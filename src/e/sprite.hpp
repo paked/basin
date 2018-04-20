@@ -15,12 +15,13 @@ struct Sprite {
   void tick(float dt);
   void render(SDL_Renderer* renderer);
 
-  float x;
-  float y;
+  int x;
+  int y;
 
   int width;
   int height;
 
+  Point nextPositionDelta;
   Point velocity;
   Point acceleration;
   Point drag = Point(0.99, 0.99);

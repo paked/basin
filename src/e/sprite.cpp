@@ -20,8 +20,8 @@ SDL_Rect Sprite::rect() {
 }
 
 void Sprite::tick(float dt) {
-  x += velocity.x * dt;
-  y += velocity.y * dt;
+  x += (int)nextPositionDelta.x;
+  y += (int)nextPositionDelta.y;
 
   velocity.x += (acceleration.x - drag.x * velocity.x) * dt;
   if (velocity.x > maxVelocity.x) {
@@ -36,6 +36,9 @@ void Sprite::tick(float dt) {
   } else if (velocity.y < -maxVelocity.y) {
     velocity.y = -maxVelocity.y;
   }
+
+  nextPositionDelta.x = velocity.x * dt;
+  nextPositionDelta.y = velocity.y * dt;
 }
 
 void Sprite::render(SDL_Renderer *renderer) {

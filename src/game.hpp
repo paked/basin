@@ -12,6 +12,8 @@ struct Game {
 
   bool quit = false;
 
+  void collide(Sprite* first, Sprite* second);
+
 private:
   Sprite* player;
 
@@ -19,4 +21,6 @@ private:
   bool playerMoveRight = false;
   bool playerMoveUp = false;
   bool playerMoveDown = false;
+
+  Sprite* wall;
 };
