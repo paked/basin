@@ -32,19 +32,7 @@ int main() {
 #ifdef __EMSCRIPTEN__
   emscripten_set_main_loop(hook, 60, 1);
 #else
-  bool quit = false;
-
-  SDL_Event event;
-
-  while (!quit) {
-    while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) {
-        quit = true;
-
-        break;
-      }
-    }
-
+  while (!game->quit) {
     hook();
 
     SDL_Delay(frameTimeMs);

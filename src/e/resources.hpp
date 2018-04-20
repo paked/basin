@@ -9,6 +9,7 @@ struct Resources {
   static std::map<std::string, SDL_Texture*> textures;
 
   static SDL_Texture* get(std::string fname);
+  static SDL_Texture* get(std::string fname, int* width, int* height);
   static bool load(std::string fname);
 
   static std::string getPath(std::string name);

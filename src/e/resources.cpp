@@ -41,6 +41,18 @@ SDL_Texture* Resources::get(std::string name) {
   return textures.find(name)->second;
 }
 
+SDL_Texture* Resources::get(std::string name, int* width, int* height) {
+  SDL_Texture* tex = get(name);
+
+  if (!tex) {
+    return nullptr;
+  }
+
+  SDL_QueryTexture(tex, NULL, NULL, width, height);
+
+  return tex;
+}
+
 std::string Resources::getPath(std::string name) {
   return GFX_PATH + name;
 }

@@ -2,6 +2,8 @@
 
 #include <SDL2/SDL.h>
 
+#include <e/sprite.hpp>
+
 struct Game {
   void load();
 
@@ -11,6 +13,10 @@ struct Game {
   bool quit = false;
 
 private:
-  float x = 0;
-  float y = 0;
+  Sprite* player;
+
+  bool playerMoveLeft = false;
+  bool playerMoveRight = false;
+  bool playerMoveUp = false;
+  bool playerMoveDown = false;
 };

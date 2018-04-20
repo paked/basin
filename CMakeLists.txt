@@ -14,7 +14,11 @@ file(GLOB SOURCES
     src/e/core.hpp
     src/e/core.cpp
     src/e/resources.hpp
-    src/e/resources.cpp)
+    src/e/resources.cpp
+    src/e/sprite.hpp
+    src/e/sprite.cpp
+    src/e/point.hpp
+    src/e/point.cpp)
 
 add_executable(game ${SOURCES})
 
