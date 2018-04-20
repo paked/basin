@@ -46,29 +46,12 @@ void Game::collide(Sprite* first, Sprite* second) {
 void Game::tick(float dt) {
   SDL_Event event;
 
+  Input::push();
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT) {
       quit = true;
-    } else if (event.type == SDL_KEYDOWN) {
-      if(event.key.keysym.scancode == SDL_SCANCODE_A) {
-        playerMoveLeft = true;
-      } else if(event.key.keysym.scancode == SDL_SCANCODE_D) {
-        playerMoveRight = true;
-      } else if(event.key.keysym.scancode == SDL_SCANCODE_W) {
-        playerMoveUp = true;
-      } else if(event.key.keysym.scancode == SDL_SCANCODE_S) {
-        playerMoveDown = true;
-      }
-    } else if (event.type == SDL_KEYUP) {
-      if(event.key.keysym.scancode == SDL_SCANCODE_A) {
-        playerMoveLeft = false;
-      } else if(event.key.keysym.scancode == SDL_SCANCODE_D) {
-        playerMoveRight = false;
-      } else if(event.key.keysym.scancode == SDL_SCANCODE_W) {
-        playerMoveUp = false;
-      } else if(event.key.keysym.scancode == SDL_SCANCODE_S) {
-        playerMoveDown = false;
-      }
+    } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+      Input::handle(event.key);
     }
   }
 
@@ -77,19 +60,19 @@ void Game::tick(float dt) {
   player->acceleration.x = 0;
   player->acceleration.y = 0;
 
-  if (playerMoveRight) {
-    player->acceleration.x = 80;
-  }
-
-  if (playerMoveLeft) {
+  if (moveLeft.down()) {
     player->acceleration.x = -80;
   }
 
-  if (playerMoveUp) {
+  if (moveRight.down()) {
+    player->acceleration.x = 80;
+  }
+
+  if (moveUp.down()) {
     player->acceleration.y = -80;
   }
 
-  if (playerMoveDown) {
+  if (moveDown.down()) {
     player->acceleration.y = 80;
   }
 
