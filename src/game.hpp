@@ -13,8 +13,6 @@ struct Game {
 
   bool quit = false;
 
-  void collide(Sprite* first, Sprite* second);
-
 private:
   Sprite* player;
 

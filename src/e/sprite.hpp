@@ -28,4 +28,6 @@ struct Sprite {
   Point maxVelocity = Point(30, 30);
 
   SDL_Texture *texture;
+
+  static void collide(Sprite* first, Sprite* second);
 };
