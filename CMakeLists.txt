@@ -24,7 +24,9 @@ file(GLOB SOURCES
     src/e/csv.hpp
     src/e/csv.cpp
     src/e/input.hpp
-    src/e/input.cpp)
+    src/e/input.cpp
+    src/e/tilemap.hpp
+    src/e/tilemap.cpp)
 
 add_executable(game ${SOURCES})
 

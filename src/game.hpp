@@ -8,6 +8,7 @@
 #include <e/sprite.hpp>
 #include <e/camera.hpp>
 #include <e/input.hpp>
+#include <e/tilemap.hpp>
 
 #include <config.hpp>
 
@@ -29,11 +30,7 @@ private:
 
   Sprite* wall;
 
-  SDL_Texture* mapTexture;
-  int mapTextureWidth;
-  int mapTextureHeight;
-  int mapTextureTileSize = 16;
-  std::vector<std::vector<std::string>> mapData;
+  Tilemap* map;
 
   Camera camera;
 };

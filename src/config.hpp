@@ -5,4 +5,5 @@
 
 #define FPS 60.0
 
-#define GFX_PATH "assets/"
+#define GFX_PATH "assets/gfx/"
+#define LVL_PATH "assets/lvl/"

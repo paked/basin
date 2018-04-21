@@ -17,10 +17,8 @@ void Game::load() {
   player = new Sprite("player.png", 200-8, 200-8);
   wall = new Sprite("wall.png", 0, 0);
 
-  mapTexture = Resources::get("tileset.png", &mapTextureWidth, &mapTextureHeight);
-
-  CSV levelCSV("assets/level.csv");
-  mapData = levelCSV.getData();
+  map = new Tilemap();
+  map->load("assets/lvl/level_base.csv", "tileset.png");
 
   camera.follow = player;
 }
@@ -67,49 +65,7 @@ void Game::tick(float dt) {
 void Game::render(SDL_Renderer* renderer) {
   SDL_Point cam = camera.point();
 
-  for (int y = 0; y < mapData.size(); y++) {
-    auto row = mapData[y];
-
-    for (int x = 0; x < row.size(); x++) {
-      auto tile = row[x];
-
-      int xIndex;
-      int yIndex;
-
-      if (tile == "33") {
-        xIndex = 1;
-        yIndex = 2;
-      } else {
-        continue;
-      }
-
-      SDL_Rect src = {
-        .x = xIndex * mapTextureTileSize,
-        .y = yIndex * mapTextureTileSize,
-        .w = 16,
-        .h = 16
-      };
-
-      SDL_Rect dst = {
-        .x = x * mapTextureTileSize,
-        .y = y * mapTextureTileSize,
-        .w = 16,
-        .h = 16
-      };
-
-      if (!camera.withinViewport(dst)) {
-        // don't need to render if the thing isn't on screen
-        continue;
-      }
-
-      dst.x -= cam.x;
-      dst.y -= cam.y;
-
-      SDL_RenderCopy(renderer, mapTexture, &src, &dst);
-    }
-  }
-
+  map->render(renderer, cam);
   wall->render(renderer, cam);
-
   player->render(renderer, cam);
 }
