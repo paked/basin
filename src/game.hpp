@@ -11,6 +11,7 @@
 #include <e/tilemap.hpp>
 
 #include <config.hpp>
+#include <info.hpp>
 
 struct Game {
   void load();
@@ -28,7 +29,7 @@ private:
   Input moveUp = Input(SDL_SCANCODE_W);
   Input moveDown = Input(SDL_SCANCODE_S);
 
-  Sprite* wall;
+  Info* info;
 
   Tilemap* map;
 

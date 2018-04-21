@@ -25,9 +25,10 @@ struct Sprite {
   Point velocity;
   Point acceleration;
   Point drag = Point(0.99, 0.99);
-  Point maxVelocity = Point(15, 15);
+  Point maxVelocity = Point(10, 10);
 
   SDL_Texture *texture;
 
   static void collide(Sprite* first, SDL_Rect second);
+  static bool isOverlapping(SDL_Rect first, SDL_Rect second);
 };

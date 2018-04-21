@@ -76,3 +76,7 @@ void Sprite::collide(Sprite* first, SDL_Rect second) {
     }
   }
 }
+
+bool Sprite::isOverlapping(SDL_Rect first, SDL_Rect second) {
+  return SDL_HasIntersection(&first, &second);
+}

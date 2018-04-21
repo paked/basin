@@ -10,13 +10,15 @@ void Game::load() {
   bool ok = Resources::load("player.png");
   ok |= Resources::load("wall.png");
   ok |= Resources::load("tileset.png");
+  ok |= Resources::load("info.png");
+  ok |= Resources::loadFont("FifteenNarrow.ttf", 10);
 
   if (!ok) {
     printf("Could not load assets\n");
   }
 
-  player = new Sprite("player.png", 200-8, 200-8);
-  wall = new Sprite("wall.png", 0, 0);
+  player = new Sprite("player.png", 33 * 16, 2 * 16);
+  info = new Info(33 * 16, 10 * 16);
 
   map = new Tilemap();
   map->loadTileset("tileset.png");
@@ -41,30 +43,26 @@ void Game::tick(float dt) {
     }
   }
 
-  Sprite::collide(player, wall->rect());
   Tilemap::collide(player, map);
+  info->showText = Sprite::isOverlapping(player->rect(), info->sprite->rect());
 
   player->acceleration.x = 0;
   player->acceleration.y = 0;
 
+  int accel = 40;
+
   if (moveLeft.down()) {
-    player->acceleration.x = -80;
-  }
-
-  if (moveRight.down()) {
-    player->acceleration.x = 80;
-  }
-
-  if (moveUp.down()) {
-    player->acceleration.y = -80;
-  }
-
-  if (moveDown.down()) {
-    player->acceleration.y = 80;
+    player->acceleration.x = -accel;
+  } else if (moveRight.down()) {
+    player->acceleration.x = accel;
+  } else if (moveUp.down()) {
+    player->acceleration.y = -accel;
+  } else if (moveDown.down()) {
+    player->acceleration.y = accel;
   }
 
   player->tick(dt);
-  wall->tick(dt);
+  info->tick(dt);
 
   camera.update();
 }
@@ -73,7 +71,7 @@ void Game::render(SDL_Renderer* renderer) {
   SDL_Point cam = camera.point();
 
   map->renderBackground(renderer, cam);
-  wall->render(renderer, cam);
+  info->render(renderer, cam);
   player->render(renderer, cam);
   map->renderForeground(renderer, cam);
 }

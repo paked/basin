@@ -8,6 +8,8 @@
 
 std::map<std::string, SDL_Texture*> Resources::textures;
 
+TTF_Font* Resources::font = nullptr;
+
 bool Resources::load(std::string name) {
   if (textures.find(name) != textures.end()) {
     printf("Texture has already been loaded: %s\n", name.c_str());
@@ -27,6 +29,18 @@ bool Resources::load(std::string name) {
   textures[name] = SDL_CreateTextureFromSurface(Core::renderer, image);
 
   SDL_FreeSurface(image);
+
+  return true;
+}
+
+bool Resources::loadFont(std::string name, int fontSize) {
+  std::string path = FONT_PATH + name;
+  font = TTF_OpenFont(path.c_str(), fontSize);
+  if (!font) {
+    printf("Font could not be loaded: %s\n", TTF_GetError());
+
+    return false;
+  }
 
   return true;
 }
