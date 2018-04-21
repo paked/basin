@@ -17,4 +17,5 @@ struct Battery {
   int frames = 3;
 
   void render(SDL_Renderer *renderer);
+
 };
