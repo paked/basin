@@ -25,6 +25,7 @@ void Game::load() {
   Core::clear = SDL_Color{.r = 10, .g = 10, .b = 13, .a = 255};
 
   camera.follow = player;
+
 }
 
 void Game::tick(float dt) {
