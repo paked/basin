@@ -36,9 +36,18 @@ int main() {
   emscripten_set_main_loop(hook, 60, 1);
 #else
   while (!game->quit) {
+    int frameStart = SDL_GetTicks();
+
     hook();
 
-    SDL_Delay(frameTimeMs);
+    int frameEnd = SDL_GetTicks();
+    int frameDuration = frameEnd - frameStart;
+
+    if (frameDuration < frameTimeMs) {
+      int delayFor = frameTimeMs - frameDuration;
+
+      SDL_Delay(frameTimeMs - frameDuration);
+    }
   }
 #endif
 
