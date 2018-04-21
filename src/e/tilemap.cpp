@@ -1,12 +1,19 @@
 #include <e/tilemap.hpp>
 
-void Tilemap::loadLevel(std::string level, std::string tilesetName, int ts) {
+void Tilemap::loadTileset(std::string tilesetName, int ts) {
   tileSize = ts;
 
   texture = Resources::get(tilesetName, &textureWidth, &textureHeight);
+}
 
-  CSV csv(level);
-  data = csv.getData();
+void Tilemap::loadBackground(std::string lvl) {
+  CSV csv(lvl);
+  backgroundData = csv.getData();
+}
+
+void Tilemap::loadForeground(std::string lvl) {
+  CSV csv(lvl);
+  foregroundData = csv.getData();
 }
 
 void Tilemap::loadCollision(std::string collision) {
@@ -16,7 +23,15 @@ void Tilemap::loadCollision(std::string collision) {
   canCollide = true;
 }
 
-void Tilemap::render(SDL_Renderer* renderer, SDL_Point camera) {
+void Tilemap::renderBackground(SDL_Renderer* renderer, SDL_Point camera) {
+  renderLayer(backgroundData, renderer, camera);
+}
+
+void Tilemap::renderForeground(SDL_Renderer* renderer, SDL_Point camera) {
+  renderLayer(foregroundData, renderer, camera);
+}
+
+void Tilemap::renderLayer(std::vector<std::vector<std::string>> data, SDL_Renderer* renderer, SDL_Point camera) {
   int tilesPerRow = textureWidth/tileSize;
   int tilesPerColumn = textureHeight/tileSize;
 

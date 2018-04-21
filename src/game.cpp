@@ -19,13 +19,14 @@ void Game::load() {
   wall = new Sprite("wall.png", 0, 0);
 
   map = new Tilemap();
-  map->loadLevel("assets/lvl/level_base.csv", "tileset.png");
+  map->loadTileset("tileset.png");
+  map->loadBackground("assets/lvl/level_background.csv");
+  map->loadForeground("assets/lvl/level_foreground.csv");
   map->loadCollision("assets/lvl/level_collision.csv");
 
   Core::clear = SDL_Color{.r = 10, .g = 10, .b = 13, .a = 255};
 
   camera.follow = player;
-
 }
 
 void Game::tick(float dt) {
@@ -71,7 +72,8 @@ void Game::tick(float dt) {
 void Game::render(SDL_Renderer* renderer) {
   SDL_Point cam = camera.point();
 
-  map->render(renderer, cam);
+  map->renderBackground(renderer, cam);
   wall->render(renderer, cam);
   player->render(renderer, cam);
+  map->renderForeground(renderer, cam);
 }

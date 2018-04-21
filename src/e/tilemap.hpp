@@ -17,15 +17,22 @@ struct Tilemap {
 
   int tileSize;
 
-  std::vector<std::vector<std::string>> data;
+  std::vector<std::vector<std::string>> backgroundData;
+  std::vector<std::vector<std::string>> foregroundData;
 
   bool canCollide = false;
   std::vector<std::vector<std::string>> collisionData;
 
-  void loadLevel(std::string level, std::string tilesetName, int tileSize = 16);
+  void loadTileset(std::string tilesetName, int tileSize = 16);
+
+  void loadBackground(std::string level);
+  void loadForeground(std::string level);
   void loadCollision(std::string collision);
 
-  void render(SDL_Renderer* renderer, SDL_Point camera);
+  void renderBackground(SDL_Renderer* renderer, SDL_Point camera);
+  void renderForeground(SDL_Renderer* renderer, SDL_Point camera);
+
+  void renderLayer(std::vector<std::vector<std::string>> layer, SDL_Renderer* renderer, SDL_Point camera);
 
   static void collide(Sprite *sprite, Tilemap *map);
 };
