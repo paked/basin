@@ -11,7 +11,9 @@
 #include <e/tilemap.hpp>
 
 #include <config.hpp>
+
 #include <info.hpp>
+#include <battery.hpp>
 
 struct Game {
   void load();
@@ -28,8 +30,10 @@ private:
   Input moveRight = Input(SDL_SCANCODE_D);
   Input moveUp = Input(SDL_SCANCODE_W);
   Input moveDown = Input(SDL_SCANCODE_S);
+  Input action = Input(SDL_SCANCODE_SPACE);
 
   Info* info;
+  Battery* battery;
 
   Tilemap* map;
 

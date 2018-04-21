@@ -7,6 +7,8 @@ include_directories(src)
 file(GLOB SOURCES
     src/main.cpp
 
+    src/battery.hpp
+    src/battery.cpp
     src/game.hpp
     src/game.cpp
     src/config.hpp

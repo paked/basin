@@ -11,6 +11,7 @@ void Game::load() {
   ok |= Resources::load("wall.png");
   ok |= Resources::load("tileset.png");
   ok |= Resources::load("info.png");
+  ok |= Resources::load("battery.png");
   ok |= Resources::loadFont("FifteenNarrow.ttf", 10);
 
   if (!ok) {
@@ -18,7 +19,14 @@ void Game::load() {
   }
 
   player = new Sprite("player.png", 33 * 16, 2 * 16);
+
   info = new Info(33 * 16, 10 * 16);
+
+  battery = new Battery();
+
+  // position battery at bottom left of the screen
+  battery->x = camera.width - (battery->width + 4);
+  battery->y = camera.height - (battery->height + 4);
 
   map = new Tilemap();
   map->loadTileset("tileset.png");
@@ -61,6 +69,14 @@ void Game::tick(float dt) {
     player->acceleration.y = accel;
   }
 
+  if (action.justDown()) {
+    battery->capacity += 0.05;
+
+    if (battery->capacity > 1) {
+      battery->capacity = 1;
+    }
+  }
+
   player->tick(dt);
   info->tick(dt);
 
@@ -74,4 +90,7 @@ void Game::render(SDL_Renderer* renderer) {
   info->render(renderer, cam);
   player->render(renderer, cam);
   map->renderForeground(renderer, cam);
+
+  // HUD
+  battery->render(renderer);
 }

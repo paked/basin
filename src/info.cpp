@@ -22,8 +22,8 @@ Info::Info(float x, float y) {
   textTexture = SDL_CreateTextureFromSurface(Core::renderer, surfaceMessage);
 
   textRect = SDL_Rect{
-    .x = x,
-    .y = y
+    .x = sprite->x,
+    .y = sprite->y
   };
 
   TTF_SizeText(Resources::font, text, &textRect.w, &textRect.h);
