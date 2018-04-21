@@ -41,8 +41,11 @@ void Sprite::tick(float dt) {
   nextPositionDelta.y = velocity.y * dt;
 }
 
-void Sprite::render(SDL_Renderer *renderer) {
+void Sprite::render(SDL_Renderer *renderer, SDL_Point camera) {
   SDL_Rect dst = rect();
+
+  dst.x -= camera.x;
+  dst.y -= camera.y;
 
   SDL_RenderCopy(renderer, texture, NULL, &dst);
 }

@@ -13,7 +13,7 @@ struct Sprite {
   SDL_Rect rect();
 
   void tick(float dt);
-  void render(SDL_Renderer* renderer);
+  void render(SDL_Renderer* renderer, SDL_Point camera);
 
   int x;
   int y;
@@ -25,7 +25,7 @@ struct Sprite {
   Point velocity;
   Point acceleration;
   Point drag = Point(0.99, 0.99);
-  Point maxVelocity = Point(30, 30);
+  Point maxVelocity = Point(15, 15);
 
   SDL_Texture *texture;
 

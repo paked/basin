@@ -9,4 +9,6 @@ void Core::init() {
   SDL_Init(SDL_INIT_VIDEO);
 
   SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window, &renderer);
+
+  SDL_RenderSetScale(renderer, GAME_SCALE, GAME_SCALE);
 }

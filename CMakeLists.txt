@@ -11,6 +11,8 @@ file(GLOB SOURCES
     src/game.cpp
     src/config.hpp
 
+    src/e/camera.hpp
+    src/e/camera.cpp
     src/e/core.hpp
     src/e/core.cpp
     src/e/resources.hpp
@@ -19,6 +21,8 @@ file(GLOB SOURCES
     src/e/sprite.cpp
     src/e/point.hpp
     src/e/point.cpp
+    src/e/csv.hpp
+    src/e/csv.cpp
     src/e/input.hpp
     src/e/input.cpp)
 

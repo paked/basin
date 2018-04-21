@@ -1,9 +1,15 @@
 #pragma once
 
+#include <vector>
+#include <string>
+
 #include <SDL2/SDL.h>
 
 #include <e/sprite.hpp>
+#include <e/camera.hpp>
 #include <e/input.hpp>
+
+#include <config.hpp>
 
 struct Game {
   void load();
@@ -22,4 +28,12 @@ private:
   Input moveDown = Input(SDL_SCANCODE_S);
 
   Sprite* wall;
+
+  SDL_Texture* mapTexture;
+  int mapTextureWidth;
+  int mapTextureHeight;
+  int mapTextureTileSize = 16;
+  std::vector<std::vector<std::string>> mapData;
+
+  Camera camera;
 };

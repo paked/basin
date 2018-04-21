@@ -2,18 +2,27 @@
 
 #include <stdio.h>
 
+#include <e/csv.hpp>
 #include <e/resources.hpp>
 
 void Game::load() {
-  bool ok = Resources::load("character.png");
+  bool ok = Resources::load("player.png");
   ok |= Resources::load("wall.png");
+  ok |= Resources::load("tileset.png");
 
   if (!ok) {
     printf("Could not load assets\n");
   }
 
-  player = new Sprite("character.png", 400-8, 400-8, 64, 64);
-  wall = new Sprite("wall.png", 400, 20);
+  player = new Sprite("player.png", 200-8, 200-8);
+  wall = new Sprite("wall.png", 0, 0);
+
+  mapTexture = Resources::get("tileset.png", &mapTextureWidth, &mapTextureHeight);
+
+  CSV levelCSV("assets/level.csv");
+  mapData = levelCSV.getData();
+
+  camera.follow = player;
 }
 
 void Game::tick(float dt) {
@@ -51,10 +60,56 @@ void Game::tick(float dt) {
 
   player->tick(dt);
   wall->tick(dt);
+
+  camera.update();
 }
 
 void Game::render(SDL_Renderer* renderer) {
-  wall->render(renderer);
+  SDL_Point cam = camera.point();
 
-  player->render(renderer);
+  for (int y = 0; y < mapData.size(); y++) {
+    auto row = mapData[y];
+
+    for (int x = 0; x < row.size(); x++) {
+      auto tile = row[x];
+
+      int xIndex;
+      int yIndex;
+
+      if (tile == "33") {
+        xIndex = 1;
+        yIndex = 2;
+      } else {
+        continue;
+      }
+
+      SDL_Rect src = {
+        .x = xIndex * mapTextureTileSize,
+        .y = yIndex * mapTextureTileSize,
+        .w = 16,
+        .h = 16
+      };
+
+      SDL_Rect dst = {
+        .x = x * mapTextureTileSize,
+        .y = y * mapTextureTileSize,
+        .w = 16,
+        .h = 16
+      };
+
+      if (!camera.withinViewport(dst)) {
+        // don't need to render if the thing isn't on screen
+        continue;
+      }
+
+      dst.x -= cam.x;
+      dst.y -= cam.y;
+
+      SDL_RenderCopy(renderer, mapTexture, &src, &dst);
+    }
+  }
+
+  wall->render(renderer, cam);
+
+  player->render(renderer, cam);
 }
