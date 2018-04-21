@@ -31,7 +31,7 @@ void Tilemap::render(SDL_Renderer* renderer, SDL_Point camera) {
       }
 
       int tileY = tile/tilesPerRow;
-      int tileX = tile - tileY;
+      int tileX = tile % tilesPerRow;
 
       SDL_Rect src = {
         .x = tileX * tileSize,
@@ -65,6 +65,8 @@ void Tilemap::render(SDL_Renderer* renderer, SDL_Point camera) {
 void Tilemap::collide(Sprite *sprite, Tilemap *map) {
   if (!map->canCollide) {
     printf("Tilemap does not have collision data\n");
+
+    return;
   }
 
   auto data = map->collisionData;

@@ -10,7 +10,6 @@
 
 #include <game.hpp>
 
-// Have to have external reference to game because of Emscripten
 Game *game;
 
 const float frameTimeMs = 1000.0/60.0;
@@ -61,7 +60,7 @@ void hook() {
 
   SDL_Renderer* renderer = Core::renderer;
 
-  SDL_SetRenderDrawColor(renderer, 244, 244, 244, 255);
+  SDL_SetRenderDrawColor(renderer, Core::clear.r, Core::clear.g, Core::clear.b, 255);
   SDL_RenderClear(renderer);
 
   game->render(renderer);

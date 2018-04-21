@@ -4,6 +4,7 @@
 
 #include <e/csv.hpp>
 #include <e/resources.hpp>
+#include <e/core.hpp>
 
 void Game::load() {
   bool ok = Resources::load("player.png");
@@ -20,6 +21,8 @@ void Game::load() {
   map = new Tilemap();
   map->loadLevel("assets/lvl/level_base.csv", "tileset.png");
   map->loadCollision("assets/lvl/level_collision.csv");
+
+  Core::clear = SDL_Color{.r = 10, .g = 10, .b = 13, .a = 255};
 
   camera.follow = player;
 }
