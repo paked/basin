@@ -50,8 +50,8 @@ void Sprite::render(SDL_Renderer *renderer, SDL_Point camera) {
   SDL_RenderCopy(renderer, texture, NULL, &dst);
 }
 
-void Sprite::collide(Sprite* first, Sprite* second) {
-  SDL_Rect b = second->rect();
+void Sprite::collide(Sprite* first, SDL_Rect second) {
+  SDL_Rect b = second;
   SDL_Rect res;
 
   // First case we check against next y position

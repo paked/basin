@@ -18,7 +18,8 @@ void Game::load() {
   wall = new Sprite("wall.png", 0, 0);
 
   map = new Tilemap();
-  map->load("assets/lvl/level_base.csv", "tileset.png");
+  map->loadLevel("assets/lvl/level_base.csv", "tileset.png");
+  map->loadCollision("assets/lvl/level_collision.csv");
 
   camera.follow = player;
 }
@@ -35,7 +36,8 @@ void Game::tick(float dt) {
     }
   }
 
-  Sprite::collide(player, wall);
+  Sprite::collide(player, wall->rect());
+  Tilemap::collide(player, map);
 
   player->acceleration.x = 0;
   player->acceleration.y = 0;

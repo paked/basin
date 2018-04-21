@@ -29,5 +29,5 @@ struct Sprite {
 
   SDL_Texture *texture;
 
-  static void collide(Sprite* first, Sprite* second);
+  static void collide(Sprite* first, SDL_Rect second);
 };
