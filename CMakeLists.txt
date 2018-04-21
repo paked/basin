@@ -10,6 +10,8 @@ file(GLOB SOURCES
     src/game.hpp
     src/game.cpp
     src/config.hpp
+    src/info.hpp
+    src/info.cpp
 
     src/e/camera.hpp
     src/e/camera.cpp
@@ -46,12 +48,15 @@ if (UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
 
 	find_package(SDL2 REQUIRED)
 	find_package(SDL2_image REQUIRED)
+	find_package(SDL2_ttf REQUIRED)
 
 	include_directories(${SDL2_INCLUDE_DIRS}
-						${SDL2_IMAGE_INCLUDE_DIR})
+						${SDL2_IMAGE_INCLUDE_DIR}
+						${SDL2_TTF_INCLUDE_DIR})
 
 	target_link_libraries(game ${SDL2_LIBRARY}
-		${SDL2_IMAGE_LIBRARIES})
+						 ${SDL2_IMAGE_LIBRARIES}
+						 ${SDL2_TTF_LIBRARIES})
 endif()
 
 # Runs if building for Emscripten (web)
@@ -61,7 +66,7 @@ if(EMSCRIPTEN)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 
     # Using SDL2 and SDL2_image
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL=2 -s USE_SDL_IMAGE=2 --std=c++11")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_SDL_TTF=2 --std=c++11")
 
     # Get SDL2_image to use PNGs
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s SDL2_IMAGE_FORMATS='[\"png\"]'")
