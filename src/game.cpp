@@ -12,6 +12,7 @@ void Game::load() {
   ok |= Resources::load("tileset.png");
   ok |= Resources::load("info.png");
   ok |= Resources::load("battery.png");
+  ok |= Resources::load("walk_test.png");
   ok |= Resources::loadFont("FifteenNarrow.ttf", 10);
 
   if (!ok) {
@@ -19,6 +20,15 @@ void Game::load() {
   }
 
   player = new Sprite("player.png", 33 * 16, 2 * 16);
+
+  /*
+  walker = new Sprite("walk_test.png");
+  walker->spritesheet(32, 32);
+  walker->addAnimation("idle", { 35, 36, 37, 38, 39 });
+  walker->playAnimation("idle");
+
+  walker->x = 35 * 16;
+  walker->y = 10 * 16;*/
 
   info = new Info(33 * 16, 10 * 16);
 

@@ -23,12 +23,11 @@ struct Sprite {
   SDL_Rect getFrame(int i);
   SDL_Rect getFrame();
 
-  void playAnimation(std::string name, bool loop = false);
+  void playAnimation(std::string name, bool loop = true);
   void addAnimation(std::string name, Animation anim);
 
   bool isSpritesheet = false;
 
-  int frameCount = 0;
   int frameLength = 1000/15;
   int spritesheetWidth;
   int spritesheetHeight;

@@ -83,14 +83,16 @@ void Sprite::updateAnimation() {
     return;
   }
 
-  frameCount++;
+  currentFrame++;
 
-  if (frameCount <= currentAnimation.size() - 1) {
+  nextFrame = SDL_GetTicks() + frameLength;
+
+  if (currentFrame <= currentAnimation.size() - 1) {
     return;
   }
 
   if (loop) {
-    frameCount = 0;
+    currentFrame = 0;
 
     return;
   }
@@ -131,7 +133,7 @@ void Sprite::render(SDL_Renderer *renderer, SDL_Point camera) {
   dst.x -= camera.x;
   dst.y -= camera.y;
 
-  SDL_RenderCopy(renderer, texture, NULL, &dst);
+  SDL_RenderCopy(renderer, texture, &src, &dst);
 }
 
 void Sprite::collide(Sprite* first, SDL_Rect second) {
