@@ -16,6 +16,8 @@ file(GLOB SOURCES
     src/info.cpp
     src/player.hpp
     src/player.cpp
+    src/enemy.hpp
+    src/enemy.cpp
 
     src/e/camera.hpp
     src/e/camera.cpp

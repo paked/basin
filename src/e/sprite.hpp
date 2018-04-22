@@ -53,7 +53,7 @@ struct Sprite {
   Point velocity;
   Point acceleration;
   Point drag = Point(0.99, 0.99);
-  Point maxVelocity = Point(10, 10);
+  Point maxVelocity = Point(1000, 1000);
 
   SDL_Texture *texture;
   bool flip = false;

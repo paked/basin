@@ -3,6 +3,8 @@
 Player::Player() {
   sprite = new Sprite("player.png");
 
+  sprite->maxVelocity = Point(10, 10);
+
   sprite->spritesheet(10, 19);
   sprite->addAnimation("idle_hori", { 0, 1 });
   sprite->addAnimation("walk_hori", { 2, 3 });
@@ -11,7 +13,7 @@ Player::Player() {
   sprite->addAnimation("idle_up", { 8, 9 });
   sprite->addAnimation("walk_up", { 10, 11 });
   sprite->x = 33 * 16;
-  sprite->y = 2 * 16;
+  sprite->y = 8 * 16;
 
   sprite->playAnimation("idle");
 }

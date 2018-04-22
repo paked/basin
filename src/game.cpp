@@ -13,6 +13,7 @@ void Game::load() {
   ok |= Resources::load("info.png");
   ok |= Resources::load("battery.png");
   ok |= Resources::load("walk_test.png");
+  ok |= Resources::load("slime.png");
   ok |= Resources::loadFont("FifteenNarrow.ttf", 10);
 
   if (!ok) {
@@ -20,15 +21,7 @@ void Game::load() {
   }
 
   player = new Player();
-
-  /*
-  walker = new Sprite("walk_test.png");
-  walker->spritesheet(32, 32);
-  walker->addAnimation("idle", { 35, 36, 37, 38, 39 });
-  walker->playAnimation("idle");
-
-  walker->x = 35 * 16;
-  walker->y = 10 * 16;*/
+  enemy = new Enemy(33 * 16, 10 * 16);
 
   info = new Info(33 * 16, 10 * 16);
 
@@ -73,6 +66,7 @@ void Game::tick(float dt) {
   }
 
   player->tick(dt);
+  enemy->tick(dt);
   info->tick(dt);
 
   camera.update();
@@ -82,7 +76,9 @@ void Game::render(SDL_Renderer* renderer) {
   SDL_Point cam = camera.point();
 
   map->renderBackground(renderer, camera);
+
   info->render(renderer, cam);
+  enemy->render(renderer, cam);
 
   player->render(renderer, cam);
   map->renderForeground(renderer, camera);

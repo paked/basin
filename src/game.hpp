@@ -15,6 +15,7 @@
 #include <player.hpp>
 #include <info.hpp>
 #include <battery.hpp>
+#include <enemy.hpp>
 
 struct Game {
   void load();
@@ -26,6 +27,7 @@ struct Game {
 
 private:
   Player* player;
+  Enemy* enemy;
 
   Input action = Input(SDL_SCANCODE_SPACE);
 
