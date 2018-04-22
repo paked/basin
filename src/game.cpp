@@ -19,7 +19,7 @@ void Game::load() {
     printf("Could not load assets\n");
   }
 
-  player = new Sprite("player.png", 33 * 16, 2 * 16);
+  player = new Player();
 
   /*
   walker = new Sprite("walk_test.png");
@@ -46,7 +46,7 @@ void Game::load() {
 
   Core::clear = SDL_Color{.r = 10, .g = 10, .b = 13, .a = 255};
 
-  camera.follow = player;
+  camera.follow = player->sprite;
 }
 
 void Game::tick(float dt) {
@@ -61,23 +61,8 @@ void Game::tick(float dt) {
     }
   }
 
-  Tilemap::collide(player, map);
-  info->showText = Sprite::isOverlapping(player->rect(), info->sprite->rect());
-
-  player->acceleration.x = 0;
-  player->acceleration.y = 0;
-
-  int accel = 40;
-
-  if (moveLeft.down()) {
-    player->acceleration.x = -accel;
-  } else if (moveRight.down()) {
-    player->acceleration.x = accel;
-  } else if (moveUp.down()) {
-    player->acceleration.y = -accel;
-  } else if (moveDown.down()) {
-    player->acceleration.y = accel;
-  }
+  Tilemap::collide(player->sprite, map);
+  info->showText = Sprite::isOverlapping(player->sprite->rect(), info->sprite->rect());
 
   if (action.justDown()) {
     battery->capacity += 0.05;

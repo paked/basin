@@ -12,7 +12,6 @@ Info::Info(float x, float y) {
   sprite = new Sprite("info.png", x, y);
 
   starting = Point(x, y);
-
   SDL_Color White = {255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
 
   const char* text = "go that way!";

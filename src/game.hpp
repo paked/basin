@@ -12,6 +12,7 @@
 
 #include <config.hpp>
 
+#include <player.hpp>
 #include <info.hpp>
 #include <battery.hpp>
 
@@ -24,12 +25,8 @@ struct Game {
   bool quit = false;
 
 private:
-  Sprite* player;
+  Player* player;
 
-  Input moveLeft = Input(SDL_SCANCODE_A);
-  Input moveRight = Input(SDL_SCANCODE_D);
-  Input moveUp = Input(SDL_SCANCODE_W);
-  Input moveDown = Input(SDL_SCANCODE_S);
   Input action = Input(SDL_SCANCODE_SPACE);
 
   Info* info;

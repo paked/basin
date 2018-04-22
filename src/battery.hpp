@@ -12,7 +12,7 @@ struct Battery {
   int width;
   int height;
 
-  float capacity = 0.0f;
+  float capacity = 0.3f;
 
   void render(SDL_Renderer *renderer);
 };

@@ -133,7 +133,12 @@ void Sprite::render(SDL_Renderer *renderer, SDL_Point camera) {
   dst.x -= camera.x;
   dst.y -= camera.y;
 
-  SDL_RenderCopy(renderer, texture, &src, &dst);
+  if (!flip) {
+    SDL_RenderCopy(renderer, texture, &src, &dst);
+    return;
+  }
+
+  SDL_RenderCopyEx(renderer, texture, &src, &dst, 0, NULL, SDL_FLIP_HORIZONTAL);
 }
 
 void Sprite::collide(Sprite* first, SDL_Rect second) {

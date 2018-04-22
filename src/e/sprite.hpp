@@ -28,7 +28,7 @@ struct Sprite {
 
   bool isSpritesheet = false;
 
-  int frameLength = 1000/15;
+  int frameLength = 1000/3;
   int spritesheetWidth;
   int spritesheetHeight;
 
@@ -56,6 +56,7 @@ struct Sprite {
   Point maxVelocity = Point(10, 10);
 
   SDL_Texture *texture;
+  bool flip = false;
 
   static void collide(Sprite* first, SDL_Rect second);
   static bool isOverlapping(SDL_Rect first, SDL_Rect second);
