@@ -13,7 +13,7 @@ Player::Player() {
   sprite->addAnimation("idle_up", { 8, 9 });
   sprite->addAnimation("walk_up", { 10, 11 });
   sprite->x = 33 * 16;
-  sprite->y = 8 * 16;
+  sprite->y = 2 * 16;
 
   sprite->playAnimation("idle");
 
@@ -93,6 +93,8 @@ void Player::tick(float dt) {
 
     justDroppedItem = true;
 
+    battery->unattach();
+
     item->active = true;
     item->sprite->x = sprite->x;
     item->sprite->y = sprite->y;
@@ -126,7 +128,7 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
   battery->sprite->x = camera.width - (battery->width + 4);
   battery->sprite->y = camera.height - (battery->height + 4);
 
-  battery->render(renderer);
+  battery->render(renderer, camera.point());
 
   if (!showEquipPrompt) {
     return;
@@ -171,6 +173,8 @@ bool Player::equipMeMaybe(std::string type, Collectable* c) {
   printf("picking up %s\n", type.c_str());
 
   justGotItem = true;
+
+  battery->attach(c->type);
 
   return true;
 }

@@ -16,6 +16,7 @@
 #include <info.hpp>
 #include <enemy.hpp>
 #include <collectable.hpp>
+#include <sliding_door.hpp>
 
 struct Game {
   void load();
@@ -29,6 +30,7 @@ private:
   Player* player;
   Enemy* enemy;
   Collectable* chainsaw;
+  SlidingDoor* slidingDoor;
 
   Info* info;
 

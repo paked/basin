@@ -56,7 +56,11 @@ struct Sprite {
   Point maxVelocity = Point(1000, 1000);
 
   SDL_Texture *texture;
+
+  // should the image be flipped horizontally?
   bool flip = false;
+  // render in camera space or on screen space?
+  bool hud = false;
 
   static void collide(Sprite* first, SDL_Rect second);
   static bool isOverlapping(SDL_Rect first, SDL_Rect second);

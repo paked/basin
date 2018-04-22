@@ -22,7 +22,7 @@ void Sprite::spritesheet(int frameWidth, int frameHeight) {
 
 SDL_Rect Sprite::getFrame() {
   int f = 0;
-  if (playing && currentAnimation.size() != 0) {
+  if (currentAnimation.size() != 0) {
     f = currentAnimation[currentFrame];
   }
 
@@ -131,8 +131,10 @@ void Sprite::render(SDL_Renderer *renderer, SDL_Point camera) {
   SDL_Rect dst = rect();
   SDL_Rect src = getFrame();
 
-  dst.x -= camera.x;
-  dst.y -= camera.y;
+  if (!hud) {
+    dst.x -= camera.x;
+    dst.y -= camera.y;
+  }
 
   if (!flip) {
     SDL_RenderCopy(renderer, texture, &src, &dst);

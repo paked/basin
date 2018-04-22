@@ -20,6 +20,8 @@ file(GLOB SOURCES
     src/enemy.cpp
     src/collectable.hpp
     src/collectable.cpp
+    src/sliding_door.hpp
+    src/sliding_door.cpp
 
     src/e/camera.hpp
     src/e/camera.cpp

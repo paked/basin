@@ -56,6 +56,7 @@ int main() {
 }
 
 void hook() {
+
   game->tick((frameTimeMs)/100);
 
   SDL_Renderer* renderer = Core::renderer;
