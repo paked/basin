@@ -16,6 +16,10 @@ Player::Player() {
   sprite->y = 8 * 16;
 
   sprite->playAnimation("idle");
+
+  equipPrompt = new Text("E to equip");
+
+  battery = new Battery();
 }
 
 void Player::tick(float dt) {
@@ -67,7 +71,6 @@ void Player::tick(float dt) {
     sprite->playAnimation("idle_down");
   }
 
-
   sprite->acceleration.x = 0;
   sprite->acceleration.y = 0;
 
@@ -83,9 +86,91 @@ void Player::tick(float dt) {
     sprite->acceleration.y = accel;
   }
 
+  justDroppedItem = false;
+  if (hasItem && equip.justDown() && !justGotItem) {
+    hasItem = false;
+    hasChainsaw = false;
+
+    justDroppedItem = true;
+
+    item->active = true;
+    item->sprite->x = sprite->x;
+    item->sprite->y = sprite->y;
+
+    item = nullptr;
+  }
+
+  if (use.justDown()) {
+    itemOn = !itemOn;
+  }
+
+  if (hasItem && itemOn) {
+    battery->capacity -= 0.05 * dt;
+  }
+
+  if (battery->capacity < 0) {
+    itemOn = false;
+  }
+
   sprite->tick(dt);
+
+  justGotItem = false;
 }
 
 void Player::render(SDL_Renderer *renderer, SDL_Point cam) {
   sprite->render(renderer, cam);
+}
+
+void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
+  // position battery at bottom left of the screen
+  battery->sprite->x = camera.width - (battery->width + 4);
+  battery->sprite->y = camera.height - (battery->height + 4);
+
+  battery->render(renderer);
+
+  if (!showEquipPrompt) {
+    return;
+  }
+ 
+  SDL_Rect dst = {
+    .x = (int)(sprite->x - equipPrompt->rect.w/2 - camera.x),
+    .y = (int)(sprite->y - equipPrompt->rect.h/2 - camera.y - 16),
+    .w = equipPrompt->rect.w,
+    .h = equipPrompt->rect.h,
+  };
+
+  SDL_RenderCopy(renderer, equipPrompt->texture, NULL, &dst);
+}
+
+bool Player::equipMeMaybe(std::string type, Collectable* c) {
+  if (hasItem || justDroppedItem) {
+    showEquipPrompt = false;
+    return false;
+  }
+
+  bool can = Sprite::isOverlapping(sprite->rect(), c->sprite->rect());
+
+  if (can) {
+    showEquipPrompt = true;
+  } else {
+    showEquipPrompt = false;
+
+    return false;
+  }
+
+  if (!equip.justDown()) {
+    return false;
+  }
+
+  hasItem = true;
+  hasChainsaw = true;
+
+  item = c;
+  item->active = false;
+
+  printf("picking up %s\n", type.c_str());
+
+  justGotItem = true;
+
+  return true;
 }

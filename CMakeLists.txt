@@ -18,6 +18,8 @@ file(GLOB SOURCES
     src/player.cpp
     src/enemy.hpp
     src/enemy.cpp
+    src/collectable.hpp
+    src/collectable.cpp
 
     src/e/camera.hpp
     src/e/camera.cpp
@@ -34,7 +36,9 @@ file(GLOB SOURCES
     src/e/input.hpp
     src/e/input.cpp
     src/e/tilemap.hpp
-    src/e/tilemap.cpp)
+    src/e/tilemap.cpp
+    src/e/text.hpp
+    src/e/text.cpp)
 
 add_executable(game ${SOURCES})
 

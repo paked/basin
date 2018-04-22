@@ -14,8 +14,8 @@
 
 #include <player.hpp>
 #include <info.hpp>
-#include <battery.hpp>
 #include <enemy.hpp>
+#include <collectable.hpp>
 
 struct Game {
   void load();
@@ -28,11 +28,9 @@ struct Game {
 private:
   Player* player;
   Enemy* enemy;
-
-  Input action = Input(SDL_SCANCODE_SPACE);
+  Collectable* chainsaw;
 
   Info* info;
-  Battery* battery;
 
   Tilemap* map;
 

@@ -4,6 +4,7 @@
 
 #include <e/sprite.hpp>
 #include <e/point.hpp>
+#include <e/text.hpp>
 
 struct Info {
   Info(float x, float y);
@@ -15,8 +16,7 @@ struct Info {
 
   Sprite* sprite;
 
-  SDL_Rect textRect;
-  SDL_Texture* textTexture;
+  Text* text;
 
   bool showText = false;
 };

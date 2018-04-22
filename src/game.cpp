@@ -14,7 +14,8 @@ void Game::load() {
   ok |= Resources::load("battery.png");
   ok |= Resources::load("walk_test.png");
   ok |= Resources::load("slime.png");
-  ok |= Resources::loadFont("FifteenNarrow.ttf", 10);
+  ok |= Resources::load("collectables.png");
+  ok |= Resources::loadFont("FifteenNarrow.ttf", 14);
 
   if (!ok) {
     printf("Could not load assets\n");
@@ -22,14 +23,9 @@ void Game::load() {
 
   player = new Player();
   enemy = new Enemy(33 * 16, 10 * 16);
+  chainsaw = new Collectable(37 * 16, 8 * 16);
 
   info = new Info(33 * 16, 10 * 16);
-
-  battery = new Battery();
-
-  // position battery at bottom left of the screen
-  battery->sprite->x = camera.width - (battery->width + 4);
-  battery->sprite->y = camera.height - (battery->height + 4);
 
   map = new Tilemap();
   map->loadTileset("tileset.png");
@@ -57,17 +53,12 @@ void Game::tick(float dt) {
   Tilemap::collide(player->sprite, map);
   info->showText = Sprite::isOverlapping(player->sprite->rect(), info->sprite->rect());
 
-  if (action.justDown()) {
-    battery->capacity += 0.05;
-
-    if (battery->capacity > 1) {
-      battery->capacity = 1;
-    }
-  }
+  player->equipMeMaybe("chainsaw", chainsaw);
 
   player->tick(dt);
   enemy->tick(dt);
   info->tick(dt);
+  chainsaw->tick(dt);
 
   camera.update();
 }
@@ -77,12 +68,12 @@ void Game::render(SDL_Renderer* renderer) {
 
   map->renderBackground(renderer, camera);
 
+  chainsaw->render(renderer, cam);
   info->render(renderer, cam);
   enemy->render(renderer, cam);
 
   player->render(renderer, cam);
-  map->renderForeground(renderer, camera);
 
-  // HUD
-  battery->render(renderer);
+  map->renderForeground(renderer, camera);
+  player->renderForeground(renderer, camera);
 }
