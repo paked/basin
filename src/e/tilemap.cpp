@@ -1,5 +1,7 @@
 #include <e/tilemap.hpp>
 
+#include <e/csv.hpp>
+
 void Tilemap::loadTileset(std::string tilesetName, int ts) {
   tileSize = ts;
 
@@ -23,15 +25,15 @@ void Tilemap::loadCollision(std::string collision) {
   canCollide = true;
 }
 
-void Tilemap::renderBackground(SDL_Renderer* renderer, SDL_Point camera) {
+void Tilemap::renderBackground(SDL_Renderer* renderer, Camera camera) {
   renderLayer(backgroundData, renderer, camera);
 }
 
-void Tilemap::renderForeground(SDL_Renderer* renderer, SDL_Point camera) {
+void Tilemap::renderForeground(SDL_Renderer* renderer, Camera camera) {
   renderLayer(foregroundData, renderer, camera);
 }
 
-void Tilemap::renderLayer(std::vector<std::vector<std::string>> data, SDL_Renderer* renderer, SDL_Point camera) {
+void Tilemap::renderLayer(std::vector<std::vector<std::string>> data, SDL_Renderer* renderer, Camera camera) {
   int tilesPerRow = textureWidth/tileSize;
   int tilesPerColumn = textureHeight/tileSize;
 
@@ -48,13 +50,6 @@ void Tilemap::renderLayer(std::vector<std::vector<std::string>> data, SDL_Render
       int tileY = tile/tilesPerRow;
       int tileX = tile % tilesPerRow;
 
-      SDL_Rect src = {
-        .x = tileX * tileSize,
-        .y = tileY * tileSize,
-        .w = tileSize,
-        .h = tileSize
-      };
-
       SDL_Rect dst = {
         .x = x * tileSize,
         .y = y * tileSize,
@@ -62,12 +57,17 @@ void Tilemap::renderLayer(std::vector<std::vector<std::string>> data, SDL_Render
         .h = tileSize
       };
 
-      /* TODO: enable this again
       if (!camera.withinViewport(dst)) {
         // don't need to render if the thing isn't on screen
         continue;
       }
-      */
+
+      SDL_Rect src = {
+        .x = tileX * tileSize,
+        .y = tileY * tileSize,
+        .w = tileSize,
+        .h = tileSize
+      };
 
       dst.x -= camera.x;
       dst.y -= camera.y;

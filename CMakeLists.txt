@@ -69,7 +69,6 @@ if(EMSCRIPTEN)
     # Make emscripten output a html page instead of just the javascript (for easier testing).
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --profiling")
     # Using SDL2 and SDL2_image
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_SDL_TTF=2 --std=c++11")
 

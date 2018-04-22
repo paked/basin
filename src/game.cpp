@@ -81,11 +81,11 @@ void Game::tick(float dt) {
 void Game::render(SDL_Renderer* renderer) {
   SDL_Point cam = camera.point();
 
-  map->renderBackground(renderer, cam);
+  map->renderBackground(renderer, camera);
   info->render(renderer, cam);
 
   player->render(renderer, cam);
-  map->renderForeground(renderer, cam);
+  map->renderForeground(renderer, camera);
 
   // HUD
   battery->render(renderer);

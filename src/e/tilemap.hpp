@@ -8,6 +8,7 @@
 #include <e/sprite.hpp>
 #include <e/resources.hpp>
 #include <e/csv.hpp>
+#include <e/camera.hpp>
 
 struct Tilemap {
   SDL_Texture* texture;
@@ -29,10 +30,10 @@ struct Tilemap {
   void loadForeground(std::string level);
   void loadCollision(std::string collision);
 
-  void renderBackground(SDL_Renderer* renderer, SDL_Point camera);
-  void renderForeground(SDL_Renderer* renderer, SDL_Point camera);
+  void renderBackground(SDL_Renderer* renderer, Camera camera);
+  void renderForeground(SDL_Renderer* renderer, Camera camera);
 
-  void renderLayer(std::vector<std::vector<std::string>> layer, SDL_Renderer* renderer, SDL_Point camera);
+  void renderLayer(std::vector<std::vector<std::string>> layer, SDL_Renderer* renderer, Camera camera);
 
   static void collide(Sprite *sprite, Tilemap *map);
 };
