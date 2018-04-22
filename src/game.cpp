@@ -25,8 +25,8 @@ void Game::load() {
   battery = new Battery();
 
   // position battery at bottom left of the screen
-  battery->x = camera.width - (battery->width + 4);
-  battery->y = camera.height - (battery->height + 4);
+  battery->sprite->x = camera.width - (battery->width + 4);
+  battery->sprite->y = camera.height - (battery->height + 4);
 
   map = new Tilemap();
   map->loadTileset("tileset.png");
@@ -88,6 +88,7 @@ void Game::render(SDL_Renderer* renderer) {
 
   map->renderBackground(renderer, cam);
   info->render(renderer, cam);
+
   player->render(renderer, cam);
   map->renderForeground(renderer, cam);
 

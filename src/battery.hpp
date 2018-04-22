@@ -2,20 +2,17 @@
 
 #include <SDL2/SDL.h>
 
+#include <e/sprite.hpp>
+
 struct Battery {
   Battery(int x = 0, int y = 0);
 
-  int x;
-  int y;
+  Sprite *sprite;
 
   int width;
   int height;
 
   float capacity = 0.0f;
 
-  SDL_Texture *texture;
-  int frames = 3;
-
   void render(SDL_Renderer *renderer);
-
 };

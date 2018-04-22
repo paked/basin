@@ -10,6 +10,65 @@ Sprite::Sprite(std::string texName, float x, float y, int width, int height) : x
   texture = Resources::get(texName);
 }
 
+void Sprite::spritesheet(int frameWidth, int frameHeight) {
+  isSpritesheet = true;
+
+  spritesheetWidth = width;
+  spritesheetHeight = height;
+
+  width = frameWidth;
+  height = frameHeight;
+}
+
+SDL_Rect Sprite::getFrame() {
+  int f = 0;
+  if (currentAnimation.size() != 0) {
+    f = currentAnimation[currentFrame];
+  }
+
+  return getFrame(f);
+}
+
+SDL_Rect Sprite::getFrame(int i) {
+  int xIndex = 0;
+  int yIndex = 0;
+  int rowSize = width;
+
+  if (isSpritesheet) {
+    rowSize = spritesheetWidth/width;
+
+    yIndex = i / rowSize;
+    xIndex = i % rowSize;
+
+    return SDL_Rect {
+      .x = xIndex * width,
+      .y = yIndex * height,
+      .w = width,
+      .h = height
+    };
+  }
+
+  return SDL_Rect {
+    .x = 0,
+    .y = 0,
+    .w = width,
+    .h = height
+  };
+}
+
+void Sprite::addAnimation(std::string name, Animation anim) {
+  animations[name] = anim;
+}
+
+void Sprite::playAnimation(std::string name, bool l) {
+  loop = l;
+
+  playing = true;
+  currentAnimation = animations[name];
+  currentFrame = 0;
+  nextFrame = SDL_GetTicks() + frameLength;
+}
+
 SDL_Rect Sprite::rect() {
   return SDL_Rect{
       .x = (int)x,
@@ -19,7 +78,31 @@ SDL_Rect Sprite::rect() {
   };
 }
 
+void Sprite::updateAnimation() {
+  if (SDL_GetTicks() < nextFrame) {
+    return;
+  }
+
+  frameCount++;
+
+  if (frameCount <= currentAnimation.size() - 1) {
+    return;
+  }
+
+  if (loop) {
+    frameCount = 0;
+
+    return;
+  }
+
+  playing = false;
+}
+
 void Sprite::tick(float dt) {
+  if (playing) {
+    updateAnimation();
+  }
+
   x += (int)nextPositionDelta.x;
   y += (int)nextPositionDelta.y;
 
@@ -43,6 +126,7 @@ void Sprite::tick(float dt) {
 
 void Sprite::render(SDL_Renderer *renderer, SDL_Point camera) {
   SDL_Rect dst = rect();
+  SDL_Rect src = getFrame();
 
   dst.x -= camera.x;
   dst.y -= camera.y;
