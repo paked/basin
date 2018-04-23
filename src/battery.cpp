@@ -11,7 +11,7 @@ Battery::Battery(int x, int y) {
   attachments->spritesheet(18, 22);
 
   attachments->addAnimation("key", { 0 });
-  attachments->addAnimation("chainsaw", { 1 });
+  attachments->addAnimation("chainsaw", { 2 });
 
   width = sprite->width;
   height = sprite->height;
@@ -25,6 +25,11 @@ void Battery::attach(Collectable::Type type) {
 
 void Battery::unattach() {
   showAttachment = false;
+}
+
+void Battery::tick(float dt) {
+  sprite->tick(dt);
+  attachments->tick(dt);
 }
 
 void Battery::render(SDL_Renderer *renderer, SDL_Point cam) {

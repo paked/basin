@@ -115,6 +115,7 @@ void Player::tick(float dt) {
   }
 
   sprite->tick(dt);
+  battery->tick(dt);
 
   justGotItem = false;
 }
