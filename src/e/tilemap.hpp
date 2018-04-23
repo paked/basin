@@ -11,6 +11,7 @@
 #include <e/camera.hpp>
 
 struct Tilemap {
+  typedef std::vector<std::vector<int>> Data;
   SDL_Texture* texture;
 
   int textureWidth;
@@ -18,11 +19,11 @@ struct Tilemap {
 
   int tileSize;
 
-  std::vector<std::vector<std::string>> backgroundData;
-  std::vector<std::vector<std::string>> foregroundData;
+  Data backgroundData;
+  Data foregroundData;
 
   bool canCollide = false;
-  std::vector<std::vector<std::string>> collisionData;
+  Data collisionData;
 
   void loadTileset(std::string tilesetName, int tileSize = 16);
 
@@ -33,7 +34,7 @@ struct Tilemap {
   void renderBackground(SDL_Renderer* renderer, Camera camera);
   void renderForeground(SDL_Renderer* renderer, Camera camera);
 
-  void renderLayer(std::vector<std::vector<std::string>> layer, SDL_Renderer* renderer, Camera camera);
+  void renderLayer(Data& data, SDL_Renderer* renderer, Camera camera);
 
   static void collide(Sprite *sprite, Tilemap *map);
 };

@@ -10,17 +10,17 @@ void Tilemap::loadTileset(std::string tilesetName, int ts) {
 
 void Tilemap::loadBackground(std::string lvl) {
   CSV csv(lvl);
-  backgroundData = csv.getData();
+  backgroundData = csv.getDataInt();
 }
 
 void Tilemap::loadForeground(std::string lvl) {
   CSV csv(lvl);
-  foregroundData = csv.getData();
+  foregroundData = csv.getDataInt();
 }
 
 void Tilemap::loadCollision(std::string collision) {
   CSV csv(collision);
-  collisionData = csv.getData();
+  collisionData = csv.getDataInt();
 
   canCollide = true;
 }
@@ -33,7 +33,7 @@ void Tilemap::renderForeground(SDL_Renderer* renderer, Camera camera) {
   renderLayer(foregroundData, renderer, camera);
 }
 
-void Tilemap::renderLayer(std::vector<std::vector<std::string>> data, SDL_Renderer* renderer, Camera camera) {
+void Tilemap::renderLayer(Data& data, SDL_Renderer* renderer, Camera camera) {
   int tilesPerRow = textureWidth/tileSize;
   int tilesPerColumn = textureHeight/tileSize;
 
@@ -41,7 +41,7 @@ void Tilemap::renderLayer(std::vector<std::vector<std::string>> data, SDL_Render
     auto row = data[y];
 
     for (int x = 0; x < row.size(); x++) {
-      auto tile = stoi(row[x]);
+      auto tile = row[x];
 
       if (tile < 0) {
         continue;
@@ -90,7 +90,7 @@ void Tilemap::collide(Sprite *sprite, Tilemap *map) {
     auto row = data[y];
 
     for (int x = 0; x < row.size(); x++) {
-      auto tile = stoi(row[x]);
+      auto tile = row[x];
 
       if (tile < 0) {
         continue;
