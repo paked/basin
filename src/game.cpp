@@ -25,7 +25,7 @@ void Game::load() {
 
   player = new Player();
   enemy = new Enemy(33 * 16, 10 * 16);
-  chainsaw = new Collectable(37 * 16, 8 * 16, Collectable::Type::CHAINSAW);
+  chainsaw = new Collectable(37 * 16, 8 * 16, Collectable::Type::KEY);
   slidingDoor = new SlidingDoor(33 * 16, 11 * 16);
 
   info = new Info(33 * 16, 10 * 16);
