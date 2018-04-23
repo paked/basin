@@ -10,12 +10,7 @@ void Camera::update() {
 }
 
 bool Camera::withinViewport(SDL_Rect rect) {
-  SDL_Rect me = SDL_Rect{
-    .x = x - 32,
-    .y = y - 32,
-    .w = width + 64,
-    .h = height + 64
-  };
+  SDL_Rect me = viewport(32);
 
   return SDL_HasIntersection(&rect, &me);
 }
@@ -24,5 +19,14 @@ SDL_Point Camera::point() {
   return SDL_Point{
     .x = x,
     .y = y
+  };
+}
+
+SDL_Rect Camera::viewport(int buffer) {
+  return SDL_Rect{
+    .x = x - buffer,
+    .y = y - buffer,
+    .w = width + buffer*2,
+    .h = height + buffer*2
   };
 }

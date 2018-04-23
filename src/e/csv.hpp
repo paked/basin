@@ -12,4 +12,5 @@ struct CSV
   CSV(std::string f, char delm = ',');
 
   std::vector<std::vector<std::string> > getData();
+  std::vector<std::vector<int> > getDataInt();
 };

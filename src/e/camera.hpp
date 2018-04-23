@@ -16,4 +16,6 @@ struct Camera {
   void update();
   bool withinViewport(SDL_Rect rect);
   SDL_Point point();
+
+  SDL_Rect viewport(int buffer = 0);
 };

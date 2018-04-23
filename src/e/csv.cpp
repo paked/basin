@@ -48,3 +48,22 @@ std::vector<std::vector<std::string> > CSV::getData() {
 
   return dataList;
 }
+
+std::vector<std::vector<int> > CSV::getDataInt() {
+  auto data = getData();
+
+  std::vector<std::vector<int>> result;
+
+  for (int y = 0; y < data.size(); y++) {
+    std::vector<std::string> row = data[y];
+
+    std::vector<int> vec;
+    for (int x = 0; x < row.size(); x++) {
+      vec.push_back(stoi(row[x]));
+    }
+
+    result.push_back(vec);
+  }
+
+  return result;
+}
