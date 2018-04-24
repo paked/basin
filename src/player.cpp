@@ -145,7 +145,7 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
   SDL_RenderCopy(renderer, equipPrompt->texture, NULL, &dst);
 }
 
-bool Player::equipMeMaybe(std::string type, Collectable* c) {
+bool Player::equipMeMaybe(Collectable* c) {
   if (hasItem || justDroppedItem) {
     showEquipPrompt = false;
     return false;
@@ -171,7 +171,7 @@ bool Player::equipMeMaybe(std::string type, Collectable* c) {
   item = c;
   item->active = false;
 
-  printf("picking up %s\n", type.c_str());
+  printf("picking up %s\n", Collectable::key(c->type).c_str());
 
   justGotItem = true;
 

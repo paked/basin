@@ -7,7 +7,7 @@
 #include <e/text.hpp>
 
 struct Info {
-  Info(float x, float y);
+  Info(float x, float y, std::string msg);
 
   Point starting;
 
@@ -19,4 +19,6 @@ struct Info {
   Text* text;
 
   bool showText = false;
+
+  bool read = false;
 };

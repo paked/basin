@@ -6,7 +6,6 @@
 
 #include <e/core.hpp>
 #include <e/resources.hpp>
-#include <e/csv.hpp>
 
 #include <game.hpp>
 
@@ -17,8 +16,6 @@ const float frameTimeMs = 1000.0/60.0;
 void hook();
 
 int main() {
-  CSV csv("assets/level.csv");
-
   printf("Initialising SDL...");
   Core::init();
   printf(" Done.\n");
@@ -56,7 +53,6 @@ int main() {
 }
 
 void hook() {
-
   game->tick((frameTimeMs)/100);
 
   SDL_Renderer* renderer = Core::renderer;

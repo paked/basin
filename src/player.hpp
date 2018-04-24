@@ -46,7 +46,7 @@ struct Player {
   Text* equipPrompt;
   bool showEquipPrompt = false;
 
-  bool equipMeMaybe(std::string type, Collectable *c);
+  bool equipMeMaybe(Collectable *c);
 
   Battery* battery;
 };

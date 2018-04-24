@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <string>
 
 #include <SDL2/SDL.h>
 
@@ -29,12 +28,16 @@ struct Game {
 private:
   Player* player;
   Enemy* enemy;
-  Collectable* chainsaw;
-  SlidingDoor* slidingDoor;
 
-  Info* info;
+  std::vector<Collectable*> collectables;
+  std::vector<Info*> infos;
+
+  SlidingDoor* slidingDoor;
 
   Tilemap* map;
 
   Camera camera;
+
+  void loadCollectables(std::string fname);
+  void loadInfos(std::string fname);
 };
