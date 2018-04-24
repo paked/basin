@@ -89,15 +89,9 @@ void Player::tick(float dt) {
   justDroppedItem = false;
   if (hasItem && equip.justDown() && !justGotItem) {
     hasItem = false;
-    hasChainsaw = false;
-
     justDroppedItem = true;
 
     battery->unattach();
-
-    item->active = true;
-    item->sprite->x = sprite->x;
-    item->sprite->y = sprite->y;
 
     item = nullptr;
   }
@@ -112,6 +106,10 @@ void Player::tick(float dt) {
 
   if (battery->capacity < 0) {
     itemOn = false;
+  }
+
+  if (hasItem) {
+    positionItem();
   }
 
   sprite->tick(dt);
@@ -166,10 +164,9 @@ bool Player::equipMeMaybe(Collectable* c) {
   }
 
   hasItem = true;
-  hasChainsaw = true;
 
   item = c;
-  item->active = false;
+  // item->active = false;
 
   printf("picking up %s\n", Collectable::key(c->type).c_str());
 
@@ -178,4 +175,34 @@ bool Player::equipMeMaybe(Collectable* c) {
   battery->attach(c->type);
 
   return true;
+}
+
+// super jank conditional to make the item follow along with the body in  a way
+// which looks like it is being carried by hand
+void Player::positionItem() {
+  std::string name = sprite->currentAnimationName;
+
+  item->sprite->flip = false;
+
+  item->sprite->y = sprite->y + 6;
+  if (name == "idle_hori") {
+    if (!sprite->flip) {
+      item->sprite->x = sprite->x + 10;
+    } else {
+      item->sprite->x = sprite->x - 8;
+      item->sprite->flip = true;
+    }
+  } else if (name == "walk_hori") {
+    if (!sprite->flip) {
+      item->sprite->x = sprite->x + 11;
+    } else {
+      item->sprite->x = sprite->x - 9;
+      item->sprite->flip = true;
+    }
+  } else if (name == "idle_down" || name == "walk_down") {
+    item->sprite->x = sprite->x + 10;
+  } else if (name == "walk_up" || name == "idle_up") {
+    item->sprite->flip = true;
+    item->sprite->x = sprite->x - 8;
+  }
 }

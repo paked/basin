@@ -65,6 +65,7 @@ void Sprite::playAnimation(std::string name, bool l) {
 
   playing = true;
   currentAnimation = animations[name];
+  currentAnimationName = name;
   currentFrame = 0;
   nextFrame = SDL_GetTicks() + frameLength;
 }

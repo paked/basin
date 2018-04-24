@@ -45,6 +45,10 @@ std::vector<std::vector<std::string> > CSV::getData() {
       vec.push_back(current);
     }
 
+    if (vec.size() == 0) {
+      continue;
+    }
+
     dataList.push_back(vec);
   }
 

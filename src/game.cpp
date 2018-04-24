@@ -18,6 +18,7 @@ void Game::load() {
   ok |= Resources::load("slime.png");
   ok |= Resources::load("collectables.png");
   ok |= Resources::load("sliding_door.png");
+  ok |= Resources::load("sliding_door_vert.png");
   ok |= Resources::load("battery_attachments.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 15);
 
@@ -37,7 +38,7 @@ void Game::load() {
   player = new Player();
 
   enemy = new Enemy(33 * 16, 10 * 16);
-  slidingDoor = new SlidingDoor(33 * 16, 11 * 16);
+  slidingDoor = new SlidingDoor(27 * 16, 9 * 16);
 
   camera.follow = player->sprite;
 }
@@ -57,10 +58,17 @@ void Game::tick(float dt) {
   Tilemap::collide(player->sprite, map);
   Sprite::collide(player->sprite, slidingDoor->rect());
 
-  for (auto collectable : collectables) {
-    collectable->tick(dt);
 
-    player->equipMeMaybe(collectable);
+  for (auto c : collectables) {
+    c->tick(dt);
+
+    player->equipMeMaybe(c);
+
+    if (c->type == Collectable::KEY) {
+      if (Sprite::isOverlapping(c->sprite->rect(), slidingDoor->rect())) {
+          slidingDoor->open();
+      }
+    }
   }
 
   for (auto info : infos) {
@@ -81,6 +89,8 @@ void Game::render(SDL_Renderer* renderer) {
 
   map->renderBackground(renderer, camera);
 
+  player->render(renderer, cam);
+
   for (auto collectable : collectables) {
     collectable->render(renderer, cam);
   }
@@ -91,7 +101,6 @@ void Game::render(SDL_Renderer* renderer) {
 
   enemy->render(renderer, cam);
 
-  player->render(renderer, cam);
   slidingDoor->render(renderer, cam);
 
   map->renderForeground(renderer, camera);
@@ -138,8 +147,7 @@ void Game::loadInfos(std::string fname) {
         printf("%s |", c.c_str());
       }
 
-      printf("\nError loading infos: malformed row (size is %d, when should be 3)\n", row.size());
-
+      printf("\nError loading infos: malformed row (size is %d, when should be 3)\n", (int)row.size());
 
       continue;
     }

@@ -41,7 +41,8 @@ struct Player {
   bool justGotItem = false;
   bool justDroppedItem = false;
   bool hasItem = false;
-  bool hasChainsaw = false;
+
+  void positionItem();
 
   Text* equipPrompt;
   bool showEquipPrompt = false;

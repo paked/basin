@@ -33,6 +33,7 @@ struct Sprite {
   int spritesheetHeight;
 
   Animation currentAnimation;
+  std::string currentAnimationName;
   int currentFrame = 0;
   bool loop = false;
   bool playing = false;
