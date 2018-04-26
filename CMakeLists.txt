@@ -22,6 +22,11 @@ file(GLOB SOURCES
     src/collectable.cpp
     src/sliding_door.hpp
     src/sliding_door.cpp
+    src/switchboard.hpp
+    src/switchboard.cpp
+    src/jumper.hpp
+    src/jumper.cpp
+
 
     src/e/camera.hpp
     src/e/camera.cpp

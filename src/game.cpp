@@ -17,9 +17,12 @@ void Game::load() {
   ok |= Resources::load("walk_test.png");
   ok |= Resources::load("slime.png");
   ok |= Resources::load("collectables.png");
-  ok |= Resources::load("sliding_door.png");
   ok |= Resources::load("sliding_door_vert.png");
+  ok |= Resources::load("switchboard.png");
   ok |= Resources::load("battery_attachments.png");
+  ok |= Resources::load("switchboard_gui.png");
+  ok |= Resources::load("switchboard_gui_jumpers.png");
+  ok |= Resources::load("switchboard_gui_overlay.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 15);
 
   if (!ok) {
@@ -34,6 +37,9 @@ void Game::load() {
 
   loadCollectables("assets/lvl/level_collectables.csv");
   loadInfos("assets/lvl/level_infos.csv");
+
+  switchboard = new Switchboard(camera.width/2, camera.height/2);
+  switchboardTerminal = new Sprite("switchboard.png", 28 * 16, 8 * 16);
 
   player = new Player();
 
@@ -52,6 +58,10 @@ void Game::tick(float dt) {
       quit = true;
     } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
       Input::handle(event.key);
+    } else if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
+      Input::handle(event.button);
+    } else if (event.type == SDL_MOUSEMOTION) {
+      Input::handle(event.motion);
     }
   }
 
@@ -68,6 +78,8 @@ void Game::tick(float dt) {
       if (Sprite::isOverlapping(c->sprite->rect(), slidingDoor->rect())) {
           slidingDoor->open();
       }
+    } else if (c->type == Collectable::JUMPERS) {
+      showSwitchboard = Sprite::isOverlapping(c->sprite->rect(), switchboardTerminal->rect());
     }
   }
 
@@ -80,6 +92,14 @@ void Game::tick(float dt) {
   player->tick(dt);
   slidingDoor->tick(dt);
   enemy->tick(dt);
+
+  if (showSwitchboard) {
+    switchboard->tick(dt);
+
+    if (switchboard->continuous()) {
+      slidingDoor->open();
+    }
+  }
 
   camera.update();
 }
@@ -99,12 +119,18 @@ void Game::render(SDL_Renderer* renderer) {
     info->render(renderer, cam);
   }
 
+  switchboardTerminal->render(renderer, cam);
+
   enemy->render(renderer, cam);
 
   slidingDoor->render(renderer, cam);
 
   map->renderForeground(renderer, camera);
   player->renderForeground(renderer, camera);
+
+  if (showSwitchboard) {
+    switchboard->render(renderer, cam);
+  }
 }
 
 void Game::loadCollectables(std::string fname) {
@@ -125,6 +151,8 @@ void Game::loadCollectables(std::string fname) {
         type = Collectable::Type::CHAINSAW;
       } else if (num == 1) {
         type = Collectable::Type::KEY;
+      } else if (num == 2) {
+        type = Collectable::Type::JUMPERS;
       } else {
         printf("Error loading collectables CSV: invalid collectable type\n");
 

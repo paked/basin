@@ -129,8 +129,17 @@ void Sprite::tick(float dt) {
 }
 
 void Sprite::render(SDL_Renderer *renderer, SDL_Point camera) {
+  int f = 0;
+  if (currentAnimation.size() != 0) {
+    f = currentAnimation[currentFrame];
+  }
+
+  renderFrame(f, renderer, camera);
+}
+
+void Sprite::renderFrame(int frame, SDL_Renderer* renderer, SDL_Point camera) {
   SDL_Rect dst = rect();
-  SDL_Rect src = getFrame();
+  SDL_Rect src = getFrame(frame);
 
   if (!hud) {
     dst.x -= camera.x;

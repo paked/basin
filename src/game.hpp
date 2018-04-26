@@ -16,6 +16,7 @@
 #include <enemy.hpp>
 #include <collectable.hpp>
 #include <sliding_door.hpp>
+#include <switchboard.hpp>
 
 struct Game {
   void load();
@@ -33,6 +34,10 @@ private:
   std::vector<Info*> infos;
 
   SlidingDoor* slidingDoor;
+
+  Sprite* switchboardTerminal;
+  Switchboard* switchboard;
+  bool showSwitchboard = false;
 
   Tilemap* map;
 

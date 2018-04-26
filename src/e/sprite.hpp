@@ -16,6 +16,7 @@ struct Sprite {
 
   void tick(float dt);
   void render(SDL_Renderer* renderer, SDL_Point camera);
+  void renderFrame(int frame, SDL_Renderer* renderer, SDL_Point camera);
 
   SDL_Rect rect();
 

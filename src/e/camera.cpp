@@ -5,8 +5,8 @@ void Camera::update() {
     return;
   }
 
-  x = (follow->x - follow->width/2) - width/2;
-  y = (follow->y - follow->height/2) - height/2;
+  x = follow->x - (width - follow->width)/2;
+  y = follow->y - (height - follow->height)/2;
 }
 
 bool Camera::withinViewport(SDL_Rect rect) {

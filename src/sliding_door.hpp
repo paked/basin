@@ -18,4 +18,6 @@ struct SlidingDoor {
   bool isOpen = false;
 
   Sprite* sprite;
+
+  Sprite* switchboard;
 };

@@ -8,9 +8,13 @@ SlidingDoor::SlidingDoor(int x, int y) {
   sprite->addAnimation("open", { 1, 2, 3, 4, 5, 6, 7 });
 
   sprite->playAnimation("closed", false);
+
+  switchboard = new Sprite("switchboard.png", x + 16, y - 16);
 }
 
 void SlidingDoor::open() {
+  if (isOpen) return;
+
   isOpen = true;
 
   sprite->playAnimation("open", false);
@@ -18,10 +22,12 @@ void SlidingDoor::open() {
 
 void SlidingDoor::tick(float dt) {
   sprite->tick(dt);
+  switchboard->tick(dt);
 }
 
 void SlidingDoor::render(SDL_Renderer *renderer, SDL_Point cam) {
   sprite->render(renderer, cam);
+  switchboard->render(renderer, cam);
 }
 
 SDL_Rect SlidingDoor::rect() {
