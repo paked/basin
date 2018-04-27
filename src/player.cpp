@@ -20,11 +20,15 @@ Player::Player() {
   equipPrompt = new Text("E to equip");
 
   battery = new Battery();
+  torch = new Torch();
 }
 
 void Player::tick(float dt) {
+  torch->pre();
+
   if (moveLeft.justDown()) {
     currentMovement = MOVE_LEFT;
+    eyeLine = Torch::LEFT;
 
     sprite->flip = true;
     sprite->playAnimation("walk_hori");
@@ -32,6 +36,7 @@ void Player::tick(float dt) {
 
   if (moveRight.justDown()) {
     currentMovement = MOVE_RIGHT;
+    eyeLine = Torch::RIGHT;
 
     sprite->flip = false;
     sprite->playAnimation("walk_hori");
@@ -39,11 +44,15 @@ void Player::tick(float dt) {
 
   if (moveUp.justDown()) {
     currentMovement = MOVE_UP;
+    eyeLine = Torch::UP;
+
     sprite->playAnimation("walk_up");
   }
 
   if (moveDown.justDown()) {
     currentMovement = MOVE_DOWN;
+    eyeLine = Torch::DOWN;
+
     sprite->playAnimation("walk_down");
   }
 
@@ -116,6 +125,10 @@ void Player::tick(float dt) {
   battery->tick(dt);
 
   justGotItem = false;
+
+  torch->beamIn(eyeLine);
+
+  torch->post();
 }
 
 void Player::render(SDL_Renderer *renderer, SDL_Point cam) {
@@ -129,18 +142,18 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
 
   battery->render(renderer, camera.point());
 
-  if (!showEquipPrompt) {
-    return;
-  }
- 
-  SDL_Rect dst = {
-    .x = (int)(sprite->x - equipPrompt->rect.w/2 - camera.x),
-    .y = (int)(sprite->y - equipPrompt->rect.h/2 - camera.y - 16),
-    .w = equipPrompt->rect.w,
-    .h = equipPrompt->rect.h,
-  };
+  if (showEquipPrompt) {
+    SDL_Rect dst = {
+      .x = (int)(sprite->x - equipPrompt->rect.w/2 - camera.x),
+      .y = (int)(sprite->y - equipPrompt->rect.h/2 - camera.y - 16),
+      .w = equipPrompt->rect.w,
+      .h = equipPrompt->rect.h,
+    };
 
-  SDL_RenderCopy(renderer, equipPrompt->texture, NULL, &dst);
+    SDL_RenderCopy(renderer, equipPrompt->texture, NULL, &dst);
+  }
+
+  torch->render(renderer);
 }
 
 bool Player::equipMeMaybe(Collectable* c) {

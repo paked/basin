@@ -26,7 +26,8 @@ file(GLOB SOURCES
     src/switchboard.cpp
     src/jumper.hpp
     src/jumper.cpp
-
+    src/torch.hpp
+    src/torch.cpp
 
     src/e/camera.hpp
     src/e/camera.cpp

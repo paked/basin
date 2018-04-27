@@ -11,11 +11,12 @@ SDL_Color Core::clear;
 void Core::init() {
   SDL_Init(SDL_INIT_VIDEO);
 
-  if(TTF_Init()==-1) {
+  if(TTF_Init() == -1) {
     printf("Unable to initialise SDL2_TTF: %s\n", TTF_GetError());
   }
 
-  SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, 0, &window, &renderer);
+  window = SDL_CreateWindow("game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_WIDTH, 0);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
   SDL_RenderSetScale(renderer, GAME_SCALE, GAME_SCALE);
   SDL_CaptureMouse(SDL_TRUE);

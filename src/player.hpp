@@ -8,6 +8,7 @@
 #include <e/text.hpp>
 
 #include <battery.hpp>
+#include <torch.hpp>
 #include <collectable.hpp>
 
 struct Player {
@@ -20,6 +21,7 @@ struct Player {
   };
 
   Movement currentMovement = IDLE;
+  Torch::Direction eyeLine = Torch::DOWN;
 
   Player();
 
@@ -50,4 +52,5 @@ struct Player {
   bool equipMeMaybe(Collectable *c);
 
   Battery* battery;
+  Torch* torch;
 };

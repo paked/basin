@@ -23,6 +23,7 @@ void Game::load() {
   ok |= Resources::load("switchboard_gui.png");
   ok |= Resources::load("switchboard_gui_jumpers.png");
   ok |= Resources::load("switchboard_gui_overlay.png");
+  ok |= Resources::load("torch_beam.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 15);
 
   if (!ok) {
@@ -67,7 +68,6 @@ void Game::tick(float dt) {
 
   Tilemap::collide(player->sprite, map);
   Sprite::collide(player->sprite, slidingDoor->rect());
-
 
   for (auto c : collectables) {
     c->tick(dt);
