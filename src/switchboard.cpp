@@ -51,12 +51,10 @@ void Switchboard::tick(float dt) {
     pinned = nullptr;
   }
 
-  if (pinned && Input::mouseDown) {
+  if (pinned) {
     pinned->sprite->x = point.x - offset.x;
     pinned->sprite->y = point.y - offset.y;
   }
-
-
 
   backboard->tick(dt);
 }
