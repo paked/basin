@@ -24,8 +24,6 @@ Player::Player() {
 }
 
 void Player::tick(float dt) {
-  torch->pre();
-
   if (moveLeft.justDown()) {
     currentMovement = MOVE_LEFT;
     eyeLine = Torch::LEFT;
@@ -126,9 +124,15 @@ void Player::tick(float dt) {
 
   justGotItem = false;
 
-  torch->beamIn(eyeLine);
+  if (torch->darkness > 0.1) {
+    torch->pre();
 
-  torch->post();
+    if (hasItem && item->type == Collectable::TORCH) {
+      torch->beamIn(eyeLine);
+    }
+
+    torch->post();
+  }
 }
 
 void Player::render(SDL_Renderer *renderer, SDL_Point cam) {
@@ -153,7 +157,9 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
     SDL_RenderCopy(renderer, equipPrompt->texture, NULL, &dst);
   }
 
-  torch->render(renderer);
+  if (torch->darkness > 0.1) {
+    torch->render(renderer);
+  }
 }
 
 bool Player::equipMeMaybe(Collectable* c) {

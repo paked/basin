@@ -7,6 +7,7 @@ Collectable::Collectable(int x, int y, Type t) : type(t) {
   sprite->addAnimation("chainsaw", { 0 });
   sprite->addAnimation("key", { 1 });
   sprite->addAnimation("jumpers", { 2 });
+  sprite->addAnimation("torch", { 3 });
 
   sprite->x = x;
   sprite->y = y;
@@ -33,6 +34,8 @@ std::string Collectable::key(Type t) {
     return "key";
   } else if (t == JUMPERS) {
     return "jumpers";
+  } else if (t == TORCH) {
+    return "torch";
   }
 
   return "";

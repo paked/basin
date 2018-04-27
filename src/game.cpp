@@ -66,6 +66,14 @@ void Game::tick(float dt) {
     }
   }
 
+  SDL_Rect darkZone = {.x = 1 * 16, .y = 16 * 16, .w = 12 * 16, .h = 9 * 16 };
+
+  if (Sprite::isOverlapping(player->sprite->rect(), darkZone)) {
+    player->torch->darkness = 1.0;
+  } else {
+    player->torch->darkness = 0.0;
+  }
+
   Tilemap::collide(player->sprite, map);
   Sprite::collide(player->sprite, slidingDoor->rect());
 
@@ -153,6 +161,8 @@ void Game::loadCollectables(std::string fname) {
         type = Collectable::Type::KEY;
       } else if (num == 2) {
         type = Collectable::Type::JUMPERS;
+      } else if (num == 3) {
+        type = Collectable::Type::TORCH;
       } else {
         printf("Error loading collectables CSV: invalid collectable type\n");
 

@@ -22,6 +22,8 @@ struct Torch {
   Sprite* beam;
   SDL_Texture* buffer;
 
+  float darkness = 1.0;
+
   void pre();
   void post();
 

@@ -13,7 +13,7 @@ Torch::Torch() {
 void Torch::pre() {
   SDL_SetRenderTarget(Core::renderer, buffer);
 
-  SDL_SetRenderDrawColor(Core::renderer, 0, 0, 0, 255);
+  SDL_SetRenderDrawColor(Core::renderer, 0, 0, 0, 255 * darkness);
   SDL_RenderClear(Core::renderer);
 }
 

@@ -10,7 +10,8 @@ struct Collectable {
   enum Type {
     CHAINSAW,
     KEY,
-    JUMPERS
+    JUMPERS,
+    TORCH
   };
 
   Type type;
