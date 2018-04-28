@@ -24,7 +24,7 @@ void Game::load() {
   ok |= Resources::load("switchboard_gui_jumpers.png");
   ok |= Resources::load("switchboard_gui_overlay.png");
   ok |= Resources::load("torch_beam.png");
-  ok |= Resources::loadFont("Cave-Story.ttf", 15);
+  ok |= Resources::loadFont("Cave-Story.ttf", 30);
 
   if (!ok) {
     printf("Could not load assets\n");
@@ -40,12 +40,11 @@ void Game::load() {
   loadInfos("assets/lvl/map_infos.csv");
 
   switchboard = new Switchboard(camera.width/2, camera.height/2);
-  switchboardTerminal = new Sprite("switchboard.png", 8 * 16, 11 * 16);
+  switchboardTerminal = new Sprite("switchboard.png", 8 * 16 * Core::scale, 11 * 16 * Core::scale);
 
   player = new Player();
 
-  enemy = new Enemy(33 * 16, 10 * 16);
-  slidingDoor = new SlidingDoor(10 * 16, 11 * 16);
+  slidingDoor = new SlidingDoor(10 * 16 * Core::scale, 11 * 16 * Core::scale);
 
   camera.follow = player->sprite;
 }
@@ -101,7 +100,6 @@ void Game::tick(float dt) {
 
   player->tick(dt);
   slidingDoor->tick(dt);
-  enemy->tick(dt);
 
   if (showSwitchboard) {
     switchboard->tick(dt);
@@ -130,8 +128,6 @@ void Game::render(SDL_Renderer* renderer) {
   }
 
   switchboardTerminal->render(renderer, cam);
-
-  enemy->render(renderer, cam);
 
   slidingDoor->render(renderer, cam);
 
@@ -171,7 +167,10 @@ void Game::loadCollectables(std::string fname) {
         continue;
       }
 
-      collectables.push_back(new Collectable(x * 16 + 12, y * 16 + 12, type));
+      int worldX = (x * 16 + 12) * Core::scale;
+      int worldY = (y * 16 + 12) * Core::scale;
+
+      collectables.push_back(new Collectable(worldX, worldY, type));
     }
   }
 }
@@ -192,10 +191,10 @@ void Game::loadInfos(std::string fname) {
       continue;
     }
 
-    int x = stoi(row[0]);
-    int y = stoi(row[1]);
+    int x = stoi(row[0]) * 16 + 12;
+    int y = stoi(row[1]) * 16 + 12;
     std::string msg = row[2];
 
-    infos.push_back(new Info(x * 16 + 12, y * 16 + 12, msg));
+    infos.push_back(new Info(x * Core::scale, y * Core::scale, msg));
   }
 }

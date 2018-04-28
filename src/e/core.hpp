@@ -2,6 +2,8 @@
 
 #include <SDL2/SDL.h>
 
+#include <config.hpp>
+
 // Pretty much a global dump for SDL level things
 struct Core {
   static SDL_Window* window;
@@ -10,4 +12,6 @@ struct Core {
   static SDL_Color clear;
 
   static void init();
+
+  static int scale;
 };

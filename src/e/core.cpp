@@ -7,6 +7,7 @@
 SDL_Window* Core::window = nullptr;
 SDL_Renderer* Core::renderer = nullptr;
 SDL_Color Core::clear;
+int Core::scale = GAME_SCALE;
 
 void Core::init() {
   SDL_Init(SDL_INIT_VIDEO);
@@ -18,6 +19,5 @@ void Core::init() {
   window = SDL_CreateWindow("game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_WIDTH, 0);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-  SDL_RenderSetScale(renderer, GAME_SCALE, GAME_SCALE);
   SDL_CaptureMouse(SDL_TRUE);
 }

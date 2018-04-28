@@ -7,11 +7,12 @@
 
 struct Camera {
   Sprite* follow = nullptr;
+
   int x = 0;
   int y = 0;
 
-  int width = SCREEN_WIDTH/GAME_SCALE;
-  int height = SCREEN_HEIGHT/GAME_SCALE;
+  int width = SCREEN_WIDTH;
+  int height = SCREEN_HEIGHT;
 
   void update();
   bool withinViewport(SDL_Rect rect);

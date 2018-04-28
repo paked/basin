@@ -38,6 +38,8 @@ struct Player {
   Input equip = Input(SDL_SCANCODE_E);
   Input use = Input(SDL_SCANCODE_SPACE);
 
+  int acceleration = 40;
+
   Collectable* item;
   bool itemOn = false;
   bool justGotItem = false;

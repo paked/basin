@@ -1,11 +1,13 @@
 #include <e/tilemap.hpp>
 
+#include <e/core.hpp>
 #include <e/csv.hpp>
 
 void Tilemap::loadTileset(std::string tilesetName, int ts) {
   tileSize = ts;
 
-  texture = Resources::get(tilesetName, &textureWidth, &textureHeight);
+  tileset = new Sprite(tilesetName);
+  tileset->spritesheet(tileSize, tileSize);
 }
 
 void Tilemap::loadBackground(std::string lvl) {
@@ -34,9 +36,6 @@ void Tilemap::renderForeground(SDL_Renderer* renderer, Camera camera) {
 }
 
 void Tilemap::renderLayer(Data& data, SDL_Renderer* renderer, Camera camera) {
-  int tilesPerRow = textureWidth/tileSize;
-  int tilesPerColumn = textureHeight/tileSize;
-
   for (int y = 0; y < data.size(); y++) {
     auto row = data[y];
 
@@ -47,14 +46,11 @@ void Tilemap::renderLayer(Data& data, SDL_Renderer* renderer, Camera camera) {
         continue;
       }
 
-      int tileY = tile/tilesPerRow;
-      int tileX = tile % tilesPerRow;
-
       SDL_Rect dst = {
-        .x = x * tileSize,
-        .y = y * tileSize,
-        .w = tileSize,
-        .h = tileSize
+        .x = x * tileSize * Core::scale,
+        .y = y * tileSize * Core::scale,
+        .w = tileSize * Core::scale,
+        .h = tileSize * Core::scale
       };
 
       if (!camera.withinViewport(dst)) {
@@ -62,17 +58,13 @@ void Tilemap::renderLayer(Data& data, SDL_Renderer* renderer, Camera camera) {
         continue;
       }
 
-      SDL_Rect src = {
-        .x = tileX * tileSize,
-        .y = tileY * tileSize,
-        .w = tileSize,
-        .h = tileSize
-      };
-
+      // Translate dst to screen coordinates
       dst.x -= camera.x;
       dst.y -= camera.y;
 
-      SDL_RenderCopy(renderer, texture, &src, &dst);
+      SDL_Rect src = tileset->getFrame(tile);
+
+      SDL_RenderCopy(renderer, tileset->texture, &src, &dst);
     }
   }
 }
@@ -97,10 +89,10 @@ void Tilemap::collide(Sprite *sprite, Tilemap *map) {
       }
       
       SDL_Rect rect = {
-        .x = x * map->tileSize,
-        .y = y * map->tileSize,
-        .w = map->tileSize,
-        .h = map->tileSize
+        .x = x * map->tileSize * Core::scale,
+        .y = y * map->tileSize * Core::scale,
+        .w = map->tileSize * Core::scale,
+        .h = map->tileSize * Core::scale
       };
 
       Sprite::collide(sprite, rect);

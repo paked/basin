@@ -29,7 +29,7 @@ void Info::tick(float dt) {
     sprite->playAnimation("read");
   }
 
-  sprite->y = (int) starting.y + std::sin(DEGREES_TO_RADIANS(SDL_GetTicks()/1.3))*1;
+  sprite->y = (int) starting.y + std::sin(DEGREES_TO_RADIANS(SDL_GetTicks()/4))*4;
 
   sprite->tick(dt);
 }
@@ -41,16 +41,17 @@ void Info::render(SDL_Renderer *renderer, SDL_Point cam) {
     return;
   }
 
-  SDL_Rect trect = text->rect;
-  trect.w /= 2;
-  trect.h /= 2;
+  SDL_Rect rect = text->rect;
 
   SDL_Rect dst = {
-    .x = (int)(starting.x - trect.w/2 - cam.x),
-    .y = (int)(starting.y - trect.h/2 - cam.y - 16),
-    .w = trect.w,
-    .h = trect.h,
+    .x = (int)(starting.x - (rect.w/2 - sprite->rect().w/2)),
+    .y = (int)(starting.y - (rect.h/2 - sprite->rect().h/2) - 64),
+    .w = rect.w,
+    .h = rect.h
   };
+
+  dst.x -= cam.x;
+  dst.y -= cam.y;
 
   SDL_RenderCopy(renderer, text->texture, NULL, &dst);
 }

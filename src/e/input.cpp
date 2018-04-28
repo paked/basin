@@ -19,8 +19,8 @@ void Input::handle(SDL_KeyboardEvent event) {
 }
 
 void Input::handle(SDL_MouseMotionEvent event) {
-  mouseX = event.x / GAME_SCALE;
-  mouseY = event.y / GAME_SCALE;
+  mouseX = event.x;
+  mouseY = event.y;
 }
 
 void Input::handle(SDL_MouseButtonEvent event) {

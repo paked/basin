@@ -7,15 +7,12 @@
 
 #include <e/sprite.hpp>
 #include <e/resources.hpp>
-#include <e/csv.hpp>
 #include <e/camera.hpp>
+#include <e/sprite.hpp>
 
 struct Tilemap {
   typedef std::vector<std::vector<int>> Data;
-  SDL_Texture* texture;
-
-  int textureWidth;
-  int textureHeight;
+  Sprite* tileset;
 
   int tileSize;
 

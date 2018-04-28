@@ -1,23 +1,26 @@
 #include <e/sprite.hpp>
 
+#include <e/core.hpp>
 #include <e/resources.hpp>
 
 Sprite::Sprite(std::string texName, float x, float y) : x(x), y(y) {
-  texture = Resources::get(texName, &width, &height);
+  x *= Core::scale;
+  y *= Core::scale;
+
+  texture = Resources::get(texName, &textureWidth, &textureHeight);
+
+  width = textureWidth * Core::scale;
+  height = textureHeight * Core::scale;
 }
 
-Sprite::Sprite(std::string texName, float x, float y, int width, int height) : x(x), y(y), width(width), height(height) {
-  texture = Resources::get(texName);
-}
-
-void Sprite::spritesheet(int frameWidth, int frameHeight) {
+void Sprite::spritesheet(int fw, int fh) {
   isSpritesheet = true;
 
-  spritesheetWidth = width;
-  spritesheetHeight = height;
+  frameWidth = fw;
+  frameHeight = fh;
 
-  width = frameWidth;
-  height = frameHeight;
+  width = fw * Core::scale;
+  height = fh * Core::scale;
 }
 
 SDL_Rect Sprite::getFrame() {
@@ -32,27 +35,27 @@ SDL_Rect Sprite::getFrame() {
 SDL_Rect Sprite::getFrame(int i) {
   int xIndex = 0;
   int yIndex = 0;
-  int rowSize = width;
+  int rowSize = frameWidth;
 
   if (isSpritesheet) {
-    rowSize = spritesheetWidth/width;
+    rowSize = textureWidth/frameWidth;
 
     yIndex = i / rowSize;
     xIndex = i % rowSize;
 
     return SDL_Rect {
-      .x = xIndex * width,
-      .y = yIndex * height,
-      .w = width,
-      .h = height
+      .x = xIndex * frameWidth,
+      .y = yIndex * frameHeight,
+      .w = frameWidth,
+      .h = frameHeight
     };
   }
 
   return SDL_Rect {
     .x = 0,
     .y = 0,
-    .w = width,
-    .h = height
+    .w = textureWidth,
+    .h = textureHeight
   };
 }
 

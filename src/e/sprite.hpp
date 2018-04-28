@@ -11,8 +11,10 @@
 typedef std::vector<int> Animation;
 
 struct Sprite {
+  static void collide(Sprite* first, SDL_Rect second);
+  static bool isOverlapping(SDL_Rect first, SDL_Rect second);
+
   Sprite(std::string texName, float x=0, float y=0);
-  Sprite(std::string texName, float x, float y, int width, int height);
 
   void tick(float dt);
   void render(SDL_Renderer* renderer, SDL_Point camera);
@@ -27,11 +29,14 @@ struct Sprite {
   void playAnimation(std::string name, bool loop = true);
   void addAnimation(std::string name, Animation anim);
 
+  // internal method. probably doesn't have much outside use.
+  void updateAnimation();
+
   bool isSpritesheet = false;
 
   int frameLength = 1000/3;
-  int spritesheetWidth;
-  int spritesheetHeight;
+  int frameWidth;
+  int frameHeight;
 
   Animation currentAnimation;
   std::string currentAnimationName;
@@ -41,9 +46,6 @@ struct Sprite {
   int nextFrame;
 
   std::map<std::string, Animation> animations;
-
-  // internal method
-  void updateAnimation();
 
   int x;
   int y;
@@ -57,13 +59,12 @@ struct Sprite {
   Point drag = Point(0.99, 0.99);
   Point maxVelocity = Point(1000, 1000);
 
+  int textureWidth;
+  int textureHeight;
   SDL_Texture *texture;
 
   // should the image be flipped horizontally?
   bool flip = false;
   // render in camera space or on screen space?
   bool hud = false;
-
-  static void collide(Sprite* first, SDL_Rect second);
-  static bool isOverlapping(SDL_Rect first, SDL_Rect second);
 };

@@ -1,9 +1,9 @@
 #include <player.hpp>
 
+#include <e/core.hpp>
+
 Player::Player() {
   sprite = new Sprite("player.png");
-
-  sprite->maxVelocity = Point(10, 10);
 
   sprite->spritesheet(10, 19);
   sprite->addAnimation("idle_hori", { 0, 1 });
@@ -12,8 +12,6 @@ Player::Player() {
   sprite->addAnimation("walk_down", { 6, 7 });
   sprite->addAnimation("idle_up", { 8, 9 });
   sprite->addAnimation("walk_up", { 10, 11 });
-  sprite->x = 9 * 16 - sprite->width/2;
-  sprite->y = 1 * 16;
 
   sprite->playAnimation("idle_down");
 
@@ -21,6 +19,11 @@ Player::Player() {
 
   battery = new Battery();
   torch = new Torch();
+
+  sprite->maxVelocity = Point(25, 25);
+  sprite->drag = Point(0.95, 0.95);
+  sprite->x = (9 * 16)*Core::scale - sprite->width/2;
+  sprite->y = (1 * 16)*Core::scale;
 }
 
 void Player::tick(float dt) {
@@ -81,16 +84,14 @@ void Player::tick(float dt) {
   sprite->acceleration.x = 0;
   sprite->acceleration.y = 0;
 
-  int accel = 40;
-
   if (currentMovement == MOVE_LEFT) {
-    sprite->acceleration.x = -accel;
+    sprite->acceleration.x = -acceleration;
   } else if (currentMovement == MOVE_RIGHT) {
-    sprite->acceleration.x = accel;
+    sprite->acceleration.x = acceleration;
   } else if (currentMovement == MOVE_UP) {
-    sprite->acceleration.y = -accel;
+    sprite->acceleration.y = -acceleration;
   } else if (currentMovement == MOVE_DOWN) {
-    sprite->acceleration.y = accel;
+    sprite->acceleration.y = acceleration;
   }
 
   justDroppedItem = false;
@@ -148,12 +149,17 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
   battery->render(renderer, camera.point());
 
   if (showEquipPrompt) {
+    SDL_Rect rect = equipPrompt->rect;
+
     SDL_Rect dst = {
-      .x = (int)(sprite->x - equipPrompt->rect.w/2 - camera.x),
-      .y = (int)(sprite->y - equipPrompt->rect.h/2 - camera.y - 16),
-      .w = equipPrompt->rect.w,
-      .h = equipPrompt->rect.h,
+      .x = sprite->x - (rect.w/2 - sprite->rect().w/2),
+      .y = sprite->y - (rect.h/2 - sprite->rect().h/2) - 64,
+      .w = rect.w,
+      .h = rect.h
     };
+
+    dst.x -= camera.x;
+    dst.y -= camera.y;
 
     SDL_RenderCopy(renderer, equipPrompt->texture, NULL, &dst);
 
@@ -198,19 +204,20 @@ bool Player::equipMeMaybe(Collectable* c) {
 
 // make the item look like it is being carried around by the player
 void Player::positionItem() {
-  item->sprite->y = sprite->y + 6;
+  item->sprite->y = sprite->y + 24;
   item->visible = true;
   item->sprite->flip = false;
 
   if (eyeLine == Torch::LEFT) {
     item->sprite->flip = true;
-    item->sprite->x = sprite->x - 4;
+    item->sprite->x = sprite->x - 16;
   } else if (eyeLine == Torch::RIGHT) {
-    item->sprite->x = sprite->x + 5;
+    item->sprite->x = sprite->x + 20;
   } else if (eyeLine == Torch::UP) {
-    item->sprite->x = sprite->x + 1;
+    item->sprite->x = sprite->x + 4;
     item->visible = false;
   } else if (eyeLine == Torch::DOWN) {
-    item->sprite->x = sprite->x + 1;
+    item->sprite->y += 4;
+    item->sprite->x = sprite->x + 4;
   }
 }
