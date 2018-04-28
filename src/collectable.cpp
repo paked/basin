@@ -20,7 +20,7 @@ void Collectable::tick(float dt) {
 }
 
 void Collectable::render(SDL_Renderer* renderer, SDL_Point cam) {
-  if (!active) {
+  if (!visible) {
     return;
   }
 

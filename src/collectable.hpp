@@ -23,7 +23,7 @@ struct Collectable {
 
   static std::string key(Type t);
 
-  bool active = true;
+  bool visible = true;
 
   Sprite* sprite;
 };

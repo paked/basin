@@ -32,20 +32,20 @@ void Game::load() {
 
   map = new Tilemap();
   map->loadTileset("tileset.png");
-  map->loadBackground("assets/lvl/level_background.csv");
-  map->loadForeground("assets/lvl/level_foreground.csv");
-  map->loadCollision("assets/lvl/level_collision.csv");
+  map->loadBackground("assets/lvl/map_background.csv");
+  map->loadForeground("assets/lvl/map_foreground.csv");
+  map->loadCollision("assets/lvl/map_collision.csv");
 
-  loadCollectables("assets/lvl/level_collectables.csv");
-  loadInfos("assets/lvl/level_infos.csv");
+  loadCollectables("assets/lvl/map_collectables.csv");
+  loadInfos("assets/lvl/map_infos.csv");
 
   switchboard = new Switchboard(camera.width/2, camera.height/2);
-  switchboardTerminal = new Sprite("switchboard.png", 28 * 16, 8 * 16);
+  switchboardTerminal = new Sprite("switchboard.png", 8 * 16, 11 * 16);
 
   player = new Player();
 
   enemy = new Enemy(33 * 16, 10 * 16);
-  slidingDoor = new SlidingDoor(27 * 16, 9 * 16);
+  slidingDoor = new SlidingDoor(10 * 16, 11 * 16);
 
   camera.follow = player->sprite;
 }
@@ -74,8 +74,10 @@ void Game::tick(float dt) {
     player->torch->darkness = 0.0;
   }
 
-  Tilemap::collide(player->sprite, map);
-  Sprite::collide(player->sprite, slidingDoor->rect());
+  if (!godMode.down()) {
+    Tilemap::collide(player->sprite, map);
+    Sprite::collide(player->sprite, slidingDoor->rect());
+  }
 
   for (auto c : collectables) {
     c->tick(dt);
@@ -169,7 +171,7 @@ void Game::loadCollectables(std::string fname) {
         continue;
       }
 
-      collectables.push_back(new Collectable(x * 16, y * 16, type));
+      collectables.push_back(new Collectable(x * 16 + 12, y * 16 + 12, type));
     }
   }
 }
@@ -194,6 +196,6 @@ void Game::loadInfos(std::string fname) {
     int y = stoi(row[1]);
     std::string msg = row[2];
 
-    infos.push_back(new Info(x * 16, y * 16, msg));
+    infos.push_back(new Info(x * 16 + 12, y * 16 + 12, msg));
   }
 }

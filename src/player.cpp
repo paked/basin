@@ -12,10 +12,10 @@ Player::Player() {
   sprite->addAnimation("walk_down", { 6, 7 });
   sprite->addAnimation("idle_up", { 8, 9 });
   sprite->addAnimation("walk_up", { 10, 11 });
-  sprite->x = 33 * 16;
-  sprite->y = 2 * 16;
+  sprite->x = 9 * 16 - sprite->width/2;
+  sprite->y = 1 * 16;
 
-  sprite->playAnimation("idle");
+  sprite->playAnimation("idle_down");
 
   equipPrompt = new Text("E to equip");
 
@@ -97,6 +97,7 @@ void Player::tick(float dt) {
   if (hasItem && equip.justDown() && !justGotItem) {
     hasItem = false;
     justDroppedItem = true;
+    item->visible = true;
 
     battery->unattach();
 
@@ -155,6 +156,10 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
     };
 
     SDL_RenderCopy(renderer, equipPrompt->texture, NULL, &dst);
+
+    // BAD CODE. relies on rendering being done last in the frame in order to
+    // reset the showEquipPrompt flag.
+    showEquipPrompt = false;
   }
 
   if (torch->darkness > 0.1) {
@@ -164,28 +169,23 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
 
 bool Player::equipMeMaybe(Collectable* c) {
   if (hasItem || justDroppedItem) {
-    showEquipPrompt = false;
     return false;
   }
 
-  bool can = Sprite::isOverlapping(sprite->rect(), c->sprite->rect());
-
-  if (can) {
-    showEquipPrompt = true;
-  } else {
-    showEquipPrompt = false;
-
+  if (!Sprite::isOverlapping(sprite->rect(), c->sprite->rect())) {
     return false;
   }
+
+  showEquipPrompt = true;
 
   if (!equip.justDown()) {
+    // The equip button was not pressed, no chance of pick up.
     return false;
   }
 
   hasItem = true;
 
   item = c;
-  // item->active = false;
 
   printf("picking up %s\n", Collectable::key(c->type).c_str());
 
@@ -196,32 +196,21 @@ bool Player::equipMeMaybe(Collectable* c) {
   return true;
 }
 
-// super jank conditional to make the item follow along with the body in  a way
-// which looks like it is being carried by hand
+// make the item look like it is being carried around by the player
 void Player::positionItem() {
-  std::string name = sprite->currentAnimationName;
-
+  item->sprite->y = sprite->y + 6;
+  item->visible = true;
   item->sprite->flip = false;
 
-  item->sprite->y = sprite->y + 6;
-  if (name == "idle_hori") {
-    if (!sprite->flip) {
-      item->sprite->x = sprite->x + 10;
-    } else {
-      item->sprite->x = sprite->x - 8;
-      item->sprite->flip = true;
-    }
-  } else if (name == "walk_hori") {
-    if (!sprite->flip) {
-      item->sprite->x = sprite->x + 11;
-    } else {
-      item->sprite->x = sprite->x - 9;
-      item->sprite->flip = true;
-    }
-  } else if (name == "idle_down" || name == "walk_down") {
-    item->sprite->x = sprite->x + 10;
-  } else if (name == "walk_up" || name == "idle_up") {
+  if (eyeLine == Torch::LEFT) {
     item->sprite->flip = true;
-    item->sprite->x = sprite->x - 8;
+    item->sprite->x = sprite->x - 4;
+  } else if (eyeLine == Torch::RIGHT) {
+    item->sprite->x = sprite->x + 5;
+  } else if (eyeLine == Torch::UP) {
+    item->sprite->x = sprite->x + 1;
+    item->visible = false;
+  } else if (eyeLine == Torch::DOWN) {
+    item->sprite->x = sprite->x + 1;
   }
 }

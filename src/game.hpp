@@ -45,4 +45,6 @@ private:
 
   void loadCollectables(std::string fname);
   void loadInfos(std::string fname);
+
+  Input godMode = Input(SDL_SCANCODE_TAB);
 };
