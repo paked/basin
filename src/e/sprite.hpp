@@ -32,6 +32,22 @@ struct Sprite {
   // internal method. probably doesn't have much outside use.
   void updateAnimation();
 
+  int x;
+  int y;
+  int width;
+  int height;
+  // should the image be flipped horizontally?
+  bool flip = false;
+  // render in camera space or on screen space?
+  bool hud = false;
+  int angle = 0;
+
+  Point velocity;
+  Point acceleration;
+  Point drag = Point(0.99, 0.99);
+  Point maxVelocity = Point(1000, 1000);
+  Point nextPositionDelta;
+
   bool isSpritesheet = false;
 
   int frameLength = 1000/3;
@@ -40,31 +56,13 @@ struct Sprite {
 
   Animation currentAnimation;
   std::string currentAnimationName;
+  std::map<std::string, Animation> animations;
   int currentFrame = 0;
   bool loop = false;
   bool playing = false;
   int nextFrame;
 
-  std::map<std::string, Animation> animations;
-
-  int x;
-  int y;
-
-  int width;
-  int height;
-
-  Point nextPositionDelta;
-  Point velocity;
-  Point acceleration;
-  Point drag = Point(0.99, 0.99);
-  Point maxVelocity = Point(1000, 1000);
-
   int textureWidth;
   int textureHeight;
   SDL_Texture *texture;
-
-  // should the image be flipped horizontally?
-  bool flip = false;
-  // render in camera space or on screen space?
-  bool hud = false;
 };

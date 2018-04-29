@@ -15,7 +15,7 @@ Player::Player() {
 
   sprite->playAnimation("idle_down");
 
-  textEquip = new Text("E to equip");
+  textEquip = new Text("Pick up with E");
   textInsert = new Text("Insert with E");
   textPower = new Text("Power on with space");
 
@@ -229,9 +229,11 @@ bool Player::equipMeMaybe(Collectable* c) {
 
 // make the item look like it is being carried around by the player
 void Player::positionItem() {
-  item->sprite->y = sprite->y + 24;
+  item->sprite->y = sprite->y + 32;
   item->visible = true;
   item->sprite->flip = false;
+
+  item->sprite->angle = 0;
 
   if (eyeLine == Torch::LEFT) {
     item->sprite->flip = true;
@@ -242,6 +244,7 @@ void Player::positionItem() {
     item->sprite->x = sprite->x + 4;
     item->visible = false;
   } else if (eyeLine == Torch::DOWN) {
+    item->sprite->angle = 90;
     item->sprite->y += 4;
     item->sprite->x = sprite->x + 4;
   }
