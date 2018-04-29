@@ -3,21 +3,26 @@
 #include <stdio.h>
 
 #include <e/input.hpp>
+#include <e/core.hpp>
+
+#include <config.hpp>
 
 Switchboard::Switchboard(int x, int y) {
+  terminal = new Sprite("switchboard.png", x, y);
+
   backboard = new Sprite("switchboard_gui.png");
   overlay = new Sprite("switchboard_gui_overlay.png");
   overlay->spritesheet(64, 64);
 
-  backboard->x = overlay->x = x - backboard->width/2;
-  backboard->y = overlay->y = y - backboard->height/2;
+  backboard->x = overlay->x = SCREEN_WIDTH/2 - backboard->width/2;
+  backboard->y = overlay->y = SCREEN_HEIGHT/2 - backboard->height/2;
   backboard->hud = overlay->hud = true;
 
-  inPositive = new Jumper(true, { backboard->x + 2 * 16, backboard->y + 6 * 16 });
-  inNegative = new Jumper(false, { backboard->x + 6 * 16, backboard->y + 6 * 16 });
+  inPositive = new Jumper(true, { backboard->x + (2 * 16) * Core::scale, backboard->y + (6 * 16) * Core::scale });
+  inNegative = new Jumper(false, { backboard->x + (6 * 16) * Core::scale, backboard->y + (6 * 16) * Core::scale });
 
-  outPositive = new Jumper(true, { backboard->x + 2 * 16, backboard->y + 2 * 16 });
-  outNegative = new Jumper(false, { backboard->x + 6 * 16, backboard->y + 2 * 16 });
+  outPositive = new Jumper(true, { backboard->x + (2 * 16) * Core::scale, backboard->y + (2 * 16) * Core::scale });
+  outNegative = new Jumper(false, { backboard->x + (6 * 16) * Core::scale, backboard->y + (2 * 16) * Core::scale });
 
   inPositive->sprite->x = 20;
   inPositive->sprite->y = 150;
@@ -60,12 +65,23 @@ void Switchboard::tick(float dt) {
 }
 
 void Switchboard::render(SDL_Renderer* renderer, SDL_Point cam) {
+  terminal->render(renderer, cam);
+}
+
+void Switchboard::renderOverlay(SDL_Renderer* renderer, SDL_Point cam) {
   backboard->render(renderer, cam);
 
+  inPositive->render(renderer, cam);
+  outPositive->render(renderer, cam);
+  inNegative->render(renderer, cam);
+  outNegative->render(renderer, cam);
+
+
+  /*
   // TODO: clean this up
   SDL_Rect og = overlay->rect();
 
-  outPositive->sprite->render(renderer, cam);
+  outPositive->render(renderer, cam);
   if (!outPositive->dirty()) {
     overlay->x = backboard->x;
     overlay->y = backboard->y;
@@ -97,7 +113,7 @@ void Switchboard::render(SDL_Renderer* renderer, SDL_Point cam) {
   }
 
   overlay->x = og.x;
-  overlay->y = og.y;
+  overlay->y = og.y;*/
 }
 
 bool Switchboard::continuous() {

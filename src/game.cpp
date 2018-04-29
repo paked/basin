@@ -39,8 +39,7 @@ void Game::load() {
   loadCollectables("assets/lvl/map_collectables.csv");
   loadInfos("assets/lvl/map_infos.csv");
 
-  switchboard = new Switchboard(camera.width/2, camera.height/2);
-  switchboardTerminal = new Sprite("switchboard.png", 8 * 16 * Core::scale, 11 * 16 * Core::scale);
+  switchboard = new Switchboard(8 * 16 * Core::scale, 11 * 16 * Core::scale);
 
   player = new Player();
 
@@ -82,19 +81,11 @@ void Game::tick(float dt) {
     Sprite::collide(player->sprite, slidingDoor->rect());
   }
 
-  for (auto c : collectables) {
-    c->tick(dt);
-
-    player->equipMeMaybe(c);
-
-    if (c->type == Collectable::KEY) {
-      if (Sprite::isOverlapping(c->sprite->rect(), slidingDoor->rect())) {
-          slidingDoor->open();
-      }
-    } else if (c->type == Collectable::JUMPERS) {
-      showSwitchboard = Sprite::isOverlapping(c->sprite->rect(), switchboardTerminal->rect());
-    }
+  if (showSwitchboard && cancel.justDown()) {
+    showSwitchboard = false;
   }
+
+  tickCollectables(dt);
 
   for (auto info : infos) {
     info->showText = Sprite::isOverlapping(player->sprite->rect(), info->sprite->rect());
@@ -110,6 +101,8 @@ void Game::tick(float dt) {
 
     if (switchboard->continuous()) {
       slidingDoor->open();
+
+      showSwitchboard = false;
     }
   }
 
@@ -131,7 +124,7 @@ void Game::render(SDL_Renderer* renderer) {
     info->render(renderer, cam);
   }
 
-  switchboardTerminal->render(renderer, cam);
+  switchboard->render(renderer, cam);
 
   slidingDoor->render(renderer, cam);
 
@@ -139,7 +132,30 @@ void Game::render(SDL_Renderer* renderer) {
   player->renderForeground(renderer, camera);
 
   if (showSwitchboard) {
-    switchboard->render(renderer, cam);
+    switchboard->renderOverlay(renderer, cam);
+  }
+}
+
+void Game::tickCollectables(float dt) {
+  for (auto c : collectables) {
+    c->tick(dt);
+
+    player->equipMeMaybe(c);
+
+    switch (c->type) {
+      case Collectable::KEY:
+        if (Sprite::isOverlapping(c->sprite->rect(), slidingDoor->rect())) {
+          slidingDoor->open();
+        }
+
+        break;
+      case Collectable::JUMPERS:
+        if (player->justDroppedItem && Sprite::isOverlapping(c->sprite->rect(), switchboard->terminal->rect())) {
+          showSwitchboard = Sprite::isOverlapping(c->sprite->rect(), switchboard->terminal->rect());
+        }
+
+        break;
+    }
   }
 }
 

@@ -11,11 +11,12 @@ struct Switchboard {
 
   void tick(float dt);
   void render(SDL_Renderer* renderer, SDL_Point cam);
+  void renderOverlay(SDL_Renderer* renderer, SDL_Point cam);
 
   bool continuous();
 
+  Sprite* terminal;
   Sprite* backboard;
-
   Sprite* overlay;
 
   Jumper* inPositive;

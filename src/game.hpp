@@ -31,11 +31,11 @@ private:
   Enemy* enemy;
 
   std::vector<Collectable*> collectables;
+  void tickCollectables(float dt);
   std::vector<Info*> infos;
 
   SlidingDoor* slidingDoor;
 
-  Sprite* switchboardTerminal;
   Switchboard* switchboard;
   bool showSwitchboard = false;
 
@@ -46,5 +46,6 @@ private:
   void loadCollectables(std::string fname);
   void loadInfos(std::string fname);
 
+  Input cancel = Input(SDL_SCANCODE_ESCAPE);
   Input godMode = Input(SDL_SCANCODE_TAB);
 };
