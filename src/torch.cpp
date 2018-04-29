@@ -2,10 +2,12 @@
 
 #include <e/core.hpp>
 
+#include <config.hpp>
+
 Torch::Torch() {
   beam = new Sprite("torch_beam.png");
 
-  buffer = SDL_CreateTexture(Core::renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 200, 200);
+  buffer = SDL_CreateTexture(Core::renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   SDL_SetTextureBlendMode(buffer, SDL_BLENDMODE_MOD);
 }
@@ -21,8 +23,8 @@ void Torch::beamIn(Direction d) {
   SDL_Rect src = beam->rect();
   SDL_Rect dst = beam->rect();
 
-  dst.x = 100 - 16;
-  dst.y = 100 - 8;
+  dst.x = SCREEN_WIDTH/2 - src.w/2;
+  dst.y = SCREEN_WIDTH/2 - src.h/8;
 
   double angle = 0;
 
@@ -50,7 +52,7 @@ void Torch::beamIn(Direction d) {
   // for some reason...
   angle -= 180;
 
-  SDL_Point center = { .x = 16, .y = 8};
+  SDL_Point center = { .x = 16 * Core::scale, .y = 8 * Core::scale };
 
   SDL_RenderCopyEx(
       Core::renderer,

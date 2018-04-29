@@ -66,6 +66,10 @@ void Game::tick(float dt) {
   }
 
   SDL_Rect darkZone = {.x = 1 * 16, .y = 16 * 16, .w = 12 * 16, .h = 9 * 16 };
+  darkZone.x *= Core::scale;
+  darkZone.y *= Core::scale;
+  darkZone.w *= Core::scale;
+  darkZone.h *= Core::scale;
 
   if (Sprite::isOverlapping(player->sprite->rect(), darkZone)) {
     player->torch->darkness = 1.0;
