@@ -115,7 +115,6 @@ void Player::tick(float dt) {
     torch->post();
   }
 
-
   if (hasItem && equip.justDown() && !justGotItem) {
     hasItem = false;
     justDroppedItem = true;
@@ -154,7 +153,7 @@ void Player::postTick() {
     return;
   }
 
-  if (promptClear) {
+  if (promptClear || busy) {
     doPrompt = false;
     promptText = nullptr;
 
