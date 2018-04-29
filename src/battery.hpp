@@ -21,6 +21,8 @@ struct Battery {
 
   float capacity = 0.3f;
 
+  bool hasCapacity(float c);
+
   void tick(float dt);
   void render(SDL_Renderer *renderer, SDL_Point cam);
 };

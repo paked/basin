@@ -24,6 +24,7 @@ struct Collectable {
   static std::string key(Type t);
 
   bool visible = true;
+  bool shouldPromptEquip = true;
 
   Sprite* sprite;
 };

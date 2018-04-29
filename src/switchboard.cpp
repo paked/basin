@@ -24,15 +24,15 @@ Switchboard::Switchboard(int x, int y) {
   outPositive = new Jumper(true, { backboard->x + (2 * 16) * Core::scale, backboard->y + (2 * 16) * Core::scale });
   outNegative = new Jumper(false, { backboard->x + (6 * 16) * Core::scale, backboard->y + (2 * 16) * Core::scale });
 
-  inPositive->sprite->x = 20;
-  inPositive->sprite->y = 150;
-  inNegative->sprite->x = 170;
-  inNegative->sprite->y = 150;
+  inPositive->sprite->x = 20 * Core::scale;
+  inPositive->sprite->y = 150 * Core::scale;
+  inNegative->sprite->x = 170 * Core::scale;
+  inNegative->sprite->y = 150 * Core::scale;
 
-  outPositive->sprite->x = 20;
-  outPositive->sprite->y = 30;
-  outNegative->sprite->x = 170;
-  outNegative->sprite->y = 30;
+  outPositive->sprite->x = 20 * Core::scale;
+  outPositive->sprite->y = 30 * Core::scale;
+  outNegative->sprite->x = 170 * Core::scale;
+  outNegative->sprite->y = 30 * Core::scale;
 }
 
 void Switchboard::tick(float dt) {
@@ -78,7 +78,7 @@ void Switchboard::renderOverlay(SDL_Renderer* renderer, SDL_Point cam) {
 
 
   /*
-  // TODO: clean this up
+  // TODO: re add in the insert thing
   SDL_Rect og = overlay->rect();
 
   outPositive->render(renderer, cam);

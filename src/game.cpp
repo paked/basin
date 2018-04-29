@@ -81,10 +81,7 @@ void Game::tick(float dt) {
     Sprite::collide(player->sprite, slidingDoor->rect());
   }
 
-  if (showSwitchboard && cancel.justDown()) {
-    showSwitchboard = false;
-    player->busy = false;
-  }
+
 
   tickCollectables(dt);
 
@@ -97,15 +94,27 @@ void Game::tick(float dt) {
   player->tick(dt);
   slidingDoor->tick(dt);
 
+  // TODO: flatten this
   if (showSwitchboard) {
-    switchboard->tick(dt);
-
     if (switchboard->continuous()) {
-      slidingDoor->open();
+      player->proposePrompt(player->textPower);
 
+      if (player->use.justDown() && player->battery->hasCapacity(0.1)) {
+        player->battery->capacity -= 0.1;
+
+        slidingDoor->open();
+
+        showSwitchboard = false;
+        player->busy = false;
+      }
+    }
+
+    if (cancel.justDown()) {
       showSwitchboard = false;
       player->busy = false;
     }
+
+    switchboard->tick(dt);
   }
 
   camera.update();

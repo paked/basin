@@ -153,7 +153,7 @@ void Player::postTick() {
     return;
   }
 
-  if (promptClear || busy) {
+  if (promptClear) {
     doPrompt = false;
     promptText = nullptr;
 
@@ -199,7 +199,7 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
 }
 
 bool Player::equipMeMaybe(Collectable* c) {
-  if (hasItem || justDroppedItem) {
+  if (hasItem || justDroppedItem || busy) {
     return false;
   }
 
@@ -207,7 +207,9 @@ bool Player::equipMeMaybe(Collectable* c) {
     return false;
   }
 
-  proposePrompt(textEquip);
+  if (c->shouldPromptEquip) {
+    proposePrompt(textEquip);
+  }
 
   if (!equip.justDown()) {
     // The equip button was not pressed, no chance of pick up.
@@ -215,12 +217,16 @@ bool Player::equipMeMaybe(Collectable* c) {
   }
 
   hasItem = true;
+  justGotItem = true;
 
   item = c;
 
+  // after we pick up an item once, we don't need to be in-your-face about
+  // suggesting to pick it up again
+  item->shouldPromptEquip = false;
+
   printf("picking up %s\n", Collectable::key(c->type).c_str());
 
-  justGotItem = true;
 
   battery->attach(c->type);
 

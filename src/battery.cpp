@@ -1,6 +1,11 @@
 #include <battery.hpp>
 
+#include <cmath>
+
+#include <e/core.hpp>
 #include <e/resources.hpp>
+
+#define DEGREES_TO_RADIANS(degrees) ((degrees) * 3.14159265359 / 180.0)
 
 Battery::Battery(int x, int y) {
   sprite = new Sprite("battery.png");
@@ -69,7 +74,7 @@ void Battery::render(SDL_Renderer *renderer, SDL_Point cam) {
 
   src = sprite->getFrame(2);
 
-  src.y += offset;
+  src.y += offset/Core::scale;
   src.h = battSize;
 
   dst = {
@@ -86,4 +91,8 @@ void Battery::render(SDL_Renderer *renderer, SDL_Point cam) {
   }
 
   attachments->render(renderer, cam);
+}
+
+bool Battery::hasCapacity(float c) {
+  return (capacity - c > 0);
 }
