@@ -26,6 +26,7 @@ struct Player {
   Player();
 
   void tick(float dt);
+  void postTick();
   void render(SDL_Renderer *renderer, SDL_Point cam);
   void renderForeground(SDL_Renderer *renderer, Camera cam);
 
@@ -38,20 +39,34 @@ struct Player {
   Input equip = Input(SDL_SCANCODE_E);
   Input use = Input(SDL_SCANCODE_SPACE);
 
+  bool busy = false;
+
   int acceleration = 40;
 
   Collectable* item;
   bool itemOn = false;
   bool justGotItem = false;
   bool justDroppedItem = false;
+  Collectable* lastDroppedItem = nullptr;
   bool hasItem = false;
 
   void positionItem();
 
-  Text* equipPrompt;
-  bool showEquipPrompt = false;
+  Text* textEquip;
+  Text* textInsert;
+  Text* textPower;
 
   bool equipMeMaybe(Collectable *c);
+
+  bool promptClear = false;
+  void proposePrompt(Text *text);
+
+  bool doPrompt = false;
+  SDL_Point promptPosition = { 400, 100};
+  Text *promptText;
+  bool promptOn = true;
+  int promptNextToggle;
+  int promptToggleFrequency = 500;
 
   Battery* battery;
   Torch* torch;

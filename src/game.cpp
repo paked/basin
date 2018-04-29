@@ -83,6 +83,7 @@ void Game::tick(float dt) {
 
   if (showSwitchboard && cancel.justDown()) {
     showSwitchboard = false;
+    player->busy = false;
   }
 
   tickCollectables(dt);
@@ -103,10 +104,13 @@ void Game::tick(float dt) {
       slidingDoor->open();
 
       showSwitchboard = false;
+      player->busy = false;
     }
   }
 
   camera.update();
+
+  player->postTick();
 }
 
 void Game::render(SDL_Renderer* renderer) {
@@ -142,6 +146,8 @@ void Game::tickCollectables(float dt) {
 
     player->equipMeMaybe(c);
 
+    bool isHeld = player->item == c;
+
     switch (c->type) {
       case Collectable::KEY:
         if (Sprite::isOverlapping(c->sprite->rect(), slidingDoor->rect())) {
@@ -150,8 +156,18 @@ void Game::tickCollectables(float dt) {
 
         break;
       case Collectable::JUMPERS:
-        if (player->justDroppedItem && Sprite::isOverlapping(c->sprite->rect(), switchboard->terminal->rect())) {
-          showSwitchboard = Sprite::isOverlapping(c->sprite->rect(), switchboard->terminal->rect());
+        if (!Sprite::isOverlapping(c->sprite->rect(), switchboard->terminal->rect())) {
+          // add implicit is-overlapping-with-player condition to rest of scope.
+          break;
+        }
+
+        if (isHeld) {
+          player->proposePrompt(player->textInsert);
+        }
+
+        if (player->justDroppedItem && player->lastDroppedItem == c) {
+          showSwitchboard = true;
+          player->busy = true;
         }
 
         break;

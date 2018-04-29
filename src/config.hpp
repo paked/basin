@@ -8,3 +8,5 @@
 #define GFX_PATH "assets/gfx/"
 #define LVL_PATH "assets/lvl/"
 #define FONT_PATH "assets/gfx/font/"
+
+// #define DEBUG 1

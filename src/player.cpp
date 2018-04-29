@@ -15,7 +15,9 @@ Player::Player() {
 
   sprite->playAnimation("idle_down");
 
-  equipPrompt = new Text("E to equip");
+  textEquip = new Text("E to equip");
+  textInsert = new Text("Insert with E");
+  textPower = new Text("Power on with space");
 
   battery = new Battery();
   torch = new Torch();
@@ -84,6 +86,15 @@ void Player::tick(float dt) {
   sprite->acceleration.x = 0;
   sprite->acceleration.y = 0;
 
+  lastDroppedItem = nullptr;
+  justDroppedItem = false;
+
+  if (busy) {
+    // Stop player from moving, picking things up, etc. while interacting with a panel or whatever.
+    // Not entirely sure what the ramifications of this will be...
+    return;
+  }
+
   if (currentMovement == MOVE_LEFT) {
     sprite->acceleration.x = -acceleration;
   } else if (currentMovement == MOVE_RIGHT) {
@@ -94,7 +105,17 @@ void Player::tick(float dt) {
     sprite->acceleration.y = acceleration;
   }
 
-  justDroppedItem = false;
+  if (torch->darkness > 0.1) {
+    torch->pre();
+
+    if (hasItem && item->type == Collectable::TORCH) {
+      torch->beamIn(eyeLine);
+    }
+
+    torch->post();
+  }
+
+
   if (hasItem && equip.justDown() && !justGotItem) {
     hasItem = false;
     justDroppedItem = true;
@@ -102,6 +123,7 @@ void Player::tick(float dt) {
 
     battery->unattach();
 
+    lastDroppedItem = item;
     item = nullptr;
   }
 
@@ -125,16 +147,27 @@ void Player::tick(float dt) {
   battery->tick(dt);
 
   justGotItem = false;
+}
 
-  if (torch->darkness > 0.1) {
-    torch->pre();
-
-    if (hasItem && item->type == Collectable::TORCH) {
-      torch->beamIn(eyeLine);
-    }
-
-    torch->post();
+void Player::postTick() {
+  if (!doPrompt) {
+    return;
   }
+
+  if (promptClear) {
+    doPrompt = false;
+    promptText = nullptr;
+
+    return;
+  }
+
+  if (SDL_GetTicks() > promptNextToggle) {
+    promptOn = !promptOn;
+
+    promptNextToggle = SDL_GetTicks() + promptToggleFrequency;
+  }
+
+  promptClear = true;
 }
 
 void Player::render(SDL_Renderer *renderer, SDL_Point cam) {
@@ -148,24 +181,17 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
 
   battery->render(renderer, camera.point());
 
-  if (showEquipPrompt) {
-    SDL_Rect rect = equipPrompt->rect;
+  if (doPrompt && promptOn) {
+    SDL_Rect rect = promptText->rect;
 
     SDL_Rect dst = {
-      .x = sprite->x - (rect.w/2 - sprite->rect().w/2),
-      .y = sprite->y - (rect.h/2 - sprite->rect().h/2) - 64,
-      .w = rect.w,
-      .h = rect.h
+      .x = promptPosition.x - rect.w,
+      .y = promptPosition.y - rect.h,
+      .w = rect.w*2,
+      .h = rect.h*2
     };
 
-    dst.x -= camera.x;
-    dst.y -= camera.y;
-
-    SDL_RenderCopy(renderer, equipPrompt->texture, NULL, &dst);
-
-    // BAD CODE. relies on rendering being done last in the frame in order to
-    // reset the showEquipPrompt flag.
-    showEquipPrompt = false;
+    SDL_RenderCopy(renderer, promptText->texture, NULL, &dst);
   }
 
   if (torch->darkness > 0.1) {
@@ -182,7 +208,7 @@ bool Player::equipMeMaybe(Collectable* c) {
     return false;
   }
 
-  showEquipPrompt = true;
+  proposePrompt(textEquip);
 
   if (!equip.justDown()) {
     // The equip button was not pressed, no chance of pick up.
@@ -220,4 +246,18 @@ void Player::positionItem() {
     item->sprite->y += 4;
     item->sprite->x = sprite->x + 4;
   }
+}
+
+void Player::proposePrompt(Text* text) {
+  if (promptText == text) {
+    promptClear = false;
+
+    return;
+  }
+
+  promptText = text;
+  doPrompt = true;
+  promptOn = true;
+  promptClear = false;
+  promptNextToggle = SDL_GetTicks() + promptToggleFrequency;
 }

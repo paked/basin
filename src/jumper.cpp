@@ -1,5 +1,7 @@
 #include <jumper.hpp>
 
+#include <config.hpp>
+
 Jumper::Jumper(bool positive, SDL_Point socket) : socket(socket) {
   sprite = new Sprite("switchboard_gui_jumpers.png");
   sprite->hud = true;
@@ -63,29 +65,9 @@ void Jumper::generateColliders() {
 }
 
 void Jumper::render(SDL_Renderer* renderer, SDL_Point cam) {
-  /* if (in()) {
-    int hiddenLength = (socket.y - sprite->y)/4;
-    int offset = (sprite->height - hiddenLength)/4;
+  sprite->render(renderer, cam);
 
-    printf("hl: %d, os: %d\n", hiddenLength, offset);
-
-    SDL_Rect src = sprite->getFrame();
-
-    src.y += (24 - hiddenLength);
-    src.h = hiddenLength;
-
-    SDL_Rect dst = {
-      .x = sprite->x,
-      .y = sprite->y + hiddenLength*4,
-      .w = sprite->width,
-      .h = hiddenLength*4
-    };
-
-    SDL_RenderCopy(renderer, sprite->texture, &src, &dst);
-  } else {*/
-    sprite->render(renderer, cam);
-  //}
-
+#ifdef DEBUG
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
   SDL_Rect bananaRect = rect(); 
   SDL_RenderDrawRect(renderer, &bananaRect);
@@ -101,6 +83,7 @@ void Jumper::render(SDL_Renderer* renderer, SDL_Point cam) {
 
   SDL_SetRenderDrawColor(renderer, 100, 255, 255, 255);
   SDL_RenderDrawRect(renderer, &socketTopPad);
+#endif
 
   if (in()) {
     SDL_SetRenderDrawColor(renderer, 0, 255, 50, 255);

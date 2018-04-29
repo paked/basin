@@ -6,6 +6,7 @@
 
 struct Text {
   Text(std::string text);
+  ~Text();
 
   std::string text;
   SDL_Texture* texture;
