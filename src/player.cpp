@@ -108,8 +108,10 @@ void Player::tick(float dt) {
   if (torch->darkness > 0.1) {
     torch->pre();
 
-    if (hasItem && item->type == Collectable::TORCH) {
+    if (hasItem && item->type == Collectable::TORCH && torch->on) {
       torch->beamIn(eyeLine);
+
+      battery->capacity -= 0.001 * dt;
     }
 
     torch->post();
@@ -126,16 +128,12 @@ void Player::tick(float dt) {
     item = nullptr;
   }
 
-  if (use.justDown()) {
-    itemOn = !itemOn;
+  if (hasItem && item->type == Collectable::TORCH && use.justDown()) {
+    torch->on = !torch->on;
   }
 
-  if (hasItem && itemOn) {
-    battery->capacity -= 0.05 * dt;
-  }
-
-  if (battery->capacity < 0) {
-    itemOn = false;
+  if (hasItem && item->type == Collectable::TORCH && battery->capacity < 0) {
+    torch->on = false;
   }
 
   if (hasItem) {
@@ -174,6 +172,10 @@ void Player::render(SDL_Renderer *renderer, SDL_Point cam) {
 }
 
 void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
+  if (torch->dark()) {
+    torch->render(renderer);
+  }
+
   // position battery at bottom left of the screen
   battery->sprite->x = camera.width - (battery->width + 4);
   battery->sprite->y = camera.height - (battery->height + 4);
@@ -191,10 +193,6 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
     };
 
     SDL_RenderCopy(renderer, promptText->texture, NULL, &dst);
-  }
-
-  if (torch->darkness > 0.1) {
-    torch->render(renderer);
   }
 }
 

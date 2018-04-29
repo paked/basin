@@ -81,8 +81,6 @@ void Game::tick(float dt) {
     Sprite::collide(player->sprite, slidingDoor->rect());
   }
 
-
-
   tickCollectables(dt);
 
   for (auto info : infos) {
@@ -177,6 +175,12 @@ void Game::tickCollectables(float dt) {
         if (player->justDroppedItem && player->lastDroppedItem == c) {
           showSwitchboard = true;
           player->busy = true;
+        }
+
+        break;
+      case Collectable::TORCH:
+        if (isHeld && !player->torch->on &&player->torch->dark()) {
+          player->proposePrompt(player->textPower);
         }
 
         break;

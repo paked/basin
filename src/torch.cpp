@@ -64,6 +64,10 @@ void Torch::beamIn(Direction d) {
       SDL_FLIP_NONE);
 }
 
+bool Torch::dark() {
+  return darkness > 0.1;
+}
+
 void Torch::post() {
   SDL_SetRenderTarget(Core::renderer, NULL);
 }
