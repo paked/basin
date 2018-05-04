@@ -24,8 +24,8 @@ Player::Player() {
 
   sprite->maxVelocity = Point(25, 25);
   sprite->drag = Point(0.95, 0.95);
-  sprite->x = (9 * 16)*Core::scale - sprite->width/2;
-  sprite->y = (1 * 16)*Core::scale;
+  sprite->x = (17 * 16)*Core::scale - sprite->width/2;
+  sprite->y = (17 * 16)*Core::scale;
 }
 
 void Player::tick(float dt) {

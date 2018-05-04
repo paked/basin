@@ -17,6 +17,7 @@
 #include <collectable.hpp>
 #include <sliding_door.hpp>
 #include <switchboard.hpp>
+#include <boulder.hpp>
 
 struct Game {
   void load();
@@ -29,6 +30,11 @@ struct Game {
 private:
   Player* player;
   Enemy* enemy;
+
+  bool blockadeUp = true;
+  Sprite* mazeBlockade;
+
+  Boulder* boulder;
 
   std::vector<Collectable*> collectables;
   void tickCollectables(float dt);

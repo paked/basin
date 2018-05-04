@@ -9,6 +9,8 @@ file(GLOB SOURCES
 
     src/battery.hpp
     src/battery.cpp
+    src/boulder.hpp
+    src/boulder.cpp
     src/game.hpp
     src/game.cpp
     src/config.hpp

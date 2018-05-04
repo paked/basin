@@ -24,6 +24,8 @@ void Game::load() {
   ok |= Resources::load("switchboard_gui_jumpers.png");
   ok |= Resources::load("switchboard_gui_overlay.png");
   ok |= Resources::load("torch_beam.png");
+  ok |= Resources::load("maze_blockade.png");
+  ok |= Resources::load("boulder.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
 
   if (!ok) {
@@ -38,6 +40,9 @@ void Game::load() {
 
   loadCollectables("assets/lvl/map_collectables.csv");
   loadInfos("assets/lvl/map_infos.csv");
+
+  mazeBlockade = new Sprite("maze_blockade.png", 10 * 16 * Core::scale, 23 * 16 * Core::scale);
+  boulder = new Boulder(21 * 16 * Core::scale, (24 * 16 + 8) * Core::scale);
 
   switchboard = new Switchboard(8 * 16 * Core::scale, 11 * 16 * Core::scale);
 
@@ -64,7 +69,7 @@ void Game::tick(float dt) {
     }
   }
 
-  SDL_Rect darkZone = {.x = 1 * 16, .y = 25 * 16, .w = 12 * 16, .h = 9 * 16 };
+  SDL_Rect darkZone = {.x = 1 * 16, .y = 25 * 16, .w = 10 * 16, .h = 4 * 16 };
   darkZone.x *= Core::scale;
   darkZone.y *= Core::scale;
   darkZone.w *= Core::scale;
@@ -79,6 +84,29 @@ void Game::tick(float dt) {
   if (!godMode.down()) {
     Tilemap::collide(player->sprite, map);
     Sprite::collide(player->sprite, slidingDoor->rect());
+
+    if (blockadeUp) {
+      Sprite::collide(player->sprite, mazeBlockade->rect());
+    }
+  }
+
+  if (blockadeUp) {
+    SDL_Rect triggerBoulder = {.x = 11 * 16, .y = 25 * 16, .w = 16 * 2, .h = 16};
+    triggerBoulder.x *= Core::scale;
+    triggerBoulder.y *= Core::scale;
+    triggerBoulder.w *= Core::scale;
+    triggerBoulder.h *= Core::scale;
+
+    if (Sprite::isOverlapping(player->sprite->rect(), triggerBoulder)) {
+      boulder->roll();
+    }
+
+    if (Sprite::isOverlapping(boulder->sprite->rect(), mazeBlockade->rect())) {
+      blockadeUp = false;
+    }
+
+    boulder->tick(dt);
+    mazeBlockade->tick(dt);
   }
 
   tickCollectables(dt);
@@ -139,12 +167,18 @@ void Game::render(SDL_Renderer* renderer) {
 
   slidingDoor->render(renderer, cam);
 
-  map->renderForeground(renderer, camera);
-  player->renderForeground(renderer, camera);
+  if (blockadeUp) {
+    mazeBlockade->render(renderer, cam);
+    boulder->sprite->render(renderer, cam);
+  }
 
   if (showSwitchboard) {
     switchboard->renderOverlay(renderer, cam);
   }
+
+  map->renderForeground(renderer, camera);
+  player->renderForeground(renderer, camera);
+
 }
 
 void Game::tickCollectables(float dt) {
