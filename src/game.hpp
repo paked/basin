@@ -18,6 +18,7 @@
 #include <sliding_door.hpp>
 #include <switchboard.hpp>
 #include <boulder.hpp>
+#include <blockade.hpp>
 
 struct Game {
   void load();
@@ -31,8 +32,7 @@ private:
   Player* player;
   Enemy* enemy;
 
-  bool blockadeUp = true;
-  Sprite* mazeBlockade;
+  Blockade* blockade;
 
   Boulder* boulder;
 

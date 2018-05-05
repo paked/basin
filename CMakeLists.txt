@@ -11,6 +11,8 @@ file(GLOB SOURCES
     src/battery.cpp
     src/boulder.hpp
     src/boulder.cpp
+    src/blockade.hpp
+    src/blockade.cpp
     src/game.hpp
     src/game.cpp
     src/config.hpp

@@ -25,7 +25,9 @@ void Game::load() {
   ok |= Resources::load("switchboard_gui_overlay.png");
   ok |= Resources::load("torch_beam.png");
   ok |= Resources::load("maze_blockade.png");
+  ok |= Resources::load("blockade_particle.png");
   ok |= Resources::load("boulder.png");
+  ok |= Resources::load("explosion.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
 
   if (!ok) {
@@ -41,7 +43,7 @@ void Game::load() {
   loadCollectables("assets/lvl/map_collectables.csv");
   loadInfos("assets/lvl/map_infos.csv");
 
-  mazeBlockade = new Sprite("maze_blockade.png", 10 * 16 * Core::scale, 23 * 16 * Core::scale);
+  blockade = new Blockade(10 * 16 * Core::scale, 23 * 16 * Core::scale);
   boulder = new Boulder(21 * 16 * Core::scale, (24 * 16 + 8) * Core::scale);
 
   switchboard = new Switchboard(8 * 16 * Core::scale, 11 * 16 * Core::scale);
@@ -85,12 +87,12 @@ void Game::tick(float dt) {
     Tilemap::collide(player->sprite, map);
     Sprite::collide(player->sprite, slidingDoor->rect());
 
-    if (blockadeUp) {
-      Sprite::collide(player->sprite, mazeBlockade->rect());
+    if (blockade->up) {
+      Sprite::collide(player->sprite, blockade->sprite->rect());
     }
   }
 
-  if (blockadeUp) {
+  if (blockade->up) {
     SDL_Rect triggerBoulder = {.x = 11 * 16, .y = 25 * 16, .w = 16 * 2, .h = 16};
     triggerBoulder.x *= Core::scale;
     triggerBoulder.y *= Core::scale;
@@ -101,13 +103,14 @@ void Game::tick(float dt) {
       boulder->roll();
     }
 
-    if (Sprite::isOverlapping(boulder->sprite->rect(), mazeBlockade->rect())) {
-      blockadeUp = false;
+    if (Sprite::isOverlapping(boulder->sprite->rect(), blockade->sprite->rect())) {
+      blockade->explode();
     }
 
     boulder->tick(dt);
-    mazeBlockade->tick(dt);
   }
+
+  blockade->tick(dt);
 
   tickCollectables(dt);
 
@@ -167,8 +170,8 @@ void Game::render(SDL_Renderer* renderer) {
 
   slidingDoor->render(renderer, cam);
 
-  if (blockadeUp) {
-    mazeBlockade->render(renderer, cam);
+  blockade->render(renderer, camera);
+  if (blockade->up) {
     boulder->sprite->render(renderer, cam);
   }
 
