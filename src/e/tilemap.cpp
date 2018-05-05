@@ -99,3 +99,17 @@ void Tilemap::collide(Sprite *sprite, Tilemap *map) {
     }
   }
 }
+
+// checks whether the player is on a background tile
+bool Tilemap::isOverlapping(Sprite *sprite, Tilemap *map) {
+  int x = sprite->x/Core::scale/map->tileSize;
+  int y = sprite->y/Core::scale/map->tileSize;
+
+  if (x < 0 || y < 0) {
+    return false;
+  }
+
+  int tile = map->backgroundData[y][x];
+
+  return tile > 0;
+}

@@ -34,4 +34,5 @@ struct Tilemap {
   void renderLayer(Data& data, SDL_Renderer* renderer, Camera camera);
 
   static void collide(Sprite *sprite, Tilemap *map);
+  static bool isOverlapping(Sprite *sprite, Tilemap *map);
 };

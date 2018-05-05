@@ -40,11 +40,15 @@ void Game::load() {
   map->loadForeground("assets/lvl/map_foreground.csv");
   map->loadCollision("assets/lvl/map_collision.csv");
 
+  darkness = new Tilemap();
+  darkness->loadTileset("tileset.png");
+  darkness->loadBackground("assets/lvl/map_darkness.csv");
+
   loadCollectables("assets/lvl/map_collectables.csv");
   loadInfos("assets/lvl/map_infos.csv");
 
   blockade = new Blockade(10 * 16 * Core::scale, 23 * 16 * Core::scale);
-  boulder = new Boulder(21 * 16 * Core::scale, (24 * 16 + 8) * Core::scale);
+  boulder = new Boulder(25 * 16 * Core::scale, (24 * 16 + 8) * Core::scale);
 
   switchboard = new Switchboard(8 * 16 * Core::scale, 11 * 16 * Core::scale);
 
@@ -71,13 +75,7 @@ void Game::tick(float dt) {
     }
   }
 
-  SDL_Rect darkZone = {.x = 1 * 16, .y = 25 * 16, .w = 10 * 16, .h = 4 * 16 };
-  darkZone.x *= Core::scale;
-  darkZone.y *= Core::scale;
-  darkZone.w *= Core::scale;
-  darkZone.h *= Core::scale;
-
-  if (Sprite::isOverlapping(player->sprite->rect(), darkZone)) {
+  if (Tilemap::isOverlapping(player->sprite, darkness)) {
     player->torch->darkness = 1.0;
   } else {
     player->torch->darkness = 0.0;
@@ -155,7 +153,6 @@ void Game::render(SDL_Renderer* renderer) {
   SDL_Point cam = camera.point();
 
   map->renderBackground(renderer, camera);
-
   player->render(renderer, cam);
 
   for (auto collectable : collectables) {
@@ -180,8 +177,12 @@ void Game::render(SDL_Renderer* renderer) {
   }
 
   map->renderForeground(renderer, camera);
-  player->renderForeground(renderer, camera);
 
+  if (!player->torch->dark()) {
+    darkness->renderBackground(renderer, camera);
+  }
+
+  player->renderForeground(renderer, camera);
 }
 
 void Game::tickCollectables(float dt) {

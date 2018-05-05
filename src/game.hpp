@@ -45,6 +45,7 @@ private:
   Switchboard* switchboard;
   bool showSwitchboard = false;
 
+  Tilemap* darkness;
   Tilemap* map;
 
   Camera camera;
