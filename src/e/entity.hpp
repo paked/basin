@@ -7,6 +7,7 @@
 const float DEPTH_BG = -100;
 const float DEPTH_MG = 0;
 const float DEPTH_FG = 100;
+const float DEPTH_UI = 200;
 const float DEPTH_ABOVE = 1;
 const float DEPTH_BELOW = -1;
 

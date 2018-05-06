@@ -10,6 +10,7 @@ Text::Text(std::string text) : text(text) {
 
   texture = SDL_CreateTextureFromSurface(Core::renderer, surface);
 
+  rect.x = rect.y = 0;
   TTF_SizeText(Resources::font, text.c_str(), &rect.w, &rect.h);
 
   SDL_FreeSurface(surface);

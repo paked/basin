@@ -161,7 +161,7 @@ void Player::tick(float dt) {
     };
 
     RenderJob j;
-    j.depth = getDepth() + DEPTH_ABOVE;
+    j.depth = DEPTH_UI;
     j.tex = promptText->texture;
     j.src = promptText->rect;
     j.dst = dst;
