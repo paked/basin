@@ -6,6 +6,7 @@
 
 #include <e/camera.hpp>
 #include <e/sprite.hpp>
+#include <e/entity.hpp>
 
 struct Particle {
   float x;
@@ -15,11 +16,11 @@ struct Particle {
   float dy;
 };
 
-struct Blockade {
+struct Blockade : Entity {
   Blockade(float x, float y);
 
+  void start();
   void tick(float dt);
-  void render(SDL_Renderer* renderer, Camera cam);
 
   void explode();
 

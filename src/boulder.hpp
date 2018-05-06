@@ -1,8 +1,9 @@
 #pragma once
 
 #include <e/sprite.hpp>
+#include <e/entity.hpp>
 
-struct Boulder {
+struct Boulder : Entity {
   Boulder(int x, int y);
 
   Sprite *sprite;

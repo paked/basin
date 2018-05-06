@@ -12,4 +12,6 @@ void Boulder::tick(float dt) {
   sprite->angle += spinSpeed * dt;
 
   sprite->tick(dt);
+
+  sprite->job(scene, getDepth());
 }

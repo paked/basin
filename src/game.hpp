@@ -38,10 +38,12 @@ struct Game {
 private:
   Scene* scene;
   Group<Entity> entities;
+  Camera camera;
 
   Player* player;
   Tilemap *map;
-  Camera camera;
+  Blockade* blockade;
+  Boulder* boulder;
   Group<Collectable> collectables;
 
   int darknessLayer;
@@ -56,7 +58,6 @@ private:
 
   Enemy* enemy;
 
-  Blockade* blockade;
 
   Boulder* boulder;
 

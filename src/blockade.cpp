@@ -9,6 +9,11 @@ float rand01() {
 
 Blockade::Blockade(float x, float y) {
   sprite = new Sprite("maze_blockade.png", x, y);
+}
+
+void Blockade::start() {
+  float x = sprite->x;
+  float y = sprite->y;
 
   explosionSprite = new Sprite("explosion.png", x - 16, y + 64);
   explosionSprite->frameLength = 1000/40;
@@ -48,35 +53,30 @@ void Blockade::tick(float dt) {
     up = false;
   }
 
-  if (!particlesAlive) {
-    return;
+  if (particlesAlive) {
+    if (SDL_GetTicks() > particleDeathTime) {
+      particlesAlive = false;
+    }
+
+    for (auto& p : particles) {
+      p.x += p.dx * particleSpeed * dt;
+      p.y += p.dy * particleSpeed * dt;
+    }
   }
 
-  if (SDL_GetTicks() > particleDeathTime) {
-    particlesAlive = false;
-
-    return;
-  }
-
-  for (auto& p : particles) {
-    p.x += p.dx * particleSpeed * dt;
-    p.y += p.dy * particleSpeed * dt;
-  }
-}
-
-void Blockade::render(SDL_Renderer* renderer, Camera cam) {
+  // send render commands
   if (up) {
-    sprite->render(renderer, cam.point());
+    sprite->job(scene, getDepth());
   }
+
+  explosionSprite->job(scene, DEPTH_FG + DEPTH_ABOVE);
 
   if (particlesAlive) {
     for (auto p : particles) {
       particleSprite->x = p.x;
       particleSprite->y = p.y;
 
-      particleSprite->render(renderer, cam.point());
+      particleSprite->job(scene, getDepth() + DEPTH_FG + 2*DEPTH_ABOVE);
     }
   }
-  
-  explosionSprite->render(renderer, cam.point());
 }

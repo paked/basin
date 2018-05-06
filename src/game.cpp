@@ -66,10 +66,17 @@ void Game::start() {
   map = new Tilemap(ts);
   map->loadLayer("map_background.csv", DEPTH_BG);
   map->loadLayer("map_foreground.csv", DEPTH_FG);
-  darknessLayer = map->loadLayer("map_darkness.csv", DEPTH_FG * 1.5);
+  darknessLayer = map->loadLayer("map_darkness.csv", DEPTH_FG + DEPTH_ABOVE);
   map->loadCollisionLayer("map_collision.csv");
-
   map->addToGroup(&entities);
+
+  // Blockade
+  blockade = new Blockade(10 * 16 * Core::scale, 23 * 16 * Core::scale);
+  entities.add(blockade);
+
+  // Boulder
+  boulder = new Boulder(25 * 16 * Core::scale, (24 * 16 + 8) * Core::scale);
+  entities.add(boulder);
 
   // load collectables
   entities.add(&collectables);
@@ -96,6 +103,7 @@ void Game::tick(float dt) {
   }
 
   Collision::collide(player->sprite, map);
+  Collision::collide(player->sprite, blockade->sprite->rect());
 
   if (!Collision::isOverlapping(player->sprite, map, darknessLayer)) {
     map->layers[darknessLayer]->active = true;
@@ -134,6 +142,22 @@ void Game::tick(float dt) {
         }
 
         break;
+    }
+  }
+
+  if (blockade->up) {
+    SDL_Rect triggerBoulder = {.x = 11 * 16, .y = 25 * 16, .w = 16 * 2, .h = 16};
+    triggerBoulder.x *= Core::scale;
+    triggerBoulder.y *= Core::scale;
+    triggerBoulder.w *= Core::scale;
+    triggerBoulder.h *= Core::scale;
+
+    if (Collision::isOverlapping(player->sprite, triggerBoulder)) {
+      boulder->roll();
+    }
+
+    if (Collision::isOverlapping(boulder->sprite, blockade->sprite->rect())) {
+      blockade->explode();
     }
   }
 
