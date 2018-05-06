@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <SDL2/SDL.h>
 
 #include <e/scene.hpp>
@@ -11,17 +13,21 @@ const float DEPTH_UI = 200;
 const float DEPTH_ABOVE = 1;
 const float DEPTH_BELOW = -1;
 
+struct Component;
+
 struct Entity {
-  Entity* parent = nullptr;
-
-  bool active = true;
-  float localDepth = DEPTH_MG;
-
-  Scene* scene;
-
-  float getDepth();
-
   virtual void start();
   virtual void tick(float dt);
   virtual void postTick();
+
+  float getDepth();
+
+  void reg(Component* comp);
+
+  Entity* parent = nullptr;
+  Scene* scene;
+  std::vector<Component*> components;
+
+  bool active = true;
+  float localDepth = DEPTH_MG;
 };

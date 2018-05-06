@@ -25,11 +25,15 @@ void Player::start() {
 
   sprite->maxVelocity = Point(25, 25);
   sprite->drag = Point(0.95, 0.95);
-  sprite->x = (17 * 16)*Core::scale - sprite->width/2;
-  sprite->y = (17 * 16)*Core::scale;
+  sprite->x = (9 * 16)*Core::scale - sprite->width/2;
+  sprite->y = (2 * 16)*Core::scale;
+
+  reg(battery);
 }
 
 void Player::tick(float dt) {
+  Entity::tick(dt);
+
   if (moveLeft.justDown()) {
     currentMovement = MOVE_LEFT;
     eyeLine = Torch::LEFT;
@@ -143,7 +147,6 @@ void Player::tick(float dt) {
   }
 
   sprite->tick(dt);
-  battery->tick(dt);
 
   justGotItem = false;
 
@@ -194,32 +197,6 @@ void Player::postTick() {
 
   promptClear = true;
 }
-
-/*
-void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
-  if (torch->dark) {
-    torch->render(renderer);
-  }
-
-  // position battery at bottom left of the screen
-  battery->sprite->x = camera.width - (battery->width + 4);
-  battery->sprite->y = camera.height - (battery->height + 4);
-
-  battery->render(renderer, camera.point());
-
-  if (doPrompt && promptOn) {
-    SDL_Rect rect = promptText->rect;
-
-    SDL_Rect dst = {
-      .x = promptPosition.x - rect.w,
-      .y = promptPosition.y - rect.h,
-      .w = rect.w*2,
-      .h = rect.h*2
-    };
-
-    SDL_RenderCopy(renderer, promptText->texture, NULL, &dst);
-  }
-}*/
 
 bool Player::equipMeMaybe(Collectable* c) {
   if (hasItem || justDroppedItem || busy) {

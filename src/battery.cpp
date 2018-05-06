@@ -24,6 +24,11 @@ Battery::Battery(int x, int y) {
   height = sprite->height;
 }
 
+void Battery::start() {
+  sprite->x = entity->scene->camera->width - (width + 4);
+  sprite->y = entity->scene->camera->height- (height + 4);
+}
+
 void Battery::attach(Collectable::Type type) {
   showAttachment = true;
 
@@ -37,14 +42,17 @@ void Battery::unattach() {
 void Battery::tick(float dt) {
   sprite->tick(dt);
   attachments->tick(dt);
-}
 
-void Battery::render(SDL_Renderer *renderer, SDL_Point cam) {
+  // send render commands
+  Scene* scene = entity->scene;
+  RenderJob j;
+  j.depth = DEPTH_UI;
+  j.tex = sprite->texture;
+
   attachments->x = sprite->x;
   attachments->y = sprite->y - sprite->height + 2;
 
   SDL_Rect src = sprite->getFrame(0);
-  SDL_Texture* texture = sprite->texture;
 
   int x = sprite->x;
   int y = sprite->y;
@@ -56,7 +64,10 @@ void Battery::render(SDL_Renderer *renderer, SDL_Point cam) {
     .h = height
   };
 
-  SDL_RenderCopy(renderer, texture, &src, &dst);
+  j.src = src;
+  j.dst = dst;
+  j.depth += DEPTH_ABOVE;
+  scene->renderer->queue.push(j);
 
   src = sprite->getFrame(1);
 
@@ -67,7 +78,10 @@ void Battery::render(SDL_Renderer *renderer, SDL_Point cam) {
     .h = height
   };
 
-  SDL_RenderCopy(renderer, texture, &src, &dst);
+  j.src = src;
+  j.dst = dst;
+  j.depth += DEPTH_ABOVE;
+  scene->renderer->queue.push(j);
 
   int battSize = (int) (height * capacity);
   int offset = height - battSize;
@@ -84,13 +98,14 @@ void Battery::render(SDL_Renderer *renderer, SDL_Point cam) {
     .h = battSize
   };
 
-  SDL_RenderCopy(renderer, texture, &src, &dst);
+  j.src = src;
+  j.dst = dst;
+  j.depth += DEPTH_ABOVE;
+  scene->renderer->queue.push(j);
 
-  if (!showAttachment) {
-    return;
+  if (showAttachment) {
+    attachments->job(scene, DEPTH_UI);
   }
-
-  attachments->render(renderer, cam);
 }
 
 bool Battery::hasCapacity(float c) {

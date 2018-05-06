@@ -5,8 +5,12 @@
 #include <e/sprite.hpp>
 #include <collectable.hpp>
 
-struct Battery {
+#include <e/component.hpp>
+
+struct Battery : Component{
   Battery(int x = 0, int y = 0);
+
+  void start();
 
   Sprite *sprite;
   Sprite *attachments;

@@ -41,6 +41,8 @@ file(GLOB SOURCES
     src/e/renderer.cpp
     src/e/scene.hpp
     src/e/scene.cpp
+    src/e/component.hpp
+    src/e/component.cpp
 
     src/e/camera.hpp
     src/e/camera.cpp

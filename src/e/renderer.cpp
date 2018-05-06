@@ -1,5 +1,7 @@
 #include <e/renderer.hpp>
 
+#include <stdio.h>
+
 #include <e/core.hpp>
 
 void Renderer::render(SDL_Renderer* r) {
