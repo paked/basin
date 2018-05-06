@@ -14,7 +14,7 @@ struct Tilemap {
 
   int loadLayer(std::string fname, float depth);
   void loadCollisionLayer(std::string fname);
-  void addToGroup(Group *g);
+  void addToGroup(Group<Entity> *g);
 
   Tileset* tileset;
   std::vector<Tilelayer*> layers;

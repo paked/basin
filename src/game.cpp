@@ -45,20 +45,9 @@ void Game::start() {
     .camera = &camera
   };
 
-  entities = new Group();
-  entities->scene = scene;
+  entities.scene = scene;
 
 /*
-  map = new Tilemap();
-  map->loadTileset("tileset.png");
-  map->loadBackground("assets/lvl/map_background.csv");
-  map->loadForeground("assets/lvl/map_foreground.csv");
-  map->loadCollision("assets/lvl/map_collision.csv");
-
-  darkness = new Tilemap();
-  darkness->loadTileset("tileset.png");
-  darkness->loadBackground("assets/lvl/map_darkness.csv");
-
   loadCollectables("assets/lvl/map_collectables.csv");
   loadInfos("assets/lvl/map_infos.csv");
 
@@ -69,20 +58,27 @@ void Game::start() {
 
   slidingDoor = new SlidingDoor(10 * 16 * Core::scale, 11 * 16 * Core::scale);*/
 
+  // Player
   player = new Player();
+  entities.add(player);
 
+  // Map
   Tileset* ts = new Tileset("tileset.png", 16);
   map = new Tilemap(ts);
-
   map->loadLayer("map_background.csv", DEPTH_BG);
   map->loadLayer("map_foreground.csv", DEPTH_FG);
-
+  darknessLayer = map->loadLayer("map_darkness.csv", DEPTH_FG * 1.5);
   map->loadCollisionLayer("map_collision.csv");
-  
-  camera.follow = player->sprite;
 
-  entities->add(player);
-  map->addToGroup(entities);
+  map->addToGroup(&entities);
+
+  // load collectables
+  entities.add(&collectables);
+  loadCollectables("assets/lvl/map_collectables.csv");
+  
+  // Populate entity lists
+  // Setup camera
+  camera.follow = player->sprite;
 }
 
 void Game::tick(float dt) {
@@ -103,17 +99,51 @@ void Game::tick(float dt) {
 
   Collision::collide(player->sprite, map);
 
-  camera.update();
-
-  entities->tick(dt);
-  
-  /*
-
-  if (Tilemap::isOverlapping(player->sprite, darkness)) {
-    player->torch->darkness = 1.0;
+  if (!Collision::isOverlapping(player->sprite, map, darknessLayer)) {
+    map->layers[darknessLayer]->active = true;
+    player->torch->dark = false;
   } else {
-    player->torch->darkness = 0.0;
+    map->layers[darknessLayer]->active = false;
+    player->torch->dark = true;
   }
+
+  for (auto& c : collectables.members) {
+    player->equipMeMaybe(c);
+
+    bool isHeld = player->item == c;
+
+    switch (c->type) {
+      case Collectable::JUMPERS:
+        /*
+        if (!Sprite::isOverlapping(c->sprite->rect(), switchboard->terminal->rect())) {
+          // add implicit is-overlapping-with-player condition to rest of scope.
+          break;
+        }
+
+        if (isHeld) {
+          player->proposePrompt(player->textInsert);
+        }
+
+        if (player->justDroppedItem && player->lastDroppedItem == c) {
+          showSwitchboard = true;
+          player->busy = true;
+        }
+
+        break;*/
+      case Collectable::TORCH:
+        if (isHeld && !player->torch->on && player->torch->dark) {
+          player->proposePrompt(player->textPower);
+        }
+
+        break;
+    }
+  }
+
+  entities.tick(dt);
+  camera.update();
+  entities.postTick();
+
+  /*
 
   if (!godMode.down()) {
     Tilemap::collide(player->sprite, map);
@@ -222,6 +252,43 @@ void Game::render(SDL_Renderer* r) {
 
   player->renderForeground(renderer, camera);*/
 }
+
+void Game::loadCollectables(std::string fname) {
+  CSV csv(fname);
+
+  auto data = csv.getDataInt();
+
+  for (int y = 0; y < data.size(); y++) {
+    auto row = data[y];
+
+    for (int x = 0; x < row.size(); x++) {
+      int num = row[x];
+      Collectable::Type type;
+
+      if (num < 0) {
+        continue;
+      } else if (num == 0) {
+        type = Collectable::Type::CHAINSAW;
+      } else if (num == 1) {
+        type = Collectable::Type::KEY;
+      } else if (num == 2) {
+        type = Collectable::Type::JUMPERS;
+      } else if (num == 3) {
+        type = Collectable::Type::TORCH;
+      } else {
+        printf("Error loading collectables CSV: invalid collectable type\n");
+
+        continue;
+      }
+
+      int worldX = (x * 16 + 12) * Core::scale;
+      int worldY = (y * 16 + 12) * Core::scale;
+
+      collectables.add(new Collectable(worldX, worldY, type));
+    }
+  }
+}
+
 
 /*
 void Game::tickCollectables(float dt) {

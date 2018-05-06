@@ -7,7 +7,9 @@
 Torch::Torch() {
   beam = new Sprite("torch_beam.png");
 
-  buffer = SDL_CreateTexture(Core::renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
+  bufferSRC = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
+  buffer = SDL_CreateTexture(Core::renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, bufferSRC.w, bufferSRC.h);
 
   SDL_SetTextureBlendMode(buffer, SDL_BLENDMODE_MOD);
 }
@@ -15,7 +17,7 @@ Torch::Torch() {
 void Torch::pre() {
   SDL_SetRenderTarget(Core::renderer, buffer);
 
-  SDL_SetRenderDrawColor(Core::renderer, 0, 0, 0, 255 * darkness);
+  SDL_SetRenderDrawColor(Core::renderer, 0, 0, 0, dark ? 255 : 0);
   SDL_RenderClear(Core::renderer);
 }
 
@@ -64,14 +66,16 @@ void Torch::beamIn(Direction d) {
       SDL_FLIP_NONE);
 }
 
-bool Torch::dark() {
-  return darkness > 0.1;
+void Torch::job(Scene *scene) {
+  RenderJob j;
+  j.depth = 170; 
+  j.tex = buffer;
+  j.src = bufferSRC;
+  j.dst = bufferSRC;
+
+  scene->renderer->queue.push(j);
 }
 
 void Torch::post() {
   SDL_SetRenderTarget(Core::renderer, NULL);
-}
-
-void Torch::render(SDL_Renderer* renderer) {
-  SDL_RenderCopy(renderer, buffer, NULL, NULL);
 }

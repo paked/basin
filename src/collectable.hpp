@@ -5,8 +5,9 @@
 #include <SDL2/SDL.h>
 
 #include <e/sprite.hpp>
+#include <e/entity.hpp>
 
-struct Collectable {
+struct Collectable : Entity {
   enum Type {
     CHAINSAW,
     KEY,
@@ -18,8 +19,8 @@ struct Collectable {
 
   Collectable(int x, int y, Type t);
 
+  void start();
   void tick(float dt);
-  void render(SDL_Renderer *renderer, SDL_Point cam);
 
   static std::string key(Type t);
 

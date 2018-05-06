@@ -188,34 +188,3 @@ void Sprite::renderFrame(int frame, SDL_Renderer* renderer, SDL_Point camera) {
 
   SDL_RenderCopyEx(renderer, texture, &src, &dst, angle, NULL, f);
 }
-
-void Sprite::collide(Sprite* first, SDL_Rect second) {
-  SDL_Rect b = second;
-  SDL_Rect res;
-
-  // First case we check against next y position
-  {
-    SDL_Rect a = first->rect();
-    a.y += (int)first->nextPositionDelta.y;
-
-    if (SDL_IntersectRect(&a, &b, &res)) {
-      float mod = (first->velocity.y < 0) ? 1 : -1;
-      first->nextPositionDelta.y += (int)res.h * mod;
-    }
-  }
-
-  // Then we check against the next x position
-  {
-    SDL_Rect a = first->rect();
-    a.x += (int)first->nextPositionDelta.x;
-
-    if (SDL_IntersectRect(&a, &b, &res)) {
-      float mod = (first->velocity.x < 0) ? 1 : -1;
-      first->nextPositionDelta.x += (int)res.w * mod;
-    }
-  }
-}
-
-bool Sprite::isOverlapping(SDL_Rect first, SDL_Rect second) {
-  return SDL_HasIntersection(&first, &second);
-}

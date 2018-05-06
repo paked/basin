@@ -37,11 +37,16 @@ struct Game {
 
 private:
   Scene* scene;
-  Group* entities;
+  Group<Entity> entities;
 
   Player* player;
   Tilemap *map;
   Camera camera;
+  Group<Collectable> collectables;
+
+  int darknessLayer;
+
+  void loadCollectables(std::string fname);
 
   /*
   std::vector<Collectable*> collectables;

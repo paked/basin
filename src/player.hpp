@@ -21,15 +21,12 @@ struct Player : Entity {
     MOVE_DOWN
   };
 
+  void tick(float dt);
+  void start();
+  void postTick();
+
   Movement currentMovement = IDLE;
   Torch::Direction eyeLine = Torch::DOWN;
-
-  Player();
-
-  void tick(float dt);
-  void postTick();
-  void render(SDL_Renderer *renderer, Camera cam);
-  void renderForeground(SDL_Renderer *renderer, Camera cam);
 
   Sprite* sprite;
 

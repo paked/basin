@@ -3,7 +3,7 @@
 #include <e/core.hpp>
 
 Tilelayer::Tilelayer(Tileset* ts, Data d, float dp) : tileset(ts), data(d) {
-  depth = dp;
+  localDepth = dp;
 }
 
 void Tilelayer::tick(float dt) {
@@ -38,7 +38,7 @@ void Tilelayer::tick(float dt) {
       SDL_Rect src = tileset->sprite->getFrame(tile);
 
       RenderJob j;
-      j.depth = depth;
+      j.depth = getDepth();
       j.tex = tileset->sprite->texture;
       j.src = src;
       j.dst = dst;

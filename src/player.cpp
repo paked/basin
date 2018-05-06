@@ -1,8 +1,9 @@
 #include <player.hpp>
 
+#include <e/collision.hpp>
 #include <e/core.hpp>
 
-Player::Player() {
+void Player::start() {
   sprite = new Sprite("player.png");
 
   sprite->spritesheet(10, 19);
@@ -106,7 +107,7 @@ void Player::tick(float dt) {
     sprite->acceleration.y = acceleration;
   }
 
-  if (torch->darkness > 0.1) {
+  if (torch->dark) {
     torch->pre();
 
     if (hasItem && item->type == Collectable::TORCH && torch->on) {
@@ -146,7 +147,31 @@ void Player::tick(float dt) {
 
   justGotItem = false;
 
-  sprite->job(scene);
+  // send render commands
+  sprite->job(scene, getDepth());
+
+  if (doPrompt && promptOn) {
+    SDL_Rect rect = promptText->rect;
+
+    SDL_Rect dst = {
+      .x = promptPosition.x - rect.w,
+      .y = promptPosition.y - rect.h,
+      .w = rect.w*2,
+      .h = rect.h*2
+    };
+
+    RenderJob j;
+    j.depth = getDepth() + DEPTH_ABOVE;
+    j.tex = promptText->texture;
+    j.src = promptText->rect;
+    j.dst = dst;
+
+    scene->renderer->queue.push(j);
+  }
+
+  if (torch->dark) {
+    torch->job(scene);
+  }
 }
 
 void Player::postTick() {
@@ -170,12 +195,9 @@ void Player::postTick() {
   promptClear = true;
 }
 
-void Player::render(SDL_Renderer *renderer, Camera camera) {
-  sprite->render(renderer, camera.point());
-}
-
+/*
 void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
-  if (torch->dark()) {
+  if (torch->dark) {
     torch->render(renderer);
   }
 
@@ -197,14 +219,14 @@ void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {
 
     SDL_RenderCopy(renderer, promptText->texture, NULL, &dst);
   }
-}
+}*/
 
 bool Player::equipMeMaybe(Collectable* c) {
   if (hasItem || justDroppedItem || busy) {
     return false;
   }
 
-  if (!Sprite::isOverlapping(sprite->rect(), c->sprite->rect())) {
+  if (!Collision::isOverlapping(sprite, c->sprite->rect())) {
     return false;
   }
 
@@ -228,7 +250,6 @@ bool Player::equipMeMaybe(Collectable* c) {
 
   printf("picking up %s\n", Collectable::key(c->type).c_str());
 
-
   battery->attach(c->type);
 
   return true;
@@ -237,6 +258,7 @@ bool Player::equipMeMaybe(Collectable* c) {
 // make the item look like it is being carried around by the player
 void Player::positionItem() {
   item->sprite->y = sprite->y + 32;
+  item->localDepth = DEPTH_ABOVE;
   item->visible = true;
   item->sprite->flip = false;
 
@@ -249,7 +271,7 @@ void Player::positionItem() {
     item->sprite->x = sprite->x + 20;
   } else if (eyeLine == Torch::UP) {
     item->sprite->x = sprite->x + 4;
-    item->visible = false;
+    item->localDepth = DEPTH_BELOW;
   } else if (eyeLine == Torch::DOWN) {
     item->sprite->angle = 90;
     item->sprite->y += 4;

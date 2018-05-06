@@ -11,20 +11,18 @@ Collectable::Collectable(int x, int y, Type t) : type(t) {
 
   sprite->x = x;
   sprite->y = y;
+}
 
+void Collectable::start() {
   sprite->playAnimation(key(type));
+
+  localDepth += DEPTH_ABOVE;
 }
 
 void Collectable::tick(float dt) {
   sprite->tick(dt);
-}
 
-void Collectable::render(SDL_Renderer* renderer, SDL_Point cam) {
-  if (!visible) {
-    return;
-  }
-
-  sprite->render(renderer, cam);
+  sprite->job(scene, getDepth());
 }
 
 std::string Collectable::key(Type t) {

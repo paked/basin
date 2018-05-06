@@ -17,18 +17,17 @@ struct Torch {
 
   Direction direction;
 
-  void render(SDL_Renderer* renderer);
+  void pre();
+  void beamIn(Direction d);
+  void post();
+
+  void job(Scene *scene);
 
   Sprite* beam;
   SDL_Texture* buffer;
+  SDL_Rect bufferSRC;
 
   bool on = false;
 
-  float darkness = 0.0;
-  bool dark();
-
-  void pre();
-  void post();
-
-  void beamIn(Direction d);
+  bool dark = false;
 };

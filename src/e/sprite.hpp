@@ -12,9 +12,6 @@
 typedef std::vector<int> Animation;
 
 struct Sprite {
-  static void collide(Sprite* first, SDL_Rect second);
-  static bool isOverlapping(SDL_Rect first, SDL_Rect second);
-
   Sprite(std::string texName, float x=0, float y=0);
 
   void tick(float dt);

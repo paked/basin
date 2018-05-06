@@ -2,6 +2,33 @@
 
 #include <e/core.hpp>
 
+void Collision::collide(Sprite* first, SDL_Rect second) {
+  SDL_Rect b = second;
+  SDL_Rect res;
+
+  // First case we check against next y position
+  {
+    SDL_Rect a = first->rect();
+    a.y += (int)first->nextPositionDelta.y;
+
+    if (SDL_IntersectRect(&a, &b, &res)) {
+      float mod = (first->velocity.y < 0) ? 1 : -1;
+      first->nextPositionDelta.y += (int)res.h * mod;
+    }
+  }
+
+  // Then we check against the next x position
+  {
+    SDL_Rect a = first->rect();
+    a.x += (int)first->nextPositionDelta.x;
+
+    if (SDL_IntersectRect(&a, &b, &res)) {
+      float mod = (first->velocity.x < 0) ? 1 : -1;
+      first->nextPositionDelta.x += (int)res.w * mod;
+    }
+  }
+}
+
 void Collision::collide(Sprite *sprite, Tilemap *map) {
   if (!map->canCollide) {
     printf("Tilemap does not have collision data\n");
@@ -29,22 +56,24 @@ void Collision::collide(Sprite *sprite, Tilemap *map) {
         .h = tileSize * Core::scale
       };
 
-      Sprite::collide(sprite, rect);
+      Collision::collide(sprite, rect);
     }
   }
 }
 
-/*
-// checks whether the player is on a background tile
-bool Collision::isOverlapping(Sprite *sprite, Tilemap *map) {
-  int x = sprite->x/Core::scale/map->tileset->tileSize;
-  int y = sprite->y/Core::scale/map->tileSize;
+bool Collision::isOverlapping(Sprite* first, SDL_Rect second) {
+  SDL_Rect frect = first->rect();
 
-  if (x < 0 || y < 0) {
-    return false;
-  }
+  return SDL_HasIntersection(&frect, &second);
+}
 
-  int tile = map->backgroundData[y][x];
+bool Collision::isOverlapping(Sprite* sprite, Tilemap *map, int layer) {
+  int tileSize = map->tileset->tileSize;
 
-  return tile > 0;
-}*/
+  int x = sprite->x/Core::scale/tileSize;
+  int y = sprite->y/Core::scale/tileSize;
+
+  Tilelayer* l = map->layers[layer];
+
+  return l->data[y][x] > 0;
+}

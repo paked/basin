@@ -2,11 +2,31 @@
 
 #include <e/entity.hpp>
 
-struct Group : Entity{
-  std::vector<Entity*> members;
+template<class T = Entity>
+struct Group : Entity {
+  std::vector<T*> members;
 
-  void add(Entity *e);
+  void add(T* e) {
+    members.push_back(e);
 
-  void tick(float dt);
-  void render(SDL_Renderer* renderer, Camera cam);
+    e->scene = scene;
+
+    e->start();
+  };
+
+  void tick(float dt) {
+    for (auto& m : members) {
+      if (!m->active) {
+        continue;
+      }
+
+      m->tick(dt);
+    }
+  }
+
+  void postTick() {
+    for (auto& m : members) {
+      m->postTick();
+    }
+  }
 };
