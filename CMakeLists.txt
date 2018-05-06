@@ -33,6 +33,15 @@ file(GLOB SOURCES
     src/torch.hpp
     src/torch.cpp
 
+    src/e/entity.hpp
+    src/e/entity.cpp
+    src/e/group.hpp
+    src/e/group.cpp
+    src/e/renderer.hpp
+    src/e/renderer.cpp
+    src/e/scene.hpp
+    src/e/scene.cpp
+
     src/e/camera.hpp
     src/e/camera.cpp
     src/e/core.hpp
@@ -49,6 +58,13 @@ file(GLOB SOURCES
     src/e/input.cpp
     src/e/tilemap.hpp
     src/e/tilemap.cpp
+    src/e/tilelayer.hpp
+    src/e/tilelayer.cpp
+    src/e/tileset.hpp
+    src/e/tileset.cpp
+    src/e/collision.hpp
+    src/e/collision.cpp
+
     src/e/text.hpp
     src/e/text.cpp)
 

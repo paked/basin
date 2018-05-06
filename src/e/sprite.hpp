@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 
 #include <e/point.hpp>
+#include <e/scene.hpp>
 
 typedef std::vector<int> Animation;
 
@@ -17,6 +18,8 @@ struct Sprite {
   Sprite(std::string texName, float x=0, float y=0);
 
   void tick(float dt);
+
+  void job(Scene* scene, float depth=0);
   void render(SDL_Renderer* renderer, SDL_Point camera);
   void renderFrame(int frame, SDL_Renderer* renderer, SDL_Point camera);
 

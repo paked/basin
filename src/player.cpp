@@ -89,11 +89,12 @@ void Player::tick(float dt) {
   lastDroppedItem = nullptr;
   justDroppedItem = false;
 
+  /*
   if (busy) {
     // Stop player from moving, picking things up, etc. while interacting with a panel or whatever.
     // Not entirely sure what the ramifications of this will be...
     return;
-  }
+  }*/
 
   if (currentMovement == MOVE_LEFT) {
     sprite->acceleration.x = -acceleration;
@@ -144,6 +145,8 @@ void Player::tick(float dt) {
   battery->tick(dt);
 
   justGotItem = false;
+
+  sprite->job(scene);
 }
 
 void Player::postTick() {
@@ -167,8 +170,8 @@ void Player::postTick() {
   promptClear = true;
 }
 
-void Player::render(SDL_Renderer *renderer, SDL_Point cam) {
-  sprite->render(renderer, cam);
+void Player::render(SDL_Renderer *renderer, Camera camera) {
+  sprite->render(renderer, camera.point());
 }
 
 void Player::renderForeground(SDL_Renderer* renderer, Camera camera) {

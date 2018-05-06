@@ -2,8 +2,9 @@
 
 #include <SDL2/SDL.h>
 
-#include <e/sprite.hpp>
 #include <config.hpp>
+
+struct Sprite;
 
 struct Camera {
   Sprite* follow = nullptr;

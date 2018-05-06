@@ -131,6 +131,37 @@ void Sprite::tick(float dt) {
   nextPositionDelta.y = velocity.y * dt;
 }
 
+void Sprite::job(Scene* scene, float depth) {
+  int f = 0;
+  if (currentAnimation.size() != 0) {
+    f = currentAnimation[currentFrame];
+  }
+
+  SDL_Rect dst = rect();
+  SDL_Rect src = getFrame(f);
+
+  if (!hud) {
+    dst.x -= scene->camera->x;
+    dst.y -= scene->camera->y;
+  }
+
+  SDL_RendererFlip fl = SDL_FLIP_NONE;
+
+  if (flip) {
+    fl = SDL_FLIP_HORIZONTAL;
+  }
+
+  RenderJob j;
+  j.depth = depth;
+  j.tex = texture;
+  j.src = src;
+  j.dst = dst;
+  j.angle = angle;
+  j.flip = fl;
+
+  scene->renderer->queue.push(j);
+}
+
 void Sprite::render(SDL_Renderer *renderer, SDL_Point camera) {
   int f = 0;
   if (currentAnimation.size() != 0) {

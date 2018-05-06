@@ -6,12 +6,13 @@
 #include <e/input.hpp>
 #include <e/camera.hpp>
 #include <e/text.hpp>
+#include <e/entity.hpp>
 
 #include <battery.hpp>
 #include <torch.hpp>
 #include <collectable.hpp>
 
-struct Player {
+struct Player : Entity {
   enum Movement {
     IDLE,
     MOVE_LEFT,
@@ -27,7 +28,7 @@ struct Player {
 
   void tick(float dt);
   void postTick();
-  void render(SDL_Renderer *renderer, SDL_Point cam);
+  void render(SDL_Renderer *renderer, Camera cam);
   void renderForeground(SDL_Renderer *renderer, Camera cam);
 
   Sprite* sprite;

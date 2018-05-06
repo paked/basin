@@ -6,7 +6,9 @@
 #include <e/resources.hpp>
 #include <e/core.hpp>
 
-void Game::load() {
+#include <e/collision.hpp>
+
+bool Game::load() {
   Core::clear = SDL_Color{.r = 10, .g = 10, .b = 13, .a = 255};
 
   bool ok = Resources::load("player.png");
@@ -34,6 +36,19 @@ void Game::load() {
     printf("Could not load assets\n");
   }
 
+  return ok;
+}
+
+void Game::start() {
+  scene = new Scene {
+    .renderer = new Renderer(),
+    .camera = &camera
+  };
+
+  entities = new Group();
+  entities->scene = scene;
+
+/*
   map = new Tilemap();
   map->loadTileset("tileset.png");
   map->loadBackground("assets/lvl/map_background.csv");
@@ -52,11 +67,22 @@ void Game::load() {
 
   switchboard = new Switchboard(8 * 16 * Core::scale, 11 * 16 * Core::scale);
 
+  slidingDoor = new SlidingDoor(10 * 16 * Core::scale, 11 * 16 * Core::scale);*/
+
   player = new Player();
 
-  slidingDoor = new SlidingDoor(10 * 16 * Core::scale, 11 * 16 * Core::scale);
+  Tileset* ts = new Tileset("tileset.png", 16);
+  map = new Tilemap(ts);
 
+  map->loadLayer("map_background.csv", DEPTH_BG);
+  map->loadLayer("map_foreground.csv", DEPTH_FG);
+
+  map->loadCollisionLayer("map_collision.csv");
+  
   camera.follow = player->sprite;
+
+  entities->add(player);
+  map->addToGroup(entities);
 }
 
 void Game::tick(float dt) {
@@ -74,6 +100,14 @@ void Game::tick(float dt) {
       Input::handle(event.motion);
     }
   }
+
+  Collision::collide(player->sprite, map);
+
+  camera.update();
+
+  entities->tick(dt);
+  
+  /*
 
   if (Tilemap::isOverlapping(player->sprite, darkness)) {
     player->torch->darkness = 1.0;
@@ -146,10 +180,13 @@ void Game::tick(float dt) {
 
   camera.update();
 
-  player->postTick();
+  player->postTick();*/
 }
 
-void Game::render(SDL_Renderer* renderer) {
+void Game::render(SDL_Renderer* r) {
+  scene->renderer->render(r);
+
+  /*
   SDL_Point cam = camera.point();
 
   map->renderBackground(renderer, camera);
@@ -183,9 +220,10 @@ void Game::render(SDL_Renderer* renderer) {
 
   blockade->render(renderer, camera);
 
-  player->renderForeground(renderer, camera);
+  player->renderForeground(renderer, camera);*/
 }
 
+/*
 void Game::tickCollectables(float dt) {
   for (auto c : collectables) {
     c->tick(dt);
@@ -285,4 +323,4 @@ void Game::loadInfos(std::string fname) {
 
     infos.push_back(new Info(x * Core::scale, y * Core::scale, msg));
   }
-}
+}*/

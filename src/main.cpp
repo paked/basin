@@ -25,7 +25,16 @@ int main() {
   printf(" Done\n");
 
   printf("Loading game resources...");
-  game->load();
+  if (game->load()) {
+    printf(" Done.\n");
+  } else {
+    printf(" Failed.\n");
+
+    return -1;
+  }
+
+  printf("Starting game...");
+  game->start();
   printf(" Done.\n");
 
 #ifdef __EMSCRIPTEN__

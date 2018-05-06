@@ -1,5 +1,7 @@
 #include <e/camera.hpp>
 
+#include <e/sprite.hpp>
+
 void Camera::update() {
   if (!follow) {
     return;

@@ -5,34 +5,20 @@
 
 #include <SDL2/SDL.h>
 
-#include <e/sprite.hpp>
-#include <e/resources.hpp>
-#include <e/camera.hpp>
-#include <e/sprite.hpp>
+#include <e/tileset.hpp>
+#include <e/tilelayer.hpp>
+#include <e/group.hpp>
 
 struct Tilemap {
-  typedef std::vector<std::vector<int>> Data;
-  Sprite* tileset;
+  Tilemap(Tileset* ts);
 
-  int tileSize;
+  int loadLayer(std::string fname, float depth);
+  void loadCollisionLayer(std::string fname);
+  void addToGroup(Group *g);
 
-  Data backgroundData;
-  Data foregroundData;
+  Tileset* tileset;
+  std::vector<Tilelayer*> layers;
 
   bool canCollide = false;
-  Data collisionData;
-
-  void loadTileset(std::string tilesetName, int tileSize = 16);
-
-  void loadBackground(std::string level);
-  void loadForeground(std::string level);
-  void loadCollision(std::string collision);
-
-  void renderBackground(SDL_Renderer* renderer, Camera camera);
-  void renderForeground(SDL_Renderer* renderer, Camera camera);
-
-  void renderLayer(Data& data, SDL_Renderer* renderer, Camera camera);
-
-  static void collide(Sprite *sprite, Tilemap *map);
-  static bool isOverlapping(Sprite *sprite, Tilemap *map);
+  Tilelayer::Data collisionData;
 };
