@@ -167,7 +167,6 @@ void Game::render(SDL_Renderer* renderer) {
 
   slidingDoor->render(renderer, cam);
 
-  blockade->render(renderer, camera);
   if (blockade->up) {
     boulder->sprite->render(renderer, cam);
   }
@@ -181,6 +180,8 @@ void Game::render(SDL_Renderer* renderer) {
   if (!player->torch->dark()) {
     darkness->renderBackground(renderer, camera);
   }
+
+  blockade->render(renderer, camera);
 
   player->renderForeground(renderer, camera);
 }
