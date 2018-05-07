@@ -102,6 +102,14 @@ void Game::tick(float dt) {
     }
   }
 
+  if (godMode.justDown()) {
+    player->sprite->solid = false;
+  }
+
+  if (godMode.justUp()) {
+    player->sprite->solid = true;
+  }
+
   Collision::collide(player->sprite, map);
   Collision::collide(player->sprite, blockade->sprite);
   Collision::collide(player->sprite, slidingDoor->sprite);
@@ -164,11 +172,13 @@ void Game::tick(float dt) {
     triggerBoulder.h *= Core::scale;
 
     if (Collision::isOverlapping(player->sprite, triggerBoulder)) {
+      camera.shake(5 * 1000, 0.3);
       boulder->roll();
     }
 
     if (Collision::isOverlapping(boulder->sprite, blockade->sprite->rect())) {
       blockade->explode();
+      camera.shake(1 * 100, 1);
     }
   }
 
@@ -177,7 +187,7 @@ void Game::tick(float dt) {
   // TODO fix this
   switchboardTerminal->job(scene);
 
-  camera.update();
+  camera.tick(dt);
   entities.postTick();
 }
 

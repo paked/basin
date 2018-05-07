@@ -41,6 +41,7 @@ private:
   Camera camera;
 
   Input cancel = Input(SDL_SCANCODE_ESCAPE);
+  Input godMode = Input(SDL_SCANCODE_LSHIFT);
 
   Player* player;
   Tilemap *map;
