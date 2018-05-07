@@ -62,7 +62,12 @@ int main() {
 }
 
 void hook() {
+  int frameStart = SDL_GetTicks();
+
   game->tick((frameTimeMs)/100);
+
+  int tickEnd = SDL_GetTicks();
+  int tickDuration = tickEnd - frameStart;
 
   SDL_Renderer* renderer = Core::renderer;
 
@@ -72,4 +77,13 @@ void hook() {
   game->render(renderer);
 
   SDL_RenderPresent(renderer);
+
+  int renderEnd = SDL_GetTicks();
+  int renderDuration = renderEnd - tickEnd;
+
+  int frameDuration = SDL_GetTicks() - frameStart;
+
+  if (frameDuration > 16) {
+    printf("WARNING: frame took too long to complete (%d vs %d) (t: %d, r: %d).\n", frameDuration, 16, tickDuration, renderDuration);
+  }
 }
