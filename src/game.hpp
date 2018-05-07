@@ -40,45 +40,20 @@ private:
   Group<Entity> entities;
   Camera camera;
 
+  Input cancel = Input(SDL_SCANCODE_ESCAPE);
+
   Player* player;
   Tilemap *map;
   Blockade* blockade;
   Boulder* boulder;
   Group<Collectable> collectables;
 
-  int darknessLayer;
-
-  void loadCollectables(std::string fname);
-
-  /*
-  std::vector<Collectable*> collectables;
-  void tickCollectables(float dt);
-  void loadCollectables(std::string fname);
-  void loadInfos(std::string fname);
-
-  Enemy* enemy;
-
-
-  Boulder* boulder;
-
-  std::vector<Collectable*> collectables;
-  void tickCollectables(float dt);
-  std::vector<Info*> infos;
+  Switchboard* switchboard;
+  Sprite* switchboardTerminal;
 
   SlidingDoor* slidingDoor;
 
-  Switchboard* switchboard;
-  bool showSwitchboard = false;
-
-  Tilemap* darkness;
-  Tilemap* map;
-
-  Camera camera;
+  int darknessLayer;
 
   void loadCollectables(std::string fname);
-  void loadInfos(std::string fname);
-
-  Input cancel = Input(SDL_SCANCODE_ESCAPE);
-  Input godMode = Input(SDL_SCANCODE_TAB);
-  */
 };

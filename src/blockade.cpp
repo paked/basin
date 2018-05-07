@@ -40,6 +40,7 @@ void Blockade::explode() {
   explosionSprite->playAnimation("explode", false);
   explosionStartParticlesTime = SDL_GetTicks() + explosionStartParticlesDelay;
   up = false;
+  sprite->solid = false;
 }
 
 void Blockade::tick(float dt) {

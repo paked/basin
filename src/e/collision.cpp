@@ -2,7 +2,19 @@
 
 #include <e/core.hpp>
 
+void Collision::collide(Sprite* first, Sprite* second) {
+  if (!second->solid) {
+    return;
+  }
+
+  collide(first, second->rect());
+}
+
 void Collision::collide(Sprite* first, SDL_Rect second) {
+  if (!first->solid) {
+    return;
+  }
+
   SDL_Rect b = second;
   SDL_Rect res;
 

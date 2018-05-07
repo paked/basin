@@ -39,8 +39,10 @@ struct Sprite {
   // should the image be flipped horizontally?
   bool flip = false;
   // render in camera space or on screen space?
-  bool hud = false;
   int angle = 0;
+
+  bool hud = false;
+  bool solid = true;
 
   Point velocity;
   Point acceleration;

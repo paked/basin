@@ -4,13 +4,13 @@
 
 #include <e/sprite.hpp>
 #include <e/point.hpp>
-#include <e/text.hpp>
+#include <e/entity.hpp>
 
-struct SlidingDoor {
+struct SlidingDoor : Entity {
   SlidingDoor(int x, int y);
 
+  void start();
   void tick(float dt);
-  void render(SDL_Renderer *renderer, SDL_Point cam);
 
   SDL_Rect rect();
 

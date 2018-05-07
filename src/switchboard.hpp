@@ -3,19 +3,18 @@
 #include <SDL2/SDL.h>
 
 #include <e/sprite.hpp>
+#include <e/entity.hpp>
 
 #include <jumper.hpp>
 
-struct Switchboard {
-  Switchboard(int x, int y);
+struct Switchboard : Entity {
+  void start();
 
   void tick(float dt);
-  void render(SDL_Renderer* renderer, SDL_Point cam);
   void renderOverlay(SDL_Renderer* renderer, SDL_Point cam);
 
   bool continuous();
 
-  Sprite* terminal;
   Sprite* backboard;
   Sprite* overlay;
 

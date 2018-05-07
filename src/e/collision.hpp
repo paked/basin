@@ -3,6 +3,7 @@
 #include <e/tilemap.hpp>
 
 struct Collision {
+  static void collide(Sprite* first, Sprite* second);
   static void collide(Sprite* first, SDL_Rect second);
   static void collide(Sprite* sprite, Tilemap* tilemap);
 

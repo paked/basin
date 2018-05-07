@@ -7,9 +7,8 @@
 
 #include <config.hpp>
 
-Switchboard::Switchboard(int x, int y) {
-  terminal = new Sprite("switchboard.png", x, y);
-
+void Switchboard::start() {
+  localDepth = DEPTH_UI;
   backboard = new Sprite("switchboard_gui.png");
   overlay = new Sprite("switchboard_gui_overlay.png");
   overlay->spritesheet(64, 64);
@@ -62,10 +61,14 @@ void Switchboard::tick(float dt) {
   }
 
   backboard->tick(dt);
-}
 
-void Switchboard::render(SDL_Renderer* renderer, SDL_Point cam) {
-  terminal->render(renderer, cam);
+  // Send render commands
+  backboard->job(scene, getDepth() + DEPTH_BELOW);
+
+  inPositive->sprite->job(scene, getDepth());
+  outPositive->sprite->job(scene, getDepth());
+  inNegative->sprite->job(scene, getDepth());
+  outNegative->sprite->job(scene, getDepth());
 }
 
 void Switchboard::renderOverlay(SDL_Renderer* renderer, SDL_Point cam) {
@@ -75,7 +78,6 @@ void Switchboard::renderOverlay(SDL_Renderer* renderer, SDL_Point cam) {
   outPositive->render(renderer, cam);
   inNegative->render(renderer, cam);
   outNegative->render(renderer, cam);
-
 
   /*
   // TODO: re add in the insert thing

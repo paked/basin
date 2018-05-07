@@ -47,16 +47,6 @@ void Game::start() {
 
   entities.scene = scene;
 
-/*
-  loadInfos("assets/lvl/map_infos.csv");
-
-  blockade = new Blockade(10 * 16 * Core::scale, 23 * 16 * Core::scale);
-  boulder = new Boulder(25 * 16 * Core::scale, (24 * 16 + 8) * Core::scale);
-
-  switchboard = new Switchboard(8 * 16 * Core::scale, 11 * 16 * Core::scale);
-
-  slidingDoor = new SlidingDoor(10 * 16 * Core::scale, 11 * 16 * Core::scale);*/
-
   // Player
   player = new Player();
   entities.add(player);
@@ -77,6 +67,16 @@ void Game::start() {
   // Boulder
   boulder = new Boulder(25 * 16 * Core::scale, (24 * 16 + 8) * Core::scale);
   entities.add(boulder);
+
+  // Switchboard
+  switchboardTerminal = new Sprite("switchboard.png", 8 * 16 * Core::scale, 11 * 16 * Core::scale);
+  switchboard = new Switchboard();
+  entities.add(switchboard);
+  switchboard->active = false;
+
+  // Sliding door
+  slidingDoor = new SlidingDoor(10 * 16 * Core::scale, 11 * 16 * Core::scale);
+  entities.add(slidingDoor);
 
   // load collectables
   entities.add(&collectables);
@@ -103,7 +103,8 @@ void Game::tick(float dt) {
   }
 
   Collision::collide(player->sprite, map);
-  Collision::collide(player->sprite, blockade->sprite->rect());
+  Collision::collide(player->sprite, blockade->sprite);
+  Collision::collide(player->sprite, slidingDoor->sprite);
 
   if (!Collision::isOverlapping(player->sprite, map, darknessLayer)) {
     map->layers[darknessLayer]->active = true;
@@ -120,9 +121,9 @@ void Game::tick(float dt) {
 
     switch (c->type) {
       case Collectable::JUMPERS:
-        /*
-        if (!Sprite::isOverlapping(c->sprite->rect(), switchboard->terminal->rect())) {
-          // add implicit is-overlapping-with-player condition to rest of scope.
+        if (!Collision::isOverlapping(c->sprite, switchboardTerminal->rect())) {
+          // we only care about jumpers if they're touching the terminal
+
           break;
         }
 
@@ -131,17 +132,27 @@ void Game::tick(float dt) {
         }
 
         if (player->justDroppedItem && player->lastDroppedItem == c) {
-          showSwitchboard = true;
-          player->busy = true;
+          switchboard->active = true;
         }
 
-        break;*/
+        break;
       case Collectable::TORCH:
         if (isHeld && !player->torch->on && player->torch->dark) {
           player->proposePrompt(player->textPower);
         }
 
         break;
+    }
+  }
+
+  if (switchboard->active) {
+    if (cancel.justDown()) {
+      switchboard->active = false;
+    }
+
+    if (switchboard->continuous()) {
+      slidingDoor->open();
+      switchboard->active = false;
     }
   }
 
@@ -162,117 +173,16 @@ void Game::tick(float dt) {
   }
 
   entities.tick(dt);
+
+  // TODO fix this
+  switchboardTerminal->job(scene);
+
   camera.update();
   entities.postTick();
-
-  /*
-
-  if (!godMode.down()) {
-    Tilemap::collide(player->sprite, map);
-    Sprite::collide(player->sprite, slidingDoor->rect());
-
-    if (blockade->up) {
-      Sprite::collide(player->sprite, blockade->sprite->rect());
-    }
-  }
-
-  if (blockade->up) {
-    SDL_Rect triggerBoulder = {.x = 11 * 16, .y = 25 * 16, .w = 16 * 2, .h = 16};
-    triggerBoulder.x *= Core::scale;
-    triggerBoulder.y *= Core::scale;
-    triggerBoulder.w *= Core::scale;
-    triggerBoulder.h *= Core::scale;
-
-    if (Sprite::isOverlapping(player->sprite->rect(), triggerBoulder)) {
-      boulder->roll();
-    }
-
-    if (Sprite::isOverlapping(boulder->sprite->rect(), blockade->sprite->rect())) {
-      blockade->explode();
-    }
-
-    boulder->tick(dt);
-  }
-
-  blockade->tick(dt);
-
-  tickCollectables(dt);
-
-  for (auto info : infos) {
-    info->showText = Sprite::isOverlapping(player->sprite->rect(), info->sprite->rect());
-
-    info->tick(dt);
-  }
-
-  player->tick(dt);
-  slidingDoor->tick(dt);
-
-  // TODO: flatten this
-  if (showSwitchboard) {
-    if (switchboard->continuous()) {
-      player->proposePrompt(player->textPower);
-
-      if (player->use.justDown() && player->battery->hasCapacity(0.1)) {
-        player->battery->capacity -= 0.1;
-
-        slidingDoor->open();
-
-        showSwitchboard = false;
-        player->busy = false;
-      }
-    }
-
-    if (cancel.justDown()) {
-      showSwitchboard = false;
-      player->busy = false;
-    }
-
-    switchboard->tick(dt);
-  }
-
-  camera.update();
-
-  player->postTick();*/
 }
 
 void Game::render(SDL_Renderer* r) {
   scene->renderer->render(r);
-
-  /*
-  SDL_Point cam = camera.point();
-
-  map->renderBackground(renderer, camera);
-  player->render(renderer, cam);
-
-  for (auto collectable : collectables) {
-    collectable->render(renderer, cam);
-  }
-
-  for (auto info : infos) {
-    info->render(renderer, cam);
-  }
-
-  switchboard->render(renderer, cam);
-
-  slidingDoor->render(renderer, cam);
-
-  if (blockade->up) {
-    boulder->sprite->render(renderer, cam);
-  }
-
-  if (showSwitchboard) {
-    switchboard->renderOverlay(renderer, cam);
-  }
-
-  map->renderForeground(renderer, camera);
-
-  if (!player->torch->dark()) {
-    darkness->renderBackground(renderer, camera);
-  }
-
-  blockade->render(renderer, camera);
-
-  player->renderForeground(renderer, camera);*/
 }
 
 void Game::loadCollectables(std::string fname) {
@@ -310,29 +220,3 @@ void Game::loadCollectables(std::string fname) {
     }
   }
 }
-
-
-/*
-void Game::loadInfos(std::string fname) {
-  CSV csv(fname);
-
-  auto data = csv.getData();
-
-  for (auto row : data) {
-    if (row.size() != 3) {
-      for (auto c : row) {
-        printf("%s |", c.c_str());
-      }
-
-      printf("\nError loading infos: malformed row (size is %d, when should be 3)\n", (int)row.size());
-
-      continue;
-    }
-
-    int x = stoi(row[0]) * 16 + 12;
-    int y = stoi(row[1]) * 16 + 12;
-    std::string msg = row[2];
-
-    infos.push_back(new Info(x * Core::scale, y * Core::scale, msg));
-  }
-}*/
