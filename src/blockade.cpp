@@ -23,6 +23,9 @@ void Blockade::start() {
   explosionSprite->playAnimation("none", false);
 
   particleSprite = new Sprite("blockade_particle.png");
+  particleSprite->spritesheet(5, 8);
+  particleSprite->addAnimation("things", {0, 1, 2, 3, 4});
+  particleSprite->playAnimation("things");
 
   int particleCount = sprite->height/particleSprite->height;
   for (int i = 0; i < particleCount; i++) {
@@ -30,8 +33,18 @@ void Blockade::start() {
     float py = (y + i*particleSprite->height);
     float dx = -1 * rand01();
     float dy = (rand01()*2 - 1);
+    float ddx = 1 + rand01();
+    float ddy = 1 + rand01();
 
-    particles.push_back({ px, py, dx, dy});
+    particles.push_back({
+        .x = px,
+        .y = py,
+        .dx = dx,
+        .dy = dy,
+        .ddx = ddx,
+        .ddy = ddy,
+        .f = rand() % 5}
+        );
   }
 }
 
@@ -60,6 +73,9 @@ void Blockade::tick(float dt) {
     }
 
     for (auto& p : particles) {
+      p.dx *= p.ddx;
+      p.dx *= p.ddy;
+
       p.x += p.dx * particleSpeed * dt;
       p.y += p.dy * particleSpeed * dt;
     }
@@ -76,6 +92,8 @@ void Blockade::tick(float dt) {
     for (auto p : particles) {
       particleSprite->x = p.x;
       particleSprite->y = p.y;
+
+      particleSprite->currentFrame = p.f;
 
       particleSprite->job(scene, getDepth() + DEPTH_FG + 2*DEPTH_ABOVE);
     }

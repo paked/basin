@@ -14,6 +14,11 @@ struct Particle {
 
   float dx;
   float dy;
+
+  float ddx;
+  float ddy;
+
+  int f;
 };
 
 struct Blockade : Entity {
