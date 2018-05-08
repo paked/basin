@@ -24,6 +24,7 @@
 #include <switchboard.hpp>
 #include <boulder.hpp>
 #include <blockade.hpp>
+#include <floorboard.hpp>
 
 struct Game {
   bool load();
@@ -48,6 +49,7 @@ private:
   Blockade* blockade;
   Boulder* boulder;
   Group<Collectable> collectables;
+  Group<Floorboard> floorboards;
 
   Switchboard* switchboard;
   Sprite* switchboardTerminal;

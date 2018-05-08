@@ -30,6 +30,7 @@ bool Game::load() {
   ok |= Resources::load("blockade_particle.png");
   ok |= Resources::load("boulder.png");
   ok |= Resources::load("explosion.png");
+  ok |= Resources::load("floorboard.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
 
   if (!ok) {
@@ -54,7 +55,7 @@ void Game::start() {
   // Map
   Tileset* ts = new Tileset("tileset.png", 16);
   map = new Tilemap(ts);
-  map->loadLayer("map_background.csv", DEPTH_BG);
+  map->loadLayer("map_background.csv", DEPTH_BG*2);
   map->loadLayer("map_foreground.csv", DEPTH_FG);
   darknessLayer = map->loadLayer("map_darkness.csv", DEPTH_FG + DEPTH_ABOVE);
   map->loadCollisionLayer("map_collision.csv");
@@ -77,6 +78,27 @@ void Game::start() {
   // Sliding door
   slidingDoor = new SlidingDoor(10 * 16 * Core::scale, 11 * 16 * Core::scale);
   entities.add(slidingDoor);
+
+  // Floorboards
+  {
+    entities.add(&floorboards);
+
+    int size = 32 * Core::scale;
+
+    int startX = 1 * map->tileset->tileSize * Core::scale;
+    int startY = 31 * map->tileset->tileSize * Core::scale;
+
+    int rowSize = 3;
+    int colSize = 4;
+
+    for (int y = 0; y < colSize; y++) {
+      for (int x = 0; x < rowSize; x++) {
+        Floorboard* fb = new Floorboard(startX + x * size, startY + y * size);
+
+        floorboards.add(fb);
+      }
+    }
+  }
 
   // load collectables
   entities.add(&collectables);
