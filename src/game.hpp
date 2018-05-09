@@ -58,5 +58,8 @@ private:
 
   int darknessLayer;
 
+  SDL_Texture* darkBuffer;
+  SDL_Rect darkBufferRect;
+
   void loadCollectables(std::string fname);
 };

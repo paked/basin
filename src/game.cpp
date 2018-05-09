@@ -106,6 +106,17 @@ void Game::start() {
   
   // Setup camera
   camera.follow = player->sprite;
+
+  // Dark buffer
+  darkBufferRect = {
+    .x = 0,
+    .y = 0,
+    .w = SCREEN_WIDTH,
+    .h = SCREEN_HEIGHT
+  };
+
+  darkBuffer = SDL_CreateTexture(Core::renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, darkBufferRect.w, darkBufferRect.h);
+  SDL_SetTextureBlendMode(darkBuffer, SDL_BLENDMODE_MOD);
 }
 
 void Game::tick(float dt) {
@@ -214,6 +225,31 @@ void Game::tick(float dt) {
 }
 
 void Game::render(SDL_Renderer* r) {
+  if (player->torch->dark) {
+    // Setup render texture
+    SDL_SetRenderTarget(r, darkBuffer);
+
+    SDL_SetRenderDrawColor(r, 0, 0, 0, (player->torch->dark ? 255 : 0));
+    SDL_RenderClear(r);
+
+    if (player->torch->on) {
+      // Draw lights onto render texture
+      player->torch->beamIn(player->eyeLine);
+    }
+
+    // Revert render texture back to
+    SDL_SetRenderTarget(r, NULL);
+
+    RenderJob j;
+    j.depth = DEPTH_UI + DEPTH_BELOW;
+    j.tex = darkBuffer;
+    j.src = darkBufferRect;
+    j.dst = darkBufferRect;
+
+    scene->renderer->queue.push(j);
+  }
+
+  // Actually render the scene
   scene->renderer->render(r);
 }
 

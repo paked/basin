@@ -111,18 +111,6 @@ void Player::tick(float dt) {
     sprite->acceleration.y = acceleration;
   }
 
-  if (torch->dark) {
-    torch->pre();
-
-    if (hasItem && item->type == Collectable::TORCH && torch->on) {
-      torch->beamIn(eyeLine);
-
-      battery->capacity -= 0.001 * dt;
-    }
-
-    torch->post();
-  }
-
   if (hasItem && equip.justDown() && !justGotItem) {
     hasItem = false;
     justDroppedItem = true;
@@ -170,10 +158,6 @@ void Player::tick(float dt) {
     j.dst = dst;
 
     scene->renderer->queue.push(j);
-  }
-
-  if (torch->dark) {
-    torch->job(scene);
   }
 }
 
