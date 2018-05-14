@@ -3,10 +3,9 @@
 #include <config.hpp>
 
 Jumper::Jumper(bool positive, SDL_Point socket) : socket(socket) {
-  sprite = new Sprite("switchboard_gui_jumpers.png");
+  sprite = new Spritesheet("switchboard_gui_jumpers.png", 8, 24);
   sprite->hud = true;
 
-  sprite->spritesheet(8, 24);
   sprite->addAnimation("positive", { 0 });
   sprite->addAnimation("negative", { 1 });
 

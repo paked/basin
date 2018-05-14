@@ -6,5 +6,5 @@ struct Component {
   virtual void start();
   virtual void tick(float dt);
 
-  Entity *entity;
+  Entity *entity = nullptr;
 };

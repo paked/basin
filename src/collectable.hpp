@@ -4,7 +4,7 @@
 
 #include <SDL2/SDL.h>
 
-#include <e/sprite.hpp>
+#include <e/spritesheet.hpp>
 #include <e/entity.hpp>
 
 struct Collectable : Entity {
@@ -20,12 +20,11 @@ struct Collectable : Entity {
   Collectable(int x, int y, Type t);
 
   void start();
-  void tick(float dt);
 
   static std::string key(Type t);
 
   bool visible = true;
   bool shouldPromptEquip = true;
 
-  Sprite* sprite;
+  Spritesheet* sprite;
 };

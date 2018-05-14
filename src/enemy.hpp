@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include <e/sprite.hpp>
-
+/*
 struct Enemy {
   Enemy(int x, int y);
 
@@ -15,4 +15,4 @@ struct Enemy {
   bool move = false;
   int moveDelay = 300;
   int moveAt = 0;
-};
+};*/

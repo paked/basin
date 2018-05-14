@@ -56,6 +56,8 @@ private:
 
   SlidingDoor* slidingDoor;
 
+  Sprite* light;
+
   int darknessLayer;
 
   SDL_Texture* darkBuffer;

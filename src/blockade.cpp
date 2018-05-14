@@ -15,17 +15,14 @@ void Blockade::start() {
   float x = sprite->x;
   float y = sprite->y;
 
-  explosionSprite = new Sprite("explosion.png", x - 16, y + 64);
-  explosionSprite->frameLength = 1000/40;
-  explosionSprite->spritesheet(32, 32);
+  explosionSprite = new Spritesheet("explosion.png", 32, 32, x - 16, y + 64);
+  explosionSprite->frameDuration = 1000/40;
   explosionSprite->addAnimation("none", { 0 });
   explosionSprite->addAnimation("explode", { 1, 2, 3, 4, 5, 6, 7, 8, 9});
   explosionSprite->playAnimation("none", false);
+  explosionSprite->localDepth = DEPTH_UI;
 
-  particleSprite = new Sprite("blockade_particle.png");
-  particleSprite->spritesheet(5, 8);
-  particleSprite->addAnimation("things", {0, 1, 2, 3, 4});
-  particleSprite->playAnimation("things");
+  particleSprite = new Spritesheet("blockade_particle.png", 5, 8);
 
   int particleCount = sprite->height/particleSprite->height;
   for (int i = 0; i < particleCount; i++) {
@@ -46,6 +43,9 @@ void Blockade::start() {
         .f = rand() % 5}
         );
   }
+
+  reg(sprite);
+  reg(explosionSprite);
 }
 
 void Blockade::explode() {
@@ -54,12 +54,10 @@ void Blockade::explode() {
   explosionStartParticlesTime = SDL_GetTicks() + explosionStartParticlesDelay;
   up = false;
   sprite->solid = false;
+  sprite->visible = false;
 }
 
 void Blockade::tick(float dt) {
-  sprite->tick(dt);
-  explosionSprite->tick(dt);
-
   if (exploding && SDL_GetTicks() > explosionStartParticlesTime) {
     particlesAlive = true;
     particleDeathTime = SDL_GetTicks() + particleAliveTime;
@@ -81,21 +79,16 @@ void Blockade::tick(float dt) {
     }
   }
 
-  // send render commands
-  if (up) {
-    sprite->job(scene, getDepth());
-  }
-
-  explosionSprite->job(scene, DEPTH_FG + DEPTH_ABOVE);
-
   if (particlesAlive) {
     for (auto p : particles) {
       particleSprite->x = p.x;
       particleSprite->y = p.y;
 
-      particleSprite->currentFrame = p.f;
+      particleSprite->frame = p.f;
 
       particleSprite->job(scene, getDepth() + DEPTH_FG + 2*DEPTH_ABOVE);
     }
   }
+
+  Entity::tick(dt);
 }

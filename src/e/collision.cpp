@@ -49,7 +49,7 @@ void Collision::collide(Sprite *sprite, Tilemap *map) {
   }
 
   auto data = map->collisionData;
-  int tileSize = map->tileset->tileSize;
+  int tileSize = map->tileset->frameWidth;
 
   for (int y = 0; y < data.size(); y++) {
     auto row = data[y];
@@ -80,7 +80,7 @@ bool Collision::isOverlapping(Sprite* first, SDL_Rect second) {
 }
 
 bool Collision::isOverlapping(Sprite* sprite, Tilemap *map, int layer) {
-  int tileSize = map->tileset->tileSize;
+  int tileSize = map->tileset->frameWidth;
 
   int x = sprite->x/Core::scale/tileSize;
   int y = sprite->y/Core::scale/tileSize;

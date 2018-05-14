@@ -11,12 +11,10 @@ struct Switchboard : Entity {
   void start();
 
   void tick(float dt);
-  void renderOverlay(SDL_Renderer* renderer, SDL_Point cam);
 
   bool continuous();
 
   Sprite* backboard;
-  Sprite* overlay;
 
   Jumper* inPositive;
   Jumper* inNegative;

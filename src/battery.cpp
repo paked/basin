@@ -8,12 +8,10 @@
 #define DEGREES_TO_RADIANS(degrees) ((degrees) * 3.14159265359 / 180.0)
 
 Battery::Battery(int x, int y) {
-  sprite = new Sprite("battery.png");
-  sprite->spritesheet(18, 22);
+  sprite = new Spritesheet("battery.png", 18, 22);
 
-  attachments = new Sprite("battery_attachments.png");
+  attachments = new Spritesheet("battery_attachments.png", 18, 22);
   attachments->hud = true;
-  attachments->spritesheet(18, 22);
 
   attachments->addAnimation("key", { 0 });
   attachments->addAnimation("chainsaw", { 2 });
@@ -40,8 +38,8 @@ void Battery::unattach() {
 }
 
 void Battery::tick(float dt) {
-  sprite->tick(dt);
-  attachments->tick(dt);
+  attachments->x = sprite->x;
+  attachments->y = sprite->y - sprite->height + 2;
 
   // send render commands
   Scene* scene = entity->scene;
@@ -49,10 +47,8 @@ void Battery::tick(float dt) {
   j.depth = DEPTH_UI;
   j.tex = sprite->texture;
 
-  attachments->x = sprite->x;
-  attachments->y = sprite->y - sprite->height + 2;
-
-  SDL_Rect src = sprite->getFrame(0);
+  sprite->frame = 0;
+  SDL_Rect src = sprite->getSRC();
 
   int x = sprite->x;
   int y = sprite->y;
@@ -69,7 +65,8 @@ void Battery::tick(float dt) {
   j.depth += DEPTH_ABOVE;
   scene->renderer->queue.push(j);
 
-  src = sprite->getFrame(1);
+  sprite->frame = 1;
+  src = sprite->getSRC();
 
   dst = {
     .x = x,
@@ -86,7 +83,8 @@ void Battery::tick(float dt) {
   int battSize = (int) (height * capacity);
   int offset = height - battSize;
 
-  src = sprite->getFrame(2);
+  sprite->frame = 2;
+  src = sprite->getSRC();
 
   src.y += offset/Core::scale;
   src.h = battSize;

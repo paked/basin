@@ -1,5 +1,6 @@
 #include <enemy.hpp>
 
+/*
 Enemy::Enemy(int x, int y) {
   sprite = new Sprite("slime.png");
   sprite->spritesheet(16, 16);
@@ -33,4 +34,4 @@ void Enemy::tick(float dt) {
 
 void Enemy::render(SDL_Renderer* renderer, SDL_Point cam) {
   sprite->render(renderer, cam);
-}
+}*/

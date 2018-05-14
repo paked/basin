@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-#include <e/sprite.hpp>
+#include <e/spritesheet.hpp>
 
 struct Jumper {
   Jumper(bool positive, SDL_Point socket);
@@ -23,5 +23,5 @@ struct Jumper {
 
   SDL_Point socket;
 
-  Sprite* sprite;
+  Spritesheet* sprite;
 };

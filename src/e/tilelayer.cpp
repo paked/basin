@@ -2,12 +2,12 @@
 
 #include <e/core.hpp>
 
-Tilelayer::Tilelayer(Tileset* ts, Data d, float dp) : tileset(ts), data(d) {
+Tilelayer::Tilelayer(Spritesheet* ts, Data d, float dp) : tileset(ts), data(d) {
   localDepth = dp;
 }
 
 void Tilelayer::tick(float dt) {
-  int tileSize = tileset->tileSize;
+  int tileSize = tileset->frameWidth;
 
   for (int y = 0; y < data.size(); y++) {
     auto row = data[y];
@@ -35,11 +35,12 @@ void Tilelayer::tick(float dt) {
       dst.x -= scene->camera->x;
       dst.y -= scene->camera->y;
 
-      SDL_Rect src = tileset->sprite->getFrame(tile);
+      tileset->frame = tile;
+      SDL_Rect src = tileset->getSRC();
 
       RenderJob j;
       j.depth = getDepth();
-      j.tex = tileset->sprite->texture;
+      j.tex = tileset->texture;
       j.src = src;
       j.dst = dst;
 

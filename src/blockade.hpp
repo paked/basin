@@ -6,6 +6,7 @@
 
 #include <e/camera.hpp>
 #include <e/sprite.hpp>
+#include <e/spritesheet.hpp>
 #include <e/entity.hpp>
 
 struct Particle {
@@ -36,12 +37,12 @@ struct Blockade : Entity {
   bool exploding = false;
   int explosionStartParticlesDelay = 150;
   int explosionStartParticlesTime;
-  Sprite* explosionSprite;
+  Spritesheet* explosionSprite;
 
   bool particlesAlive = false;
   float particleSpeed = 200;
   int particleAliveTime = 400;
   int particleDeathTime;
-  Sprite* particleSprite;
+  Spritesheet* particleSprite;
   std::vector<Particle> particles;
 };

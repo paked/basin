@@ -5,7 +5,7 @@
 
 #include <config.hpp>
 
-Tilemap::Tilemap(Tileset *ts) : tileset(ts) {};
+Tilemap::Tilemap(Spritesheet *ts) : tileset(ts) {};
 
 int Tilemap::loadLayer(std::string fname, float depth) {
   CSV csv(LVL_PATH + fname);

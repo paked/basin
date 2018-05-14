@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-#include <e/sprite.hpp>
+#include <e/spritesheet.hpp>
 #include <e/input.hpp>
 #include <e/camera.hpp>
 #include <e/text.hpp>
@@ -28,7 +28,7 @@ struct Player : Entity {
   Movement currentMovement = IDLE;
   Torch::Direction eyeLine = Torch::DOWN;
 
-  Sprite* sprite;
+  Spritesheet* sprite;
 
   Input moveLeft = Input(SDL_SCANCODE_A);
   Input moveRight = Input(SDL_SCANCODE_D);

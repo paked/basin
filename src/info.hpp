@@ -6,6 +6,8 @@
 #include <e/point.hpp>
 #include <e/text.hpp>
 
+/*
+
 struct Info {
   Info(float x, float y, std::string msg);
 
@@ -21,4 +23,4 @@ struct Info {
   bool showText = false;
 
   bool read = false;
-};
+};*/

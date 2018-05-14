@@ -54,6 +54,8 @@ file(GLOB SOURCES
     src/e/resources.cpp
     src/e/sprite.hpp
     src/e/sprite.cpp
+    src/e/spritesheet.hpp
+    src/e/spritesheet.cpp
     src/e/point.hpp
     src/e/point.cpp
     src/e/csv.hpp
@@ -64,8 +66,6 @@ file(GLOB SOURCES
     src/e/tilemap.cpp
     src/e/tilelayer.hpp
     src/e/tilelayer.cpp
-    src/e/tileset.hpp
-    src/e/tileset.cpp
     src/e/collision.hpp
     src/e/collision.cpp
 

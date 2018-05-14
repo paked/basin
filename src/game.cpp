@@ -31,6 +31,7 @@ bool Game::load() {
   ok |= Resources::load("boulder.png");
   ok |= Resources::load("explosion.png");
   ok |= Resources::load("floorboard.png");
+  ok |= Resources::load("light_small.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
 
   if (!ok) {
@@ -53,7 +54,7 @@ void Game::start() {
   entities.add(player);
 
   // Map
-  Tileset* ts = new Tileset("tileset.png", 16);
+  Spritesheet* ts = new Spritesheet("tileset.png", 16, 16);
   map = new Tilemap(ts);
   map->loadLayer("map_background.csv", DEPTH_BG*2);
   map->loadLayer("map_foreground.csv", DEPTH_FG);
@@ -84,9 +85,10 @@ void Game::start() {
     entities.add(&floorboards);
 
     int size = 32 * Core::scale;
+    int tileSize = ts->frameWidth;
 
-    int startX = 1 * map->tileset->tileSize * Core::scale;
-    int startY = 31 * map->tileset->tileSize * Core::scale;
+    int startX = 1 * tileSize * Core::scale;
+    int startY = 31 * tileSize * Core::scale;
 
     int rowSize = 3;
     int colSize = 4;
@@ -103,6 +105,8 @@ void Game::start() {
   // load collectables
   entities.add(&collectables);
   loadCollectables("assets/lvl/map_collectables.csv");
+
+  light = new Sprite("light_small.png");
   
   // Setup camera
   camera.follow = player->sprite;
@@ -215,29 +219,43 @@ void Game::tick(float dt) {
     }
   }
 
+  camera.tick(dt);
   entities.tick(dt);
 
   // TODO fix this
   switchboardTerminal->job(scene);
 
-  camera.tick(dt);
   entities.postTick();
 }
 
 void Game::render(SDL_Renderer* r) {
-  if (player->torch->dark) {
+   if (player->torch->dark) {
     // Setup render texture
     SDL_SetRenderTarget(r, darkBuffer);
 
     SDL_SetRenderDrawColor(r, 0, 0, 0, (player->torch->dark ? 255 : 0));
     SDL_RenderClear(r);
 
+    // light->x = player->sprite->x;
+    // light->y = player->sprite->y;
+
+    // light->render(r, scene->camera->point());
+
     if (player->torch->on) {
       // Draw lights onto render texture
       player->torch->beamIn(player->eyeLine);
     }
 
-    // Revert render texture back to
+    /*
+    for (auto& fb : floorboards.members) {
+      if (!fb->fake || !fb->glowing) {
+        return;
+      }
+
+      fb->glow();
+    }*/
+
+    // Revert render texture back to 
     SDL_SetRenderTarget(r, NULL);
 
     RenderJob j;

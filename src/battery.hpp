@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-#include <e/sprite.hpp>
+#include <e/spritesheet.hpp>
 #include <collectable.hpp>
 
 #include <e/component.hpp>
@@ -12,8 +12,8 @@ struct Battery : Component{
 
   void start();
 
-  Sprite *sprite;
-  Sprite *attachments;
+  Spritesheet *sprite;
+  Spritesheet *attachments;
 
   bool showAttachment = false;
 

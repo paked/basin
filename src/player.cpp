@@ -4,9 +4,8 @@
 #include <e/core.hpp>
 
 void Player::start() {
-  sprite = new Sprite("player.png");
+  sprite = new Spritesheet("player.png", 10, 19);
 
-  sprite->spritesheet(10, 19);
   sprite->addAnimation("idle_hori", { 0, 1 });
   sprite->addAnimation("walk_hori", { 2, 3 });
   sprite->addAnimation("idle_down", { 4, 5 });
@@ -25,9 +24,10 @@ void Player::start() {
 
   sprite->maxVelocity = Point(25, 25);
   sprite->drag = Point(0.95, 0.95);
-  sprite->x = (9 * 16)*Core::scale - sprite->width/2;
+  sprite->x = (10 * 16)*Core::scale - sprite->width/2;
   sprite->y = (2 * 16)*Core::scale;
 
+  reg(sprite);
   reg(battery);
 }
 
@@ -134,12 +134,9 @@ void Player::tick(float dt) {
     positionItem();
   }
 
-  sprite->tick(dt);
-
   justGotItem = false;
 
   // send render commands
-  sprite->job(scene, getDepth());
 
   if (doPrompt && promptOn) {
     SDL_Rect rect = promptText->rect;

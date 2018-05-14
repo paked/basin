@@ -13,44 +13,7 @@ Sprite::Sprite(std::string texName, float x, float y) : x(x), y(y) {
   height = textureHeight * Core::scale;
 }
 
-void Sprite::spritesheet(int fw, int fh) {
-  isSpritesheet = true;
-
-  frameWidth = fw;
-  frameHeight = fh;
-
-  width = fw * Core::scale;
-  height = fh * Core::scale;
-}
-
-SDL_Rect Sprite::getFrame() {
-  int f = 0;
-  if (currentAnimation.size() != 0) {
-    f = currentAnimation[currentFrame];
-  }
-
-  return getFrame(f);
-}
-
-SDL_Rect Sprite::getFrame(int i) {
-  int xIndex = 0;
-  int yIndex = 0;
-  int rowSize = frameWidth;
-
-  if (isSpritesheet) {
-    rowSize = textureWidth/frameWidth;
-
-    yIndex = i / rowSize;
-    xIndex = i % rowSize;
-
-    return SDL_Rect {
-      .x = xIndex * frameWidth,
-      .y = yIndex * frameHeight,
-      .w = frameWidth,
-      .h = frameHeight
-    };
-  }
-
+SDL_Rect Sprite::getSRC() {
   return SDL_Rect {
     .x = 0,
     .y = 0,
@@ -59,55 +22,18 @@ SDL_Rect Sprite::getFrame(int i) {
   };
 }
 
-void Sprite::addAnimation(std::string name, Animation anim) {
-  animations[name] = anim;
-}
-
-void Sprite::playAnimation(std::string name, bool l) {
-  loop = l;
-
-  playing = true;
-  currentAnimation = animations[name];
-  currentAnimationName = name;
-  currentFrame = 0;
-  nextFrame = SDL_GetTicks() + frameLength;
-}
-
 SDL_Rect Sprite::rect() {
   return SDL_Rect{
-      .x = (int)x,
-      .y = (int)y,
+      .x = x,
+      .y = y,
       .w = width,
       .h = height
   };
 }
 
-void Sprite::updateAnimation() {
-  if (SDL_GetTicks() < nextFrame) {
-    return;
-  }
-
-  nextFrame = SDL_GetTicks() + frameLength;
-
-  // not at end of animation
-  if (currentFrame < currentAnimation.size() - 1) {
-    currentFrame++;
-
-    return;
-  }
-
-  if (loop) {
-    currentFrame = 0;
-
-    return;
-  }
-
-  playing = false;
-}
-
 void Sprite::tick(float dt) {
-  if (playing) {
-    updateAnimation();
+  if (entity == nullptr) {
+    printf("WARNING: calling tick on an entityless component!\n");
   }
 
   x += (int)nextPositionDelta.x;
@@ -129,16 +55,16 @@ void Sprite::tick(float dt) {
 
   nextPositionDelta.x = velocity.x * dt;
   nextPositionDelta.y = velocity.y * dt;
+
+  // Send render commands
+  if (visible) {
+    job(entity->scene, entity->getDepth() + localDepth);
+  }
 }
 
 void Sprite::job(Scene* scene, float depth) {
-  int f = 0;
-  if (currentAnimation.size() != 0) {
-    f = currentAnimation[currentFrame];
-  }
-
   SDL_Rect dst = rect();
-  SDL_Rect src = getFrame(f);
+  SDL_Rect src = getSRC();
 
   if (!hud) {
     dst.x -= scene->camera->x;
@@ -162,18 +88,9 @@ void Sprite::job(Scene* scene, float depth) {
   scene->renderer->queue.push(j);
 }
 
-void Sprite::render(SDL_Renderer *renderer, SDL_Point camera) {
-  int f = 0;
-  if (currentAnimation.size() != 0) {
-    f = currentAnimation[currentFrame];
-  }
-
-  renderFrame(f, renderer, camera);
-}
-
-void Sprite::renderFrame(int frame, SDL_Renderer* renderer, SDL_Point camera) {
+void Sprite::render(SDL_Renderer* renderer, SDL_Point camera) {
   SDL_Rect dst = rect();
-  SDL_Rect src = getFrame(frame);
+  SDL_Rect src = getSRC();
 
   if (!hud) {
     dst.x -= camera.x;

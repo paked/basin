@@ -2,6 +2,8 @@
 
 Boulder::Boulder(int x, int y) {
   sprite = new Sprite("boulder.png", x, y);
+
+  reg(sprite);
 }
 
 void Boulder::roll() {
@@ -11,7 +13,5 @@ void Boulder::roll() {
 void Boulder::tick(float dt) {
   sprite->angle += spinSpeed * dt;
 
-  sprite->tick(dt);
-
-  sprite->job(scene, getDepth());
+  Entity::tick(dt);
 }

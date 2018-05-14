@@ -8,6 +8,7 @@
 
 #define DEGREES_TO_RADIANS(degrees) ((degrees) * 3.14159265359 / 180.0)
 
+/*
 Info::Info(float x, float y, std::string msg) {
   sprite = new Sprite("info.png", x, y);
   sprite->spritesheet(8, 8);
@@ -54,4 +55,4 @@ void Info::render(SDL_Renderer *renderer, SDL_Point cam) {
   dst.y -= cam.y;
 
   SDL_RenderCopy(renderer, text->texture, NULL, &dst);
-}
+}*/

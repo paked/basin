@@ -1,8 +1,7 @@
 #include <sliding_door.hpp>
 
 SlidingDoor::SlidingDoor(int x, int y) {
-  sprite = new Sprite("sliding_door_vert.png", x, y);
-  sprite->spritesheet(16, 48);
+  sprite = new Spritesheet("sliding_door_vert.png", 16, 48, x, y);
 }
 
 void SlidingDoor::start() {
@@ -10,6 +9,8 @@ void SlidingDoor::start() {
   sprite->addAnimation("open", { 1, 2, 3, 4, 5, 6, 7 });
 
   sprite->playAnimation("closed", false);
+
+  reg(sprite);
 }
 
 void SlidingDoor::open() {
@@ -20,12 +21,6 @@ void SlidingDoor::open() {
   sprite->solid = false;
 
   sprite->playAnimation("open", false);
-}
-
-void SlidingDoor::tick(float dt) {
-  sprite->tick(dt);
-
-  sprite->job(scene);
 }
 
 SDL_Rect SlidingDoor::rect() {
