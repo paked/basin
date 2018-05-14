@@ -51,4 +51,53 @@ void Torch::beamIn(Direction d) {
       angle,
       &center,
       SDL_FLIP_NONE);
+
+#ifdef DEBUG
+  SDL_SetRenderDrawColor(Core::renderer, 255, 255, 255, 255);
+
+  SDL_Rect r = rect(d);
+  SDL_RenderFillRect(Core::renderer, &r);
+#endif
+}
+
+SDL_Rect Torch::rect(Direction d) {
+  SDL_Rect r = beam->rect();
+  r.w *= 0.6;
+
+  int t = 0;
+
+  switch (d) {
+    case UP:
+      r.x = SCREEN_WIDTH/2 - r.w/2;
+      r.y = SCREEN_WIDTH/2 - r.h/8*7;
+
+      break;
+    case DOWN:
+      r.x = SCREEN_WIDTH/2 - r.w/2;
+      r.y = SCREEN_WIDTH/2 - r.h/8;
+
+      break;
+    case RIGHT:
+      t = r.w;
+
+      r.w = r.h;
+      r.h = t;
+
+      r.x = SCREEN_WIDTH/2 - r.w/8;
+      r.y = SCREEN_WIDTH/2 - r.h/2;
+
+      break;
+    case LEFT:
+      t = r.w;
+
+      r.w = r.h;
+      r.h = t;
+
+      r.x = SCREEN_WIDTH/2 - r.w/8*7;
+      r.y = SCREEN_WIDTH/2 - r.h/2;
+
+      break;
+  }
+
+  return r;
 }

@@ -93,9 +93,16 @@ void Game::start() {
     int rowSize = 3;
     int colSize = 4;
 
+    bool fake[colSize][rowSize] = {
+      { false, true, false },
+      { true, true, false },
+      { true, false, false },
+      { true, true, true },
+    };
+
     for (int y = 0; y < colSize; y++) {
       for (int x = 0; x < rowSize; x++) {
-        Floorboard* fb = new Floorboard(startX + x * size, startY + y * size);
+        Floorboard* fb = new Floorboard(startX + x * size, startY + y * size, fake[y][x]);
 
         floorboards.add(fb);
       }
@@ -190,6 +197,29 @@ void Game::tick(float dt) {
     }
   }
 
+  SDL_Rect torchHitbox = player->torch->rect(player->eyeLine);
+  torchHitbox.x += scene->camera->x;
+  torchHitbox.y += scene->camera->y;
+
+  for (auto& f : floorboards.members) {
+    if (!f->fake) {
+      continue;
+    }
+
+    int hotspotSize = 10 * Core::scale;
+    SDL_Rect floorboardHitbox = f->sprite->rect();
+    floorboardHitbox.x += hotspotSize/2;
+    floorboardHitbox.y += hotspotSize/2;
+    floorboardHitbox.w = hotspotSize;
+    floorboardHitbox.h = hotspotSize;
+
+    if (!Collision::isOverlapping(floorboardHitbox, torchHitbox)) {
+      continue;
+    }
+
+    f->trigger();
+  }
+
   if (switchboard->active) {
     if (cancel.justDown()) {
       switchboard->active = false;
@@ -236,26 +266,15 @@ void Game::render(SDL_Renderer* r) {
     SDL_SetRenderDrawColor(r, 0, 0, 0, (player->torch->dark ? 255 : 0));
     SDL_RenderClear(r);
 
-    // light->x = player->sprite->x;
-    // light->y = player->sprite->y;
-
-    // light->render(r, scene->camera->point());
+    for (auto& fb : floorboards.members) {
+      fb->glow();
+    }
 
     if (player->torch->on) {
-      // Draw lights onto render texture
       player->torch->beamIn(player->eyeLine);
     }
 
-    /*
-    for (auto& fb : floorboards.members) {
-      if (!fb->fake || !fb->glowing) {
-        return;
-      }
-
-      fb->glow();
-    }*/
-
-    // Revert render texture back to 
+    // Revert render texture back to regular screen
     SDL_SetRenderTarget(r, NULL);
 
     RenderJob j;

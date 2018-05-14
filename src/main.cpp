@@ -75,14 +75,12 @@ void hook() {
   SDL_RenderClear(renderer);
 
   game->render(renderer);
-
-  SDL_RenderPresent(renderer);
-
   int renderEnd = SDL_GetTicks();
-  int renderDuration = renderEnd - tickEnd;
 
+  int renderDuration = renderEnd - tickEnd;
   int frameDuration = SDL_GetTicks() - frameStart;
 
+  SDL_RenderPresent(renderer);
   if (frameDuration > 16) {
     printf("WARNING: frame took too long to complete (%d vs %d) (t: %d, r: %d).\n", frameDuration, 16, tickDuration, renderDuration);
   }

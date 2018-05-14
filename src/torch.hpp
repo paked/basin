@@ -3,10 +3,9 @@
 #include <SDL2/SDL.h>
 
 #include <e/sprite.hpp>
+#include <e/component.hpp>
 
-struct Torch {
-  Torch();
-
+struct Torch : Component {
   // TODO: make this an engine constant
   enum Direction {
     UP,
@@ -15,9 +14,10 @@ struct Torch {
     RIGHT
   };
 
-  Direction direction;
+  Torch();
 
   void beamIn(Direction d);
+  SDL_Rect rect(Direction d);
 
   Sprite* beam;
 

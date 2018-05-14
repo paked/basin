@@ -76,7 +76,11 @@ void Collision::collide(Sprite *sprite, Tilemap *map) {
 bool Collision::isOverlapping(Sprite* first, SDL_Rect second) {
   SDL_Rect frect = first->rect();
 
-  return SDL_HasIntersection(&frect, &second);
+  return isOverlapping(frect, second);
+}
+
+bool Collision::isOverlapping(SDL_Rect first, SDL_Rect second) {
+  return SDL_HasIntersection(&first, &second);
 }
 
 bool Collision::isOverlapping(Sprite* sprite, Tilemap *map, int layer) {

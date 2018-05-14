@@ -12,6 +12,8 @@ struct RenderJob {
   SDL_RendererFlip flip = SDL_FLIP_NONE;
   double angle = 0;
   float depth = 0;
+
+  unsigned char alpha = 255;
 };
 
 struct DepthSort

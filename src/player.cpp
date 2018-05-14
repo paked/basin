@@ -24,11 +24,14 @@ void Player::start() {
 
   sprite->maxVelocity = Point(25, 25);
   sprite->drag = Point(0.95, 0.95);
-  sprite->x = (10 * 16)*Core::scale - sprite->width/2;
-  sprite->y = (2 * 16)*Core::scale;
+  /*sprite->x = (10 * 16)*Core::scale - sprite->width/2;
+  sprite->y = (2 * 16)*Core::scale;*/
+  sprite->x = (17 * 16)*Core::scale - sprite->width/2;
+  sprite->y = (18 * 16)*Core::scale;
 
   reg(sprite);
   reg(battery);
+  reg(torch);
 }
 
 void Player::tick(float dt) {

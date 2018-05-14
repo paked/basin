@@ -84,6 +84,7 @@ void Sprite::job(Scene* scene, float depth) {
   j.dst = dst;
   j.angle = angle;
   j.flip = fl;
+  j.alpha = alpha;
 
   scene->renderer->queue.push(j);
 }
@@ -103,5 +104,16 @@ void Sprite::render(SDL_Renderer* renderer, SDL_Point camera) {
     f = SDL_FLIP_HORIZONTAL;
   }
 
+  unsigned char oldAlpha;
+  SDL_GetTextureAlphaMod(texture, &oldAlpha);
+
+  if (alpha != oldAlpha) {
+    SDL_SetTextureAlphaMod(texture, alpha);
+  }
+
   SDL_RenderCopyEx(renderer, texture, &src, &dst, angle, NULL, f);
+
+  if (alpha != oldAlpha) {
+    SDL_SetTextureAlphaMod(texture, oldAlpha);
+  }
 }

@@ -35,6 +35,7 @@ struct Sprite : Component {
   bool flip = false;
   // render in camera space or on screen space?
   int angle = 0;
+  char alpha = 255;
 
   bool hud = false;
   bool solid = true;
