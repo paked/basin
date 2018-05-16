@@ -12,6 +12,7 @@ bool Game::load() {
   Core::clear = SDL_Color{.r = 10, .g = 10, .b = 13, .a = 255};
 
   bool ok = Resources::load("player.png");
+  ok |= Resources::load("computer_gui.png");
   ok |= Resources::load("wall.png");
   ok |= Resources::load("tileset.png");
   ok |= Resources::load("info.png");
@@ -32,6 +33,7 @@ bool Game::load() {
   ok |= Resources::load("explosion.png");
   ok |= Resources::load("floorboard.png");
   ok |= Resources::load("light_small.png");
+  ok |= Resources::load("safari_guy.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
 
   if (!ok) {
@@ -91,13 +93,14 @@ void Game::start() {
     int startY = 31 * tileSize;
 
     int rowSize = 3;
-    int colSize = 4;
+    int colSize = 5;
 
     bool fake[colSize][rowSize] = {
       { false, true, false },
       { true, true, false },
       { true, false, false },
       { true, true, true },
+      { false, false, true },
     };
 
     for (int y = 0; y < colSize; y++) {
@@ -109,11 +112,12 @@ void Game::start() {
     }
   }
 
+  computer = new Computer();
+  entities.add(computer);
+
   // load collectables
   entities.add(&collectables);
   loadCollectables("assets/lvl/map_collectables.csv");
-
-  light = new Sprite("light_small.png");
 
   // Dark buffer
   darkBufferRect = {
@@ -312,6 +316,8 @@ void Game::loadCollectables(std::string fname) {
         type = Collectable::Type::JUMPERS;
       } else if (num == 3) {
         type = Collectable::Type::TORCH;
+      } else if (num == 4) {
+        type = Collectable::Type::SCREEN;
       } else {
         printf("Error loading collectables CSV: invalid collectable type\n");
 

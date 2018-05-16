@@ -9,6 +9,7 @@ void Collectable::start() {
   sprite->addAnimation("key", { 1 });
   sprite->addAnimation("jumpers", { 2 });
   sprite->addAnimation("torch", { 3 });
+  sprite->addAnimation("screen", { 4 });
 
   sprite->playAnimation(key(type));
 
@@ -26,6 +27,8 @@ std::string Collectable::key(Type t) {
     return "jumpers";
   } else if (t == TORCH) {
     return "torch";
+  } else if (t == SCREEN) {
+    return "screen";
   }
 
   return "";

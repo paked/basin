@@ -25,6 +25,7 @@
 #include <boulder.hpp>
 #include <blockade.hpp>
 #include <floorboard.hpp>
+#include <computer.hpp>
 
 struct Game {
   bool load();
@@ -44,19 +45,19 @@ private:
   Input cancel = Input(SDL_SCANCODE_ESCAPE);
   Input godMode = Input(SDL_SCANCODE_LSHIFT);
 
+  // Transient entities
   Player* player;
   Tilemap *map;
-  Blockade* blockade;
-  Boulder* boulder;
   Group<Collectable> collectables;
-  Group<Floorboard> floorboards;
-
+  
+  // Gameplay specific entities
   Switchboard* switchboard;
   Sprite* switchboardTerminal;
-
   SlidingDoor* slidingDoor;
-
-  Sprite* light;
+  Blockade* blockade;
+  Boulder* boulder;
+  Group<Floorboard> floorboards;
+  Computer *computer;
 
   int darknessLayer;
 

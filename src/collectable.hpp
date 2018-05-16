@@ -12,7 +12,8 @@ struct Collectable : Entity {
     CHAINSAW,
     KEY,
     JUMPERS,
-    TORCH
+    TORCH,
+    SCREEN
   };
 
   Type type;
