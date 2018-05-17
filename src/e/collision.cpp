@@ -1,7 +1,5 @@
 #include <e/collision.hpp>
 
-#include <e/core.hpp>
-
 void Collision::collide(Sprite* first, Sprite* second) {
   if (!second->solid) {
     return;
@@ -10,20 +8,20 @@ void Collision::collide(Sprite* first, Sprite* second) {
   collide(first, second->rect());
 }
 
-void Collision::collide(Sprite* first, SDL_Rect second) {
+void Collision::collide(Sprite* first, Rect second) {
   if (!first->solid) {
     return;
   }
 
-  SDL_Rect b = second;
-  SDL_Rect res;
+  Rect b = second;
+  Rect res;
 
   // First case we check against next y position
   {
-    SDL_Rect a = first->rect();
-    a.y += (int)first->nextPositionDelta.y;
+    Rect a = first->rect();
+    a.y += first->nextPositionDelta.y;
 
-    if (SDL_IntersectRect(&a, &b, &res)) {
+    if (intersection(a, b, &res)) {
       float mod = (first->velocity.y < 0) ? 1 : -1;
       first->nextPositionDelta.y += (int)res.h * mod;
     }
@@ -31,10 +29,10 @@ void Collision::collide(Sprite* first, SDL_Rect second) {
 
   // Then we check against the next x position
   {
-    SDL_Rect a = first->rect();
-    a.x += (int)first->nextPositionDelta.x;
+    Rect a = first->rect();
+    a.x += first->nextPositionDelta.x;
 
-    if (SDL_IntersectRect(&a, &b, &res)) {
+    if (intersection(a, b, &res)) {
       float mod = (first->velocity.x < 0) ? 1 : -1;
       first->nextPositionDelta.x += (int)res.w * mod;
     }
@@ -61,11 +59,11 @@ void Collision::collide(Sprite *sprite, Tilemap *map) {
         continue;
       }
       
-      SDL_Rect rect = {
-        .x = x * tileSize * Core::scale,
-        .y = y * tileSize * Core::scale,
-        .w = tileSize * Core::scale,
-        .h = tileSize * Core::scale
+      Rect rect = {
+        .x = x * tileSize,
+        .y = y * tileSize,
+        .w = tileSize,
+        .h = tileSize
       };
 
       Collision::collide(sprite, rect);
@@ -73,23 +71,72 @@ void Collision::collide(Sprite *sprite, Tilemap *map) {
   }
 }
 
-bool Collision::isOverlapping(Sprite* first, SDL_Rect second) {
-  SDL_Rect frect = first->rect();
+bool Collision::isOverlapping(Sprite* first, Rect second) {
+  Rect frect = first->rect();
 
   return isOverlapping(frect, second);
-}
-
-bool Collision::isOverlapping(SDL_Rect first, SDL_Rect second) {
-  return SDL_HasIntersection(&first, &second);
 }
 
 bool Collision::isOverlapping(Sprite* sprite, Tilemap *map, int layer) {
   int tileSize = map->tileset->frameWidth;
 
-  int x = sprite->x/Core::scale/tileSize;
-  int y = sprite->y/Core::scale/tileSize;
+  int x = sprite->x/tileSize;
+  int y = sprite->y/tileSize;
 
   Tilelayer* l = map->layers[layer];
 
   return l->data[y][x] > 0;
+}
+
+bool Collision::isOverlapping(Rect first, Rect second) {
+  Point amin = { first.x, first.y };
+  Point amax = { amin.x + first.w, amin.y + first.h };
+  Point bmin = { second.x, second.y };
+  Point bmax = { bmin.x + second.w, bmin.y + second.h };
+
+  return bmin.x <= amax.x &&
+    amin.x <= bmax.x &&
+    bmin.y <= amax.y &&
+    amin.y <= bmax.y;
+}
+
+bool Collision::isOverlapping(Point p, Rect r) {
+  return ((p.x >= r.x) && (p.x < r.x + r.w)) &&
+    ((p.y >= r.y) && (p.y < r.y + r.h));
+}
+
+bool Collision::intersection(Rect first, Rect second, Rect* out) {
+  float x1 = second.x; //b.min.x
+  float y1 = second.y; //b.min.y
+  float x2 = second.x + second.w; //b.max.x
+  float y2 = second.y + second.h; //b.max.y
+
+  if (first.x > x1) {
+    x1 = first.x;
+  }
+
+  if (first.y > y1) {
+    y1 = first.y;
+  }
+
+  if (first.x + first.w < x2) {
+    x2 = first.x + first.w;
+  }
+
+  if (first.y + first.h < y2) {
+    y2 = first.y + first.h;
+  }
+
+  if (x2 <= x1 || y2 <= y1) {
+    // no intersection
+
+    return false;
+  }
+
+  out->x = x1;
+  out->y = y1;
+  out->w = x2 - x1;
+  out->h = y2 - y1;
+
+  return true;
 }

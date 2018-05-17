@@ -3,25 +3,27 @@
 #include <SDL2/SDL.h>
 
 #include <e/spritesheet.hpp>
+#include <e/rect.hpp>
+#include <e/collision.hpp>
 
 struct Jumper {
-  Jumper(bool positive, SDL_Point socket);
-  void render(SDL_Renderer* renderer, SDL_Point cam);
+  Jumper(bool positive, Point socket);
+  void render(SDL_Renderer* renderer, Camera* cam);
 
   void generateColliders();
 
   bool dirty();
   bool in();
 
-  SDL_Rect rect();
+  Rect rect();
 
   int socketPadding = 2;
-  SDL_Rect socketLeftPad;
-  SDL_Rect socketRightPad;
-  SDL_Rect socketTopPad;
-  SDL_Rect socketInPad;
+  Rect socketLeftPad;
+  Rect socketRightPad;
+  Rect socketTopPad;
+  Rect socketInPad;
 
-  SDL_Point socket;
+  Point socket;
 
   Spritesheet* sprite;
 };

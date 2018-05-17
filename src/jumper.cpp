@@ -2,7 +2,7 @@
 
 #include <config.hpp>
 
-Jumper::Jumper(bool positive, SDL_Point socket) : socket(socket) {
+Jumper::Jumper(bool positive, Point socket) : socket(socket) {
   sprite = new Spritesheet("switchboard_gui_jumpers.png", 8, 24);
   sprite->hud = true;
 
@@ -14,8 +14,8 @@ Jumper::Jumper(bool positive, SDL_Point socket) : socket(socket) {
   generateColliders();
 }
 
-SDL_Rect Jumper::rect() {
-  return SDL_Rect {
+Rect Jumper::rect() {
+  return Rect {
     .x = sprite->x + 8,
     .y = sprite->y,
     .w = 16,
@@ -24,9 +24,9 @@ SDL_Rect Jumper::rect() {
 }
 
 void Jumper::generateColliders() {
-  SDL_Rect bananaRect = rect(); 
+  Rect bananaRect = rect(); 
 
-  SDL_Rect socketRect = {
+  Rect socketRect = {
     .x = socket.x - bananaRect.w/2,
     .y = socket.y - bananaRect.h/2,
     .w = bananaRect.w,
@@ -63,8 +63,8 @@ void Jumper::generateColliders() {
   socketInPad = socketRect;
 }
 
-void Jumper::render(SDL_Renderer* renderer, SDL_Point cam) {
-  sprite->render(renderer, cam);
+void Jumper::render(SDL_Renderer* renderer, Camera* camera) {
+  sprite->render(renderer, camera);
 
 #ifdef DEBUG
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
@@ -101,15 +101,13 @@ void Jumper::render(SDL_Renderer* renderer, SDL_Point cam) {
 }
 
 bool Jumper::dirty() {
-  SDL_Rect r = rect();
+  Rect r = rect();
 
-  return SDL_HasIntersection(&r, &socketLeftPad) ||
-    SDL_HasIntersection(&r, &socketRightPad) ||
-    SDL_HasIntersection(&r, &socketTopPad);
+  return Collision::isOverlapping(r, socketLeftPad) ||
+    Collision::isOverlapping(r, socketRightPad) ||
+    Collision::isOverlapping(r, socketTopPad);
 }
 
 bool Jumper::in() {
-  SDL_Rect r = sprite->rect();
-
-  return SDL_HasIntersection(&r, &socketInPad) && !dirty();
+  return Collision::isOverlapping(sprite->rect(), socketInPad) && !dirty();
 }

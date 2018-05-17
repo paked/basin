@@ -7,7 +7,7 @@
 #include <e/entity.hpp>
 
 struct SlidingDoor : Entity {
-  SlidingDoor(int x, int y);
+  SlidingDoor(float x, float y);
 
   void start();
 

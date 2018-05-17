@@ -68,7 +68,8 @@ file(GLOB SOURCES
     src/e/tilelayer.cpp
     src/e/collision.hpp
     src/e/collision.cpp
-
+    src/e/rect.hpp
+    src/e/rect.cpp
     src/e/text.hpp
     src/e/text.cpp)
 

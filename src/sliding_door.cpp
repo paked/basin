@@ -1,6 +1,6 @@
 #include <sliding_door.hpp>
 
-SlidingDoor::SlidingDoor(int x, int y) {
+SlidingDoor::SlidingDoor(float x, float y) {
   sprite = new Spritesheet("sliding_door_vert.png", 16, 48, x, y);
 }
 

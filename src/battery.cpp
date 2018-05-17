@@ -23,8 +23,8 @@ Battery::Battery(int x, int y) {
 }
 
 void Battery::start() {
-  sprite->x = entity->scene->camera->width - (width + 4);
-  sprite->y = entity->scene->camera->height- (height + 4);
+  sprite->x = entity->scene->camera->getWidth() - (width + 4);
+  sprite->y = entity->scene->camera->getHeight() - (height + 4);
 }
 
 void Battery::attach(Collectable::Type type) {
@@ -53,12 +53,14 @@ void Battery::tick(float dt) {
   int x = sprite->x;
   int y = sprite->y;
 
-  SDL_Rect dst = {
+  Rect dst1 = {
     .x = x,
     .y = y,
     .w = width,
     .h = height
   };
+
+  SDL_Rect dst = scene->camera->toView(dst1, true);
 
   j.src = src;
   j.dst = dst;
@@ -86,7 +88,7 @@ void Battery::tick(float dt) {
   sprite->frame = 2;
   src = sprite->getSRC();
 
-  src.y += offset/Core::scale;
+  src.y += offset;
   src.h = battSize;
 
   dst = {

@@ -9,8 +9,8 @@ Torch::Torch() {
 }
 
 void Torch::beamIn(Direction d) {
-  SDL_Rect src = beam->rect();
-  SDL_Rect dst = beam->rect();
+  SDL_Rect src = Rect::toSDL(beam->rect());
+  SDL_Rect dst = entity->scene->camera->toView(beam->rect(), false);
 
   dst.x = SCREEN_WIDTH/2 - src.w/2;
   dst.y = SCREEN_WIDTH/2 - src.h/8;
@@ -41,12 +41,12 @@ void Torch::beamIn(Direction d) {
   // for some reason...
   angle -= 180;
 
-  SDL_Point center = { .x = beam->width/2, .y = 8 * Core::scale };
+  SDL_Point center = { .x = beam->width/2, .y = 8 };
 
   SDL_RenderCopyEx(
       Core::renderer,
       beam->texture,
-      &src,
+      NULL,
       &dst,
       angle,
       &center,
@@ -60,11 +60,11 @@ void Torch::beamIn(Direction d) {
 #endif
 }
 
-SDL_Rect Torch::rect(Direction d) {
-  SDL_Rect r = beam->rect();
+Rect Torch::rect(Direction d) {
+  Rect r = beam->rect();
   r.w *= 0.6;
 
-  int t = 0;
+  float t = 0;
 
   switch (d) {
     case UP:

@@ -17,7 +17,7 @@ struct Torch : Component {
   Torch();
 
   void beamIn(Direction d);
-  SDL_Rect rect(Direction d);
+  Rect rect(Direction d);
 
   Sprite* beam;
 

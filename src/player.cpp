@@ -22,12 +22,10 @@ void Player::start() {
   battery = new Battery();
   torch = new Torch();
 
-  sprite->maxVelocity = Point(25, 25);
+  sprite->maxVelocity = Point(13, 13);
   sprite->drag = Point(0.95, 0.95);
-  /*sprite->x = (10 * 16)*Core::scale - sprite->width/2;
-  sprite->y = (2 * 16)*Core::scale;*/
-  sprite->x = (17 * 16)*Core::scale - sprite->width/2;
-  sprite->y = (18 * 16)*Core::scale;
+  sprite->x = (10 * 16) - sprite->width/2;
+  sprite->y = (2 * 16);
 
   reg(sprite);
   reg(battery);

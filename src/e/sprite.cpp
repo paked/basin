@@ -4,13 +4,10 @@
 #include <e/resources.hpp>
 
 Sprite::Sprite(std::string texName, float x, float y) : x(x), y(y) {
-  x *= Core::scale;
-  y *= Core::scale;
-
   texture = Resources::get(texName, &textureWidth, &textureHeight);
 
-  width = textureWidth * Core::scale;
-  height = textureHeight * Core::scale;
+  width = textureWidth;
+  height = textureHeight;
 }
 
 SDL_Rect Sprite::getSRC() {
@@ -22,8 +19,8 @@ SDL_Rect Sprite::getSRC() {
   };
 }
 
-SDL_Rect Sprite::rect() {
-  return SDL_Rect{
+Rect Sprite::rect() {
+  return Rect{
       .x = x,
       .y = y,
       .w = width,
@@ -63,13 +60,8 @@ void Sprite::tick(float dt) {
 }
 
 void Sprite::job(Scene* scene, float depth) {
-  SDL_Rect dst = rect();
+  SDL_Rect dst = scene->camera->toView(rect(), hud);
   SDL_Rect src = getSRC();
-
-  if (!hud) {
-    dst.x -= scene->camera->x;
-    dst.y -= scene->camera->y;
-  }
 
   SDL_RendererFlip fl = SDL_FLIP_NONE;
 
@@ -89,14 +81,9 @@ void Sprite::job(Scene* scene, float depth) {
   scene->renderer->queue.push(j);
 }
 
-void Sprite::render(SDL_Renderer* renderer, SDL_Point camera) {
-  SDL_Rect dst = rect();
+void Sprite::render(SDL_Renderer* renderer, Camera* camera) {
+  SDL_Rect dst = camera->toView(rect(), hud);
   SDL_Rect src = getSRC();
-
-  if (!hud) {
-    dst.x -= camera.x;
-    dst.y -= camera.y;
-  }
 
   SDL_RendererFlip f = SDL_FLIP_NONE;
 

@@ -12,6 +12,4 @@ struct Core {
   static SDL_Color clear;
 
   static void init();
-
-  static int scale;
 };

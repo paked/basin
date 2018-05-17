@@ -45,5 +45,5 @@ void Floorboard::glow() {
     return;
   }
 
-  light->render(Core::renderer, scene->camera->point());
+  light->render(Core::renderer, scene->camera);
 }

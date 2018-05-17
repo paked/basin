@@ -6,8 +6,8 @@ Spritesheet::Spritesheet(std::string texName, int fw, int fh, float x, float y):
   frameWidth = fw;
   frameHeight = fh;
 
-  width = frameWidth * Core::scale;
-  height = frameHeight * Core::scale;
+  width = frameWidth;
+  height = frameHeight;
 }
 
 void Spritesheet::tick(float dt) {
@@ -74,7 +74,7 @@ SDL_Rect Spritesheet::getSRC() {
   };
 }
 
-void Spritesheet::renderFrame(int frame, SDL_Renderer* renderer, SDL_Point camera) {
+void Spritesheet::renderFrame(int frame, SDL_Renderer* renderer, Camera* camera) {
   int f = this->frame;
 
   this->frame = frame;

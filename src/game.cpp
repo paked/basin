@@ -63,32 +63,32 @@ void Game::start() {
   map->addToGroup(&entities);
 
   // Blockade
-  blockade = new Blockade(10 * 16 * Core::scale, 23 * 16 * Core::scale);
+  blockade = new Blockade(10 * 16, 23 * 16);
   entities.add(blockade);
 
   // Boulder
-  boulder = new Boulder(25 * 16 * Core::scale, (24 * 16 + 8) * Core::scale);
+  boulder = new Boulder(25 * 16, (24 * 16 + 8));
   entities.add(boulder);
 
   // Switchboard
-  switchboardTerminal = new Sprite("switchboard.png", 8 * 16 * Core::scale, 11 * 16 * Core::scale);
+  switchboardTerminal = new Sprite("switchboard.png", 8 * 16, 11 * 16);
   switchboard = new Switchboard();
   entities.add(switchboard);
   switchboard->active = false;
 
   // Sliding door
-  slidingDoor = new SlidingDoor(10 * 16 * Core::scale, 11 * 16 * Core::scale);
+  slidingDoor = new SlidingDoor(10 * 16, 11 * 16);
   entities.add(slidingDoor);
 
   // Floorboards
   {
     entities.add(&floorboards);
 
-    int size = 32 * Core::scale;
+    int size = 32;
     int tileSize = ts->frameWidth;
 
-    int startX = 1 * tileSize * Core::scale;
-    int startY = 31 * tileSize * Core::scale;
+    int startX = 1 * tileSize;
+    int startY = 31 * tileSize;
 
     int rowSize = 3;
     int colSize = 4;
@@ -114,9 +114,6 @@ void Game::start() {
   loadCollectables("assets/lvl/map_collectables.csv");
 
   light = new Sprite("light_small.png");
-  
-  // Setup camera
-  camera.follow = player->sprite;
 
   // Dark buffer
   darkBufferRect = {
@@ -128,6 +125,9 @@ void Game::start() {
 
   darkBuffer = SDL_CreateTexture(Core::renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, darkBufferRect.w, darkBufferRect.h);
   SDL_SetTextureBlendMode(darkBuffer, SDL_BLENDMODE_MOD);
+  
+  // Setup camera
+  camera.follow = player->sprite;
 }
 
 void Game::tick(float dt) {
@@ -197,17 +197,16 @@ void Game::tick(float dt) {
     }
   }
 
-  SDL_Rect torchHitbox = player->torch->rect(player->eyeLine);
+  Rect torchHitbox = player->torch->rect(player->eyeLine);
   torchHitbox.x += scene->camera->x;
   torchHitbox.y += scene->camera->y;
-
   for (auto& f : floorboards.members) {
     if (!f->fake) {
       continue;
     }
 
-    int hotspotSize = 10 * Core::scale;
-    SDL_Rect floorboardHitbox = f->sprite->rect();
+    int hotspotSize = 10;
+    Rect floorboardHitbox = f->sprite->rect();
     floorboardHitbox.x += hotspotSize/2;
     floorboardHitbox.y += hotspotSize/2;
     floorboardHitbox.w = hotspotSize;
@@ -232,11 +231,12 @@ void Game::tick(float dt) {
   }
 
   if (blockade->up) {
-    SDL_Rect triggerBoulder = {.x = 11 * 16, .y = 25 * 16, .w = 16 * 2, .h = 16};
-    triggerBoulder.x *= Core::scale;
-    triggerBoulder.y *= Core::scale;
-    triggerBoulder.w *= Core::scale;
-    triggerBoulder.h *= Core::scale;
+    Rect triggerBoulder = {
+      .x = 11 * 16,
+      .y = 25 * 16,
+      .w = 16 * 2,
+      .h = 16
+    };
 
     if (Collision::isOverlapping(player->sprite, triggerBoulder)) {
       camera.shake(5 * 1000, 0.3);
@@ -253,7 +253,7 @@ void Game::tick(float dt) {
   entities.tick(dt);
 
   // TODO fix this
-  switchboardTerminal->job(scene);
+  // switchboardTerminal->job(scene);
 
   entities.postTick();
 }
@@ -318,8 +318,8 @@ void Game::loadCollectables(std::string fname) {
         continue;
       }
 
-      int worldX = (x * 16 + 12) * Core::scale;
-      int worldY = (y * 16 + 12) * Core::scale;
+      int worldX = (x * 16 + 12);
+      int worldY = (y * 16 + 12);
 
       collectables.add(new Collectable(worldX, worldY, type));
     }

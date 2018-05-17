@@ -3,7 +3,9 @@
 #include <stdio.h>
 
 #include <e/input.hpp>
-#include <e/core.hpp>
+#include <e/point.hpp>
+#include <e/rect.hpp>
+#include <e/collision.hpp>
 
 #include <config.hpp>
 
@@ -16,21 +18,21 @@ void Switchboard::start() {
   backboard->y = SCREEN_HEIGHT/2 - backboard->height/2;
   backboard->hud = true;
 
-  inPositive = new Jumper(true, { backboard->x + (2 * 16) * Core::scale, backboard->y + (6 * 16) * Core::scale });
-  inNegative = new Jumper(false, { backboard->x + (6 * 16) * Core::scale, backboard->y + (6 * 16) * Core::scale });
+  inPositive = new Jumper(true, { backboard->x + (2 * 16), backboard->y + (6 * 16) });
+  inNegative = new Jumper(false, { backboard->x + (6 * 16), backboard->y + (6 * 16) });
 
-  outPositive = new Jumper(true, { backboard->x + (2 * 16) * Core::scale, backboard->y + (2 * 16) * Core::scale });
-  outNegative = new Jumper(false, { backboard->x + (6 * 16) * Core::scale, backboard->y + (2 * 16) * Core::scale });
+  outPositive = new Jumper(true, { backboard->x + (2 * 16), backboard->y + (2 * 16) });
+  outNegative = new Jumper(false, { backboard->x + (6 * 16), backboard->y + (2 * 16) });
 
-  inPositive->sprite->x = 20 * Core::scale;
-  inPositive->sprite->y = 150 * Core::scale;
-  inNegative->sprite->x = 170 * Core::scale;
-  inNegative->sprite->y = 150 * Core::scale;
+  inPositive->sprite->x = 20;
+  inPositive->sprite->y = 150;
+  inNegative->sprite->x = 170;
+  inNegative->sprite->y = 150;
 
-  outPositive->sprite->x = 20 * Core::scale;
-  outPositive->sprite->y = 30 * Core::scale;
-  outNegative->sprite->x = 170 * Core::scale;
-  outNegative->sprite->y = 30 * Core::scale;
+  outPositive->sprite->x = 20;
+  outPositive->sprite->y = 30;
+  outNegative->sprite->x = 170;
+  outNegative->sprite->y = 30;
 
   reg(backboard);
   reg(inPositive->sprite);
@@ -40,15 +42,15 @@ void Switchboard::start() {
 }
 
 void Switchboard::tick(float dt) {
-  SDL_Point origin = { backboard->x, backboard->y };
+  Point origin = { backboard->x, backboard->y };
 
-  SDL_Point point = { Input::mouseX, Input::mouseY };
+  Point point = { Input::mouseX, Input::mouseY };
 
   std::vector<Jumper*> grabbables = { inPositive, inNegative, outPositive, outNegative };
   for (auto grabbable : grabbables) {
-    SDL_Rect rect = grabbable->sprite->rect();
+    Rect rect = grabbable->sprite->rect();
 
-    if (Input::mouseJustDown() && SDL_PointInRect(&point, &rect)) {
+    if (Input::mouseJustDown() && Collision::isOverlapping(point, rect)) {
       pinned = grabbable;
 
       offset = SDL_Point {point.x - rect.x, point.y - rect.y};

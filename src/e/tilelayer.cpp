@@ -19,21 +19,18 @@ void Tilelayer::tick(float dt) {
         continue;
       }
 
-      SDL_Rect dst = {
-        .x = x * tileSize * Core::scale,
-        .y = y * tileSize * Core::scale,
-        .w = tileSize * Core::scale,
-        .h = tileSize * Core::scale
+      Rect dst = {
+        .x = x * tileSize,
+        .y = y * tileSize,
+        .w = tileSize,
+        .h = tileSize
       };
 
+      /*
       if (!scene->camera->withinViewport(dst)) {
         // don't need to render if the thing isn't on screen
         continue;
-      }
-
-      // Translate dst to screen coordinates
-      dst.x -= scene->camera->x;
-      dst.y -= scene->camera->y;
+      }*/
 
       tileset->frame = tile;
       SDL_Rect src = tileset->getSRC();
@@ -42,7 +39,7 @@ void Tilelayer::tick(float dt) {
       j.depth = getDepth();
       j.tex = tileset->texture;
       j.src = src;
-      j.dst = dst;
+      j.dst = scene->camera->toView(dst);
 
       scene->renderer->queue.push(j);
     }

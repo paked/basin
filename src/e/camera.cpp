@@ -6,8 +6,9 @@
 
 void Camera::tick(float dt) {
   if (follow) {
-    realX = follow->x - (width - follow->width)/2;
-    realY = follow->y - (height - follow->height)/2;
+    Rect r = follow->rect();
+    realX = r.x - (getWidth() - r.w)/2;
+    realY = r.y - (getHeight() - r.h)/2;
   }
 
   x = realX;
@@ -32,6 +33,20 @@ void Camera::shake(int duration, float st) {
   shakeStopTime = SDL_GetTicks() + duration;
 }
 
+SDL_Rect Camera::toView(Rect rect, bool global) {
+  if (!global) {
+    rect.x -= x;
+    rect.y -= y;
+  }
+
+  rect.x *= zoom;
+  rect.y *= zoom;
+  rect.w *= zoom;
+  rect.h *= zoom;
+
+  return Rect::toSDL(rect);
+}
+
 bool Camera::withinViewport(SDL_Rect rect) {
   SDL_Rect me = viewport(32);
 
@@ -49,7 +64,15 @@ SDL_Rect Camera::viewport(int buffer) {
   return SDL_Rect{
     .x = x - buffer,
     .y = y - buffer,
-    .w = width + buffer*2,
-    .h = height + buffer*2
+    .w = logicalWidth + buffer*2,
+    .h = logicalHeight + buffer*2
   };
+}
+
+float Camera::getWidth() {
+  return logicalWidth / zoom;
+}
+
+float Camera::getHeight() {
+  return logicalHeight / zoom;
 }

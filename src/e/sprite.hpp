@@ -7,10 +7,9 @@
 #include <SDL2/SDL.h>
 
 #include <e/point.hpp>
+#include <e/rect.hpp>
 #include <e/scene.hpp>
 #include <e/component.hpp>
-
-typedef std::vector<int> Animation;
 
 struct Sprite : Component {
   Sprite(std::string texName, float x=0, float y=0);
@@ -18,19 +17,16 @@ struct Sprite : Component {
   void tick(float dt);
 
   void job(Scene* scene, float depth=0);
-  void render(SDL_Renderer* renderer, SDL_Point camera);
+  void render(SDL_Renderer* renderer, Camera* camera);
 
-  SDL_Rect rect();
-
+  Rect rect();
   virtual SDL_Rect getSRC();
 
-  // internal method. probably doesn't have much outside use.
-  void updateAnimation();
+  float x;
+  float y;
+  float width;
+  float height;
 
-  int x;
-  int y;
-  int width;
-  int height;
   // should the image be flipped horizontally?
   bool flip = false;
   // render in camera space or on screen space?
