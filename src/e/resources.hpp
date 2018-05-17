@@ -8,10 +8,12 @@
 
 struct Resources {
   static std::map<std::string, SDL_Texture*> textures;
-  static TTF_Font* font;
+  static std::map<int,TTF_Font*> fonts;
 
   static SDL_Texture* get(std::string fname);
   static SDL_Texture* get(std::string fname, int* width, int* height);
+  static TTF_Font* get(int fontSize);
+
   static bool load(std::string fname);
   static bool loadFont(std::string fname, int fontSize);
 

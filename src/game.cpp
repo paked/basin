@@ -37,6 +37,7 @@ bool Game::load() {
   ok |= Resources::load("light_small.png");
   ok |= Resources::load("safari_guy.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
+  ok |= Resources::loadFont("Cave-Story.ttf", 14);
 
   if (!ok) {
     printf("Could not load assets\n");
@@ -114,7 +115,9 @@ void Game::start() {
     }
   }
 
+  // Computer
   computer = new Computer();
+  computer->active = false;
   entities.add(computer);
 
   // load collectables
@@ -200,6 +203,20 @@ void Game::tick(float dt) {
         }
 
         break;
+      case Collectable::SCREEN:
+        if (!isHeld) {
+          break;
+        }
+
+        if (!computer->active) {
+          player->proposePrompt(player->textPower);
+        }
+
+        if (player->use.justDown()) {
+          computer->active = true;
+        }
+
+        break;
     }
   }
 
@@ -252,6 +269,12 @@ void Game::tick(float dt) {
     if (Collision::isOverlapping(boulder->sprite, blockade->sprite->rect())) {
       blockade->explode();
       camera.shake(1 * 100, 1);
+    }
+  }
+
+  if (computer->active) {
+    if (cancel.justDown()) {
+      computer->active = false;
     }
   }
 

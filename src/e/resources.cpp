@@ -8,7 +8,7 @@
 
 std::map<std::string, SDL_Texture*> Resources::textures;
 
-TTF_Font* Resources::font = nullptr;
+std::map<int, TTF_Font*> Resources::fonts;
 
 bool Resources::load(std::string name) {
   if (textures.find(name) != textures.end()) {
@@ -35,12 +35,14 @@ bool Resources::load(std::string name) {
 
 bool Resources::loadFont(std::string name, int fontSize) {
   std::string path = FONT_PATH + name;
-  font = TTF_OpenFont(path.c_str(), fontSize);
+  TTF_Font* font = TTF_OpenFont(path.c_str(), fontSize);
   if (!font) {
     printf("Font could not be loaded: %s\n", TTF_GetError());
 
     return false;
   }
+
+  fonts[fontSize] = font;
 
   return true;
 }
@@ -65,6 +67,16 @@ SDL_Texture* Resources::get(std::string name, int* width, int* height) {
   SDL_QueryTexture(tex, NULL, NULL, width, height);
 
   return tex;
+}
+
+TTF_Font* Resources::get(int fontSize) {
+  if (fonts.find(fontSize) == fonts.end()) {
+    printf("Font has not been loaded!\n");
+
+    return nullptr;
+  }
+
+  return fonts.find(fontSize)->second;
 }
 
 std::string Resources::getPath(std::string name) {
