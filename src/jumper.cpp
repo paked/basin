@@ -16,9 +16,9 @@ Jumper::Jumper(bool positive, Point socket) : socket(socket) {
 
 Rect Jumper::rect() {
   return Rect {
-    .x = sprite->x + 8,
+    .x = sprite->x + 2,
     .y = sprite->y,
-    .w = 16,
+    .w = 4,
     .h = sprite->height,
   };
 }

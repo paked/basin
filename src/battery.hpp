@@ -7,8 +7,8 @@
 
 #include <e/component.hpp>
 
-struct Battery : Component{
-  Battery(int x = 0, int y = 0);
+struct Battery : Component {
+  Battery(float x = 0, float y = 0);
 
   void start();
 
@@ -20,8 +20,8 @@ struct Battery : Component{
   void attach(Collectable::Type type);
   void unattach();
 
-  int width;
-  int height;
+  float width;
+  float height;
 
   float capacity = 0.3f;
 

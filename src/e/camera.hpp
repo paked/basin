@@ -32,7 +32,7 @@ struct Camera {
   int logicalHeight = SCREEN_HEIGHT;
 
   float shakeTrauma = 0;
-  float shakeMax = 50;
+  float shakeMax = 25;
   int shakeStopTime = 0;
   int shakeX;
   int shakeY;

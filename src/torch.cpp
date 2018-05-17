@@ -10,10 +10,12 @@ Torch::Torch() {
 
 void Torch::beamIn(Direction d) {
   SDL_Rect src = Rect::toSDL(beam->rect());
-  SDL_Rect dst = entity->scene->camera->toView(beam->rect(), false);
 
-  dst.x = SCREEN_WIDTH/2 - src.w/2;
-  dst.y = SCREEN_WIDTH/2 - src.h/8;
+  Rect pos = beam->rect();
+  pos.x = entity->scene->camera->getWidth()/2 - src.w/2;
+  pos.y = entity->scene->camera->getHeight()/2 - src.h/8*1;
+
+  SDL_Rect dst = entity->scene->camera->toView(pos, true);
 
   double angle = 0;
 
@@ -38,10 +40,10 @@ void Torch::beamIn(Direction d) {
       printf("Can't beam torch... Unknown direction?\n");
   }
 
-  // for some reason...
   angle -= 180;
 
-  SDL_Point center = { .x = beam->width/2, .y = 8 };
+  // whatever
+  SDL_Point center = { .x = beam->width*2, .y = 16 };
 
   SDL_RenderCopyEx(
       Core::renderer,
@@ -55,12 +57,15 @@ void Torch::beamIn(Direction d) {
 #ifdef DEBUG
   SDL_SetRenderDrawColor(Core::renderer, 255, 255, 255, 255);
 
-  SDL_Rect r = rect(d);
+  SDL_Rect r = Rect::toSDL(rect(d));
   SDL_RenderFillRect(Core::renderer, &r);
 #endif
 }
 
 Rect Torch::rect(Direction d) {
+  float sw = entity->scene->camera->getWidth();
+  float sh = entity->scene->camera->getHeight();
+
   Rect r = beam->rect();
   r.w *= 0.6;
 
@@ -68,13 +73,13 @@ Rect Torch::rect(Direction d) {
 
   switch (d) {
     case UP:
-      r.x = SCREEN_WIDTH/2 - r.w/2;
-      r.y = SCREEN_WIDTH/2 - r.h/8*7;
+      r.x = sw/2 - r.w/2;
+      r.y = sw/2 - r.h/8*7;
 
       break;
     case DOWN:
-      r.x = SCREEN_WIDTH/2 - r.w/2;
-      r.y = SCREEN_WIDTH/2 - r.h/8;
+      r.x = sw/2 - r.w/2;
+      r.y = sw/2 - r.h/8;
 
       break;
     case RIGHT:
@@ -83,8 +88,8 @@ Rect Torch::rect(Direction d) {
       r.w = r.h;
       r.h = t;
 
-      r.x = SCREEN_WIDTH/2 - r.w/8;
-      r.y = SCREEN_WIDTH/2 - r.h/2;
+      r.x = sw/2 - r.w/8;
+      r.y = sw/2 - r.h/2;
 
       break;
     case LEFT:
@@ -93,8 +98,8 @@ Rect Torch::rect(Direction d) {
       r.w = r.h;
       r.h = t;
 
-      r.x = SCREEN_WIDTH/2 - r.w/8*7;
-      r.y = SCREEN_WIDTH/2 - r.h/2;
+      r.x = sw/2 - r.w/8*7;
+      r.y = sw/2 - r.h/2;
 
       break;
   }

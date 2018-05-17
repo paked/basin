@@ -33,8 +33,8 @@ void Sprite::tick(float dt) {
     printf("WARNING: calling tick on an entityless component!\n");
   }
 
-  x += (int)nextPositionDelta.x;
-  y += (int)nextPositionDelta.y;
+  x += nextPositionDelta.x;
+  y += nextPositionDelta.y;
 
   velocity.x += (acceleration.x - drag.x * velocity.x) * dt;
   if (velocity.x > maxVelocity.x) {

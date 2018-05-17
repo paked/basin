@@ -14,8 +14,8 @@ void Switchboard::start() {
   backboard = new Sprite("switchboard_gui.png");
   backboard->localDepth = DEPTH_BELOW;
 
-  backboard->x = SCREEN_WIDTH/2 - backboard->width/2;
-  backboard->y = SCREEN_HEIGHT/2 - backboard->height/2;
+  backboard->x = scene->camera->getWidth()/2 - backboard->width/2;
+  backboard->y = scene->camera->getHeight()/2 - backboard->height/2;
   backboard->hud = true;
 
   inPositive = new Jumper(true, { backboard->x + (2 * 16), backboard->y + (6 * 16) });
@@ -44,7 +44,7 @@ void Switchboard::start() {
 void Switchboard::tick(float dt) {
   Point origin = { backboard->x, backboard->y };
 
-  Point point = { Input::mouseX, Input::mouseY };
+  Point point = { Input::mouseX/scene->camera->zoom, Input::mouseY/scene->camera->zoom };
 
   std::vector<Jumper*> grabbables = { inPositive, inNegative, outPositive, outNegative };
   for (auto grabbable : grabbables) {

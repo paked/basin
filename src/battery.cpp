@@ -5,9 +5,7 @@
 #include <e/core.hpp>
 #include <e/resources.hpp>
 
-#define DEGREES_TO_RADIANS(degrees) ((degrees) * 3.14159265359 / 180.0)
-
-Battery::Battery(int x, int y) {
+Battery::Battery(float x, float y) {
   sprite = new Spritesheet("battery.png", 18, 22);
 
   attachments = new Spritesheet("battery_attachments.png", 18, 22);
@@ -70,19 +68,12 @@ void Battery::tick(float dt) {
   sprite->frame = 1;
   src = sprite->getSRC();
 
-  dst = {
-    .x = x,
-    .y = y,
-    .w = width,
-    .h = height
-  };
-
   j.src = src;
   j.dst = dst;
   j.depth += DEPTH_ABOVE;
   scene->renderer->queue.push(j);
 
-  int battSize = (int) (height * capacity);
+  float battSize = (int) (height * capacity);
   int offset = height - battSize;
 
   sprite->frame = 2;
@@ -91,12 +82,14 @@ void Battery::tick(float dt) {
   src.y += offset;
   src.h = battSize;
 
-  dst = {
+  dst1 = {
     .x = x,
     .y = y + offset,
     .w = width,
-    .h = battSize
+    .h = (float) battSize
   };
+
+  dst = scene->camera->toView(dst1, true);
 
   j.src = src;
   j.dst = dst;

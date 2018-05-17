@@ -7,7 +7,7 @@ Boulder::Boulder(int x, int y) {
 }
 
 void Boulder::roll() {
-  sprite->acceleration.x = -80;
+  sprite->acceleration.x = -40;
 }
 
 void Boulder::tick(float dt) {

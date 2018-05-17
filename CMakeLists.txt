@@ -37,6 +37,8 @@ file(GLOB SOURCES
     src/torch.hpp
     src/torch.cpp
 
+    src/e/math_util.hpp
+    src/e/math_util.cpp
     src/e/entity.hpp
     src/e/entity.cpp
     src/e/group.hpp

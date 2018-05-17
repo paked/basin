@@ -1,11 +1,13 @@
 #include <game.hpp>
 
 #include <stdio.h>
+#include <math.h>
 
 #include <e/csv.hpp>
 #include <e/resources.hpp>
 #include <e/core.hpp>
 
+#include <e/math_util.hpp>
 #include <e/collision.hpp>
 
 bool Game::load() {

@@ -22,8 +22,8 @@ void Collision::collide(Sprite* first, Rect second) {
     a.y += first->nextPositionDelta.y;
 
     if (intersection(a, b, &res)) {
-      float mod = (first->velocity.y < 0) ? 1 : -1;
-      first->nextPositionDelta.y += (int)res.h * mod;
+      int mod = (first->velocity.y < 0) ? 1 : -1;
+      first->nextPositionDelta.y += res.h * mod;
     }
   }
 
@@ -33,8 +33,8 @@ void Collision::collide(Sprite* first, Rect second) {
     a.x += first->nextPositionDelta.x;
 
     if (intersection(a, b, &res)) {
-      float mod = (first->velocity.x < 0) ? 1 : -1;
-      first->nextPositionDelta.x += (int)res.w * mod;
+      int mod = (first->velocity.x < 0) ? 1 : -1;
+      first->nextPositionDelta.x += res.w * mod;
     }
   }
 }
@@ -101,8 +101,8 @@ bool Collision::isOverlapping(Rect first, Rect second) {
 }
 
 bool Collision::isOverlapping(Point p, Rect r) {
-  return ((p.x >= r.x) && (p.x < r.x + r.w)) &&
-    ((p.y >= r.y) && (p.y < r.y + r.h));
+  return ((p.x >= r.x) && (p.x <= r.x + r.w)) &&
+    ((p.y >= r.y) && (p.y <= r.y + r.h));
 }
 
 bool Collision::intersection(Rect first, Rect second, Rect* out) {
@@ -111,19 +111,19 @@ bool Collision::intersection(Rect first, Rect second, Rect* out) {
   float x2 = second.x + second.w; //b.max.x
   float y2 = second.y + second.h; //b.max.y
 
-  if (first.x > x1) {
+  if (first.x >= x1) {
     x1 = first.x;
   }
 
-  if (first.y > y1) {
+  if (first.y >= y1) {
     y1 = first.y;
   }
 
-  if (first.x + first.w < x2) {
+  if (first.x + first.w <= x2) {
     x2 = first.x + first.w;
   }
 
-  if (first.y + first.h < y2) {
+  if (first.y + first.h <= y2) {
     y2 = first.y + first.h;
   }
 

@@ -15,7 +15,7 @@ void Blockade::start() {
   float x = sprite->x;
   float y = sprite->y;
 
-  explosionSprite = new Spritesheet("explosion.png", 32, 32, x - 16, y + 64);
+  explosionSprite = new Spritesheet("explosion.png", 32, 32, x - 4, y + 16);
   explosionSprite->frameDuration = 1000/40;
   explosionSprite->addAnimation("none", { 0 });
   explosionSprite->addAnimation("explode", { 1, 2, 3, 4, 5, 6, 7, 8, 9});
@@ -26,7 +26,7 @@ void Blockade::start() {
 
   int particleCount = sprite->height/particleSprite->height;
   for (int i = 0; i < particleCount; i++) {
-    float px = x + 12 * 4;
+    float px = x + 12;
     float py = (y + i*particleSprite->height);
     float dx = -1 * rand01();
     float dy = (rand01()*2 - 1);

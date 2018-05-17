@@ -22,10 +22,14 @@ void Player::start() {
   battery = new Battery();
   torch = new Torch();
 
-  sprite->maxVelocity = Point(13, 13);
+  sprite->maxVelocity = Point(5, 5);
   sprite->drag = Point(0.95, 0.95);
+
   sprite->x = (10 * 16) - sprite->width/2;
   sprite->y = (2 * 16);
+  /*
+  sprite->x = (17 * 16) - sprite->width/2;
+  sprite->y = (18 * 16);*/
 
   reg(sprite);
   reg(battery);
@@ -216,7 +220,7 @@ bool Player::equipMeMaybe(Collectable* c) {
 
 // make the item look like it is being carried around by the player
 void Player::positionItem() {
-  item->sprite->y = sprite->y + 32;
+  item->sprite->y = sprite->y + 8;
   item->localDepth = DEPTH_ABOVE;
   item->visible = true;
   item->sprite->flip = false;
@@ -225,16 +229,16 @@ void Player::positionItem() {
 
   if (eyeLine == Torch::LEFT) {
     item->sprite->flip = true;
-    item->sprite->x = sprite->x - 16;
+    item->sprite->x = sprite->x - 4;
   } else if (eyeLine == Torch::RIGHT) {
-    item->sprite->x = sprite->x + 20;
+    item->sprite->x = sprite->x + 5;
   } else if (eyeLine == Torch::UP) {
-    item->sprite->x = sprite->x + 4;
+    item->sprite->x = sprite->x + 1;
     item->localDepth = DEPTH_BELOW;
   } else if (eyeLine == Torch::DOWN) {
     item->sprite->angle = 90;
-    item->sprite->y += 4;
-    item->sprite->x = sprite->x + 4;
+    item->sprite->y += 1;
+    item->sprite->x = sprite->x + 1;
   }
 }
 
