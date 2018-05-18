@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include <SDL2/SDL.h>
 
@@ -10,20 +11,28 @@ struct Input {
   static void handle(SDL_MouseButtonEvent event);
   static void handle(SDL_MouseMotionEvent event);
   static void handle(SDL_KeyboardEvent event);
-  static void push();
+  static void handle(SDL_TextEditingEvent event);
+  static void handle(SDL_TextInputEvent event);
 
-  static int mouseX;
-  static int mouseY;
+  static void push();
 
   static bool mouseJustDown();
   static bool mouseJustUp();
   static bool mouseDown();
   static bool mouseUp();
 
+  static void startTextInput();
+  static void stopTextInput();
+
+  static int mouseX;
+  static int mouseY;
   static bool mouseLastFrameDown;
   static bool mouseThisFrameDown;
 
-  Input(SDL_Scancode k);
+  static bool enteringText;
+  static std::string text;
+
+  Input(SDL_Scancode k, bool textEditFriendly = false);
 
   bool down();
   bool up();
@@ -34,4 +43,6 @@ struct Input {
 
   bool lastFrameDown = false;
   bool thisFrameDown = false;
+
+  bool textEditFriendly = false;
 };

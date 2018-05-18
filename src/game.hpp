@@ -42,7 +42,7 @@ private:
   Group<Entity> entities;
   Camera camera;
 
-  Input cancel = Input(SDL_SCANCODE_ESCAPE);
+  Input cancel = Input(SDL_SCANCODE_ESCAPE, true);
   Input godMode = Input(SDL_SCANCODE_LSHIFT);
 
   // Transient entities

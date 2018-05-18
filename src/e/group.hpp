@@ -7,11 +7,10 @@ struct Group : Entity {
   std::vector<T*> members;
 
   void add(T* e) {
-    members.push_back(e);
-
     e->scene = scene;
-
     e->start();
+
+    members.push_back(e);
   };
 
   void tick(float dt) {

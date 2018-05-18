@@ -37,7 +37,7 @@ bool Game::load() {
   ok |= Resources::load("light_small.png");
   ok |= Resources::load("safari_guy.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
-  ok |= Resources::loadFont("Cave-Story.ttf", 14);
+  ok |= Resources::loadFont("Cave-Story.ttf", 35);
 
   if (!ok) {
     printf("Could not load assets\n");
@@ -117,7 +117,7 @@ void Game::start() {
 
   // Computer
   computer = new Computer();
-  computer->active = false;
+  computer->deactivate();
   entities.add(computer);
 
   // load collectables
@@ -144,14 +144,33 @@ void Game::tick(float dt) {
 
   Input::push();
   while (SDL_PollEvent(&event)) {
-    if (event.type == SDL_QUIT) {
-      quit = true;
-    } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
-      Input::handle(event.key);
-    } else if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
-      Input::handle(event.button);
-    } else if (event.type == SDL_MOUSEMOTION) {
-      Input::handle(event.motion);
+    switch (event.type) {
+      case SDL_QUIT:
+        quit = true;
+
+        break;
+      case SDL_KEYDOWN:
+      case SDL_KEYUP:
+        Input::handle(event.key);
+
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+      case SDL_MOUSEBUTTONUP:
+        Input::handle(event.button);
+
+        break;
+      case SDL_MOUSEMOTION:
+        Input::handle(event.motion);
+
+        break;
+      case SDL_TEXTINPUT:
+        Input::handle(event.text);
+
+        break;
+      case SDL_TEXTEDITING:
+        Input::handle(event.edit);
+
+        break;
     }
   }
 
@@ -213,7 +232,7 @@ void Game::tick(float dt) {
         }
 
         if (player->use.justDown()) {
-          computer->active = true;
+          computer->activate();
         }
 
         break;
@@ -274,7 +293,7 @@ void Game::tick(float dt) {
 
   if (computer->active) {
     if (cancel.justDown()) {
-      computer->active = false;
+      computer->deactivate();
     }
   }
 
