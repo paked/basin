@@ -31,7 +31,7 @@ struct Computer : Entity {
 
   int maxBufferHeight;
   int bufferOffset = 0;
-  int maxLines = 20;
+  int maxLines = 100;
   std::vector<std::string> lines;
   SDL_Texture* bufferTexture;
   SDL_Rect bufferRect;

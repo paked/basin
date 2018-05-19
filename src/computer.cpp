@@ -19,7 +19,7 @@ void Computer::start() {
 
   maxBufferHeight = (120) * scene->camera->zoom;
 
-  send("It's damp, the floor is cold, and it smells of dead animal. Or something like that. Welcome to the innards of Echo Mountain. Around you is a small hole in the ground, a key, a computer, and a hammer.\n\n[If you don't know how to get started, type \"help\"]");
+  send("The rocky floor is cold, it smells of dead animal, and the sound of water is dripping in the distance. You're in a cavern deep inside Echo Mountain delivering a battery to the \"tech spirit\" so it can stay powered on another year. You look around the room and see a trapdoor, a computer, and a pretty damn big cockroach.\n\n[If you don't know how to get started, type \"help\"]");
 
   genBuffer();
   reg(screenSprite);
@@ -31,7 +31,6 @@ void Computer::tick(float dt) {
 
     Input::stopTextInput();
     Input::startTextInput();
-    // bufferOffset = 0;
   }
 
   if (up.justDown()) {
@@ -60,22 +59,18 @@ void Computer::tick(float dt) {
 
       if (bufferOffset < 0) {
         bufferOffset = 0;
-
-        printf("%d\n", bufferOffset);
       } else if (bufferOffset > bufferRect.h - maxBufferHeight) {
         bufferOffset = bufferRect.h - maxBufferHeight;
       }
 
       bufferViewport.y = bufferOffset;
-
-      printf("%d\n", bufferViewport.y);
     }
 
     SDL_Rect pos = {
       .x = 18 + screenRect.x,
       .y = 25 + screenRect.y,
       .w = bufferViewport.w,
-      .h = bufferViewport.h
+      .h = bufferViewport.h 
     };
 
     RenderJob j;
@@ -151,12 +146,55 @@ void Computer::genInput() {
   SDL_FreeSurface(surface);
 }
 
-void Computer::eval(std::string cmd) {
-  if (cmd == "help") {
-    send(cmd, "A soft voice from the distance whispers:\n\n- Type \"help\" to see this menu");
-  } else {
-    send(cmd, "Invalid command. Type \"help\" for some tips");
+void Computer::eval(std::string in) {
+  std::string cmd;
+  std::string opts;
+
+  for (int i = 0; i < in.size(); i++) {
+    char c = in[i];
+    if (c == ' ') {
+      opts = in.substr(i + 1);
+
+      break;
+    }
+
+    cmd += c;
   }
+
+  if (cmd == "help") {
+    send(in, "This is a help screen. Congratulations, you can type. These are other things you can type: \n\n- \"help\" to see this menu\n- \"look <something>\" to at something (eg. \"look cockroach\", \"look trapdoor\", \"look computer\"). You can also look around the room with just \"look\"\n- \"grab\" to pick up or pull on an item (eg \"grab trapdoor\", \"grab cockroach\")");
+
+    return;
+  }
+
+  if (cmd == "look") {
+    if (opts.empty()) {
+      send(in, "You look around and see a trapdoor, a computer, and a pretty damn big cockroach.");
+
+      return;
+    } else if (opts == "cockroach") {
+      send(in, "It's a pretty damn big cockroach. If you weren't some masochistic adventurer you'd definitely be jumping up on a table right about now. It seems to be alive, but isn't moving at the moment.");
+
+      return;
+    } else if (opts == "trapdoor") {
+      send(in, "It's a pretty rusty old trapdoor, it doesn't look like it's been used in at least a year. Maybe you can pull it open?");
+
+      return;
+    } else if (opts == "computer") {
+      send(in, "There's some just-started-my-adventure looking peson using the computer right now, it's probably you. Let's steer clear of inception and stay away from him.");
+
+      return;
+    } else if (opts == "wall" || opts == "walls") {
+      send(in, "They're pretty standard looking walls. Probably build a few hundred years ago by some monks named Mike. Unless you manage to find some x-ray goggles it's probably pretty pointless looking here.");
+
+      return;
+    }
+
+    send(in, "That thing doesn't seem to exist, to find things which do exist type \"look\"");
+    return;
+  }
+  
+  send(cmd, "Invalid command. Type \"help\" for some tips");
 }
 
 void Computer::send(std::string cmd, std::string response) {
