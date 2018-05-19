@@ -19,7 +19,7 @@ void Computer::start() {
 
   maxBufferHeight = (120) * scene->camera->zoom;
 
-  send("It's damp, the floor is cold, and it smells of dead animal. Or something like that. Welcome to the innards of Echo Mountain. Around you is a small hole in the ground, a key, a computer, and a hammer.\n\n[If you don't know how to get started, type \"help\"]\n");
+  send("It's damp, the floor is cold, and it smells of dead animal. Or something like that. Welcome to the innards of Echo Mountain. Around you is a small hole in the ground, a key, a computer, and a hammer.\n\n[If you don't know how to get started, type \"help\"]");
 
   genBuffer();
   reg(screenSprite);
@@ -31,7 +31,7 @@ void Computer::tick(float dt) {
 
     Input::stopTextInput();
     Input::startTextInput();
-    bufferOffset = 0;
+    // bufferOffset = 0;
   }
 
   if (up.justDown()) {
@@ -54,22 +54,32 @@ void Computer::tick(float dt) {
 
   // Send main screen text
   {
-    SDL_Rect src = bufferRect;
+    // If we need to scroll
+    if (bufferRect.h > maxBufferHeight) {
+      bufferViewport.h = maxBufferHeight;
 
-    if (src.h > maxBufferHeight) {
-      src.y = src.h - maxBufferHeight + bufferOffset;
-      src.h = maxBufferHeight;
+      if (bufferOffset < 0) {
+        bufferOffset = 0;
+
+        printf("%d\n", bufferOffset);
+      } else if (bufferOffset > bufferRect.h - maxBufferHeight) {
+        bufferOffset = bufferRect.h - maxBufferHeight;
+      }
+
+      bufferViewport.y = bufferOffset;
+
+      printf("%d\n", bufferViewport.y);
     }
 
     SDL_Rect pos = {
       .x = 18 + screenRect.x,
       .y = 25 + screenRect.y,
-      .w = src.w,
-      .h = src.h 
+      .w = bufferViewport.w,
+      .h = bufferViewport.h
     };
 
     RenderJob j;
-    j.src = src;
+    j.src = bufferViewport;
     j.dst = pos;
     j.tex = bufferTexture;
     j.depth = getDepth() + DEPTH_ABOVE;
@@ -120,6 +130,9 @@ void Computer::genBuffer() {
   bufferRect.x = bufferRect.y = 0;
   SDL_QueryTexture(bufferTexture, NULL, NULL, &bufferRect.w, &bufferRect.h);
 
+  bufferViewport = bufferRect;
+  bufferOffset = bufferRect.h - maxBufferHeight;
+
   SDL_FreeSurface(surface);
 }
 
@@ -140,15 +153,15 @@ void Computer::genInput() {
 
 void Computer::eval(std::string cmd) {
   if (cmd == "help") {
-    send(cmd, "A soft voice from the distance whispers:\n\n- Type \"help\" to see this menu\n");
+    send(cmd, "A soft voice from the distance whispers:\n\n- Type \"help\" to see this menu");
   } else {
-    send(cmd, "Invalid command. Type \"help\" for some tips\n");
+    send(cmd, "Invalid command. Type \"help\" for some tips");
   }
 }
 
 void Computer::send(std::string cmd, std::string response) {
   if (response.size() > 0) {
-    lines.push_back("> " + cmd + "\n");
+    lines.push_back("> " + cmd);
     lines.push_back("$ " + response);
   } else {
     lines.push_back("$ " + cmd);
@@ -164,8 +177,12 @@ void Computer::send(std::string cmd, std::string response) {
 std::string Computer::getBuffer() {
   std::string res;
 
-  for (auto& line : lines) {
-    res += line;
+  for (int i = 0; i < lines.size(); i++) {
+    res += lines[i];
+
+    if (i != lines.size() - 1) {
+      res += "\n";
+    }
   }
 
   return res;

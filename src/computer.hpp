@@ -31,10 +31,11 @@ struct Computer : Entity {
 
   int maxBufferHeight;
   int bufferOffset = 0;
-  int maxLines = 10;
+  int maxLines = 20;
   std::vector<std::string> lines;
   SDL_Texture* bufferTexture;
   SDL_Rect bufferRect;
+  SDL_Rect bufferViewport;
 
   std::string input;
   std::string lastInput;
