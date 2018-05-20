@@ -10,6 +10,7 @@ void Computer::start() {
 
   screenSprite = new Sprite("computer_gui.png");
   screenSprite->hud = true;
+  screenSprite->localDepth = DEPTH_BELOW;
 
   screenSprite->x = scene->camera->getWidth()/2 - screenSprite->width/2;
   screenSprite->y = scene->camera->getHeight()/2 - screenSprite->height/2;
@@ -22,6 +23,7 @@ void Computer::start() {
   send("The rocky floor is cold, it smells of dead animal, and the sound of water is dripping in the distance. You're in a cavern deep inside Echo Mountain delivering a battery to the \"tech spirit\" so it can stay powered on another year. You look around the room and see a trapdoor, a computer, and a pretty damn big cockroach.\n\n[If you don't know how to get started, type \"help\"]");
 
   genBuffer();
+
   reg(screenSprite);
 }
 
@@ -116,7 +118,7 @@ void Computer::deactivate() {
 void Computer::genBuffer() {
   SDL_DestroyTexture(bufferTexture);
 
-  TTF_Font* font = Resources::get(35);
+  TTF_Font* font = Resources::get(15);
 
   SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(font, getBuffer().c_str(), textColor, 128 * scene->camera->zoom);
 
@@ -125,6 +127,7 @@ void Computer::genBuffer() {
   bufferRect.x = bufferRect.y = 0;
   SDL_QueryTexture(bufferTexture, NULL, NULL, &bufferRect.w, &bufferRect.h);
 
+  bufferRect.h *= 0.9;
   bufferViewport = bufferRect;
   bufferOffset = bufferRect.h - maxBufferHeight;
 
@@ -134,7 +137,7 @@ void Computer::genBuffer() {
 void Computer::genInput() {
   SDL_DestroyTexture(inputTexture);
 
-  TTF_Font* font = Resources::get(35);
+  TTF_Font* font = Resources::get(15);
 
   SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(font, input.c_str(), textColor, 128 * scene->camera->zoom);
 
