@@ -31,7 +31,7 @@ struct Sprite : Component {
   bool flip = false;
   // render in camera space or on screen space?
   int angle = 0;
-  char alpha = 255;
+  unsigned char alpha = 255;
 
   bool hud = false;
   bool solid = true;
@@ -40,8 +40,8 @@ struct Sprite : Component {
 
   Point velocity;
   Point acceleration;
-  Point drag = Point(0.99, 0.99);
-  Point maxVelocity = Point(1000, 1000);
+  Point drag = Point { 0.99, 0.99 };
+  Point maxVelocity = Point { 1000, 1000 };
   Point nextPositionDelta;
 
   int textureWidth;

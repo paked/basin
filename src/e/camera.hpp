@@ -4,6 +4,7 @@
 
 #include <config.hpp>
 #include <e/rect.hpp>
+#include <e/point.hpp>
 
 struct Sprite;
 
@@ -13,9 +14,9 @@ struct Camera {
   void shake(int duration, float trauma = 0.5);
 
   SDL_Rect toView(Rect rect, bool global = false);
-  bool withinViewport(SDL_Rect rect);
-  SDL_Point point();
-  SDL_Rect viewport(int buffer = 0);
+  Rect viewport(float buffer = 0);
+  bool withinViewport(Rect rect);
+  Point point();
   float getWidth();
   float getHeight();
 

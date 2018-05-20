@@ -20,17 +20,17 @@ void Tilelayer::tick(float dt) {
       }
 
       Rect dst = {
-        .x = x * tileSize,
-        .y = y * tileSize,
-        .w = tileSize,
-        .h = tileSize
+        .x = (float) x * tileSize,
+        .y = (float) y * tileSize,
+        .w = (float) tileSize,
+        .h = (float) tileSize
       };
 
-      /*
       if (!scene->camera->withinViewport(dst)) {
         // don't need to render if the thing isn't on screen
+
         continue;
-      }*/
+      }
 
       tileset->frame = tile;
       SDL_Rect src = tileset->getSRC();

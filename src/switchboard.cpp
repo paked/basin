@@ -53,7 +53,7 @@ void Switchboard::tick(float dt) {
     if (Input::mouseJustDown() && Collision::isOverlapping(point, rect)) {
       pinned = grabbable;
 
-      offset = SDL_Point {point.x - rect.x, point.y - rect.y};
+      offset = Point {point.x - rect.x, point.y - rect.y};
       break;
     }
   }

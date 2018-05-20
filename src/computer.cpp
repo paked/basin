@@ -87,10 +87,10 @@ void Computer::tick(float dt) {
   // Send input line
   {
     SDL_Rect pos = {
-      .x = 20 + screenRect.x,
-      .y = 124 * scene->camera->zoom + screenRect.y,
-      .w = (float) inputRect.w,
-      .h = (float) inputRect.h
+      .x = (int) (20 + screenRect.x),
+      .y = (int) (124 * scene->camera->zoom + screenRect.y),
+      .w = inputRect.w,
+      .h = inputRect.h
     };
 
     RenderJob j;

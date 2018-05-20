@@ -23,5 +23,5 @@ struct Switchboard : Entity {
   Jumper* outNegative;
 
   Jumper* pinned = nullptr;
-  SDL_Point offset;
+  Point offset;
 };

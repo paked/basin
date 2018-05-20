@@ -5,13 +5,14 @@
 #include <e/spritesheet.hpp>
 #include <e/point.hpp>
 #include <e/entity.hpp>
+#include <e/rect.hpp>
 
 struct SlidingDoor : Entity {
   SlidingDoor(float x, float y);
 
   void start();
 
-  SDL_Rect rect();
+  Rect rect();
 
   void open();
   bool isOpen = false;

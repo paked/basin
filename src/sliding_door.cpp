@@ -23,11 +23,6 @@ void SlidingDoor::open() {
   sprite->playAnimation("open", false);
 }
 
-SDL_Rect SlidingDoor::rect() {
-  return SDL_Rect{
-    .x = sprite->x,
-      .y = sprite->y,
-      .w = sprite->width,
-      .h = sprite->height
-  };
+Rect SlidingDoor::rect() {
+  return sprite->rect();
 }

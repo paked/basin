@@ -49,8 +49,8 @@ void Battery::tick(float dt) {
   sprite->frame = 0;
   SDL_Rect src = sprite->getSRC();
 
-  int x = sprite->x;
-  int y = sprite->y;
+  float x = sprite->x;
+  float y = sprite->y;
 
   Rect dst1 = {
     .x = x,

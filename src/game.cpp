@@ -95,8 +95,8 @@ void Game::start() {
     int startX = 1 * tileSize;
     int startY = 31 * tileSize;
 
-    int rowSize = 3;
-    int colSize = 5;
+    const int rowSize = 3;
+    const int colSize = 5;
 
     bool fake[colSize][rowSize] = {
       { false, true, false },

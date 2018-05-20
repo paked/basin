@@ -89,7 +89,7 @@ void Jumper::render(SDL_Renderer* renderer, Camera* camera) {
   } else {
     SDL_SetRenderDrawColor(renderer, 0, 50, 10, 255);
   }
-
+/*
   SDL_Rect okLight = {
     .x = socket.x - 4,
     .y = socket.y - 64,
@@ -97,7 +97,7 @@ void Jumper::render(SDL_Renderer* renderer, Camera* camera) {
     .h = 8
   };
 
-  SDL_RenderFillRect(renderer, &okLight);
+  SDL_RenderFillRect(renderer, &okLight);*/
 }
 
 bool Jumper::dirty() {

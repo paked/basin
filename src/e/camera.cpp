@@ -1,8 +1,9 @@
 #include <e/camera.hpp>
 
 #include <e/sprite.hpp>
-
+#include <e/collision.hpp>
 #include <e/math_util.hpp>
+#include <e/point.hpp>
 
 void Camera::tick(float dt) {
   if (follow) {
@@ -47,21 +48,18 @@ SDL_Rect Camera::toView(Rect rect, bool global) {
   return Rect::toSDL(rect);
 }
 
-bool Camera::withinViewport(SDL_Rect rect) {
-  SDL_Rect me = viewport(32);
+bool Camera::withinViewport(Rect rect) {
+  Rect me = viewport(32);
 
-  return SDL_HasIntersection(&rect, &me);
+  return Collision::isOverlapping(me, rect);
 }
 
-SDL_Point Camera::point() {
-  return SDL_Point{
-    .x = x,
-    .y = y
-  };
+Point Camera::point() {
+  return Point(x, y);
 }
 
-SDL_Rect Camera::viewport(int buffer) {
-  return SDL_Rect{
+Rect Camera::viewport(float buffer) {
+  return Rect{
     .x = x - buffer,
     .y = y - buffer,
     .w = logicalWidth + buffer*2,
