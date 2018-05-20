@@ -37,7 +37,7 @@ bool Game::load() {
   ok |= Resources::load("light_small.png");
   ok |= Resources::load("safari_guy.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
-  ok |= Resources::loadFont("Cave-Story.ttf", 15);
+  ok |= Resources::loadFont("Cave-Story.ttf", 25);
 
   if (!ok) {
     printf("Could not load assets\n");

@@ -43,4 +43,8 @@ struct Computer : Entity {
   SDL_Rect inputRect;
 
   SDL_Rect screenRect;
+
+  // Gameplay
+  bool hasOpenedTrapdoor = false;
+  bool wearingGoggles = false;
 };
