@@ -25,11 +25,12 @@ void Player::start() {
   sprite->maxVelocity = Point(5, 5);
   sprite->drag = Point(0.95, 0.95);
 
-  sprite->x = (10 * 16) - sprite->width/2;
-  sprite->y = (46 * 16);
   /*
+  sprite->x = (10 * 16) - sprite->width/2;
+  sprite->y = (46 * 16);*/
+
   sprite->x = (17 * 16) - sprite->width/2;
-  sprite->y = (18 * 16);*/
+  sprite->y = (18 * 16);
 
   reg(sprite);
   reg(battery);

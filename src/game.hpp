@@ -26,6 +26,7 @@
 #include <blockade.hpp>
 #include <floorboard.hpp>
 #include <computer.hpp>
+#include <computer_room_wall.hpp>
 
 struct Game {
   bool load();
@@ -57,6 +58,7 @@ private:
   Blockade* blockade;
   Boulder* boulder;
   Group<Floorboard> floorboards;
+  ComputerRoomWall* computerWall;
   Computer *computer;
 
   int darknessLayer;

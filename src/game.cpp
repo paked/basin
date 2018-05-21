@@ -36,6 +36,7 @@ bool Game::load() {
   ok |= Resources::load("floorboard.png");
   ok |= Resources::load("light_small.png");
   ok |= Resources::load("safari_guy.png");
+  ok |= Resources::load("computer_room_wall.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
   ok |= Resources::loadFont("Cave-Story.ttf", 25);
 
@@ -115,6 +116,11 @@ void Game::start() {
     }
   }
 
+  // Computer room wall
+  computerWall = new ComputerRoomWall(7 * ts->frameWidth, 43 * ts->frameWidth);
+  computerWall->active = false;
+  entities.add(computerWall);
+
   // Computer
   computer = new Computer();
   computer->deactivate();
@@ -185,6 +191,7 @@ void Game::tick(float dt) {
   Collision::collide(player->sprite, map);
   Collision::collide(player->sprite, blockade->sprite);
   Collision::collide(player->sprite, slidingDoor->sprite);
+  Collision::collide(player->sprite, computerWall->sprite);
 
   if (!Collision::isOverlapping(player->sprite, map, darknessLayer)) {
     map->layers[darknessLayer]->active = true;
@@ -288,6 +295,14 @@ void Game::tick(float dt) {
     if (Collision::isOverlapping(boulder->sprite, blockade->sprite->rect())) {
       blockade->explode();
       camera.shake(1 * 100, 1);
+    }
+  }
+
+  if (!computerWall->active) {
+    if (Collision::isOverlapping(player->sprite, computerWall->trigger)) {
+      computerWall->active = true;
+
+      computerWall->enter();
     }
   }
 

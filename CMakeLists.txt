@@ -7,6 +7,8 @@ include_directories(src)
 file(GLOB SOURCES
     src/main.cpp
 
+    src/computer_room_wall.hpp
+    src/computer_room_wall.cpp
     src/computer.hpp
     src/computer.cpp
     src/floorboard.hpp
