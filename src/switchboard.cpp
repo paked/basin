@@ -71,6 +71,11 @@ void Switchboard::tick(float dt) {
 }
 
 bool Switchboard::continuous() {
+  if (pinned) {
+    // We don't want to be continuous until the player has let go of the jumepr.
+    return false;
+  }
+
   std::vector<Jumper*> grabbables = { inPositive, inNegative, outPositive, outNegative };
 
   bool ok = true;
