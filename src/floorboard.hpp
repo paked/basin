@@ -17,6 +17,6 @@ struct Floorboard : Entity {
   bool fake;
   bool glowing = false;
 
-  int glowDuration = 500;
+  int glowDuration = 10000;
   int glowingStartTime = 0;
 };

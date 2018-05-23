@@ -31,7 +31,7 @@ void Floorboard::tick(float dt) {
 
   float p = 1 - (SDL_GetTicks() - glowingStartTime)/(float)glowDuration;
 
-  light->alpha = 255 * p;
+  light->alpha = 255 * (p*p);
 }
 
 void Floorboard::trigger() {

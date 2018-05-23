@@ -25,9 +25,9 @@ void Player::start() {
   sprite->maxVelocity = Point(5, 5);
   sprite->drag = Point(0.95, 0.95);
 
+  /*
   sprite->x = (9 * 16) - sprite->width/2;
   sprite->y = (2 * 16);
-  /*
   sprite->x = (10 * 16) - sprite->width/2;
   sprite->y = (46 * 16);*/
   /*
@@ -125,7 +125,6 @@ void Player::tick(float dt) {
   if (hasItem && equip.justDown() && !justGotItem) {
     hasItem = false;
     justDroppedItem = true;
-    item->visible = true;
 
     battery->unattach();
 
@@ -228,7 +227,6 @@ bool Player::equipMeMaybe(Collectable* c) {
 void Player::positionItem() {
   item->sprite->y = sprite->y + 8;
   item->localDepth = DEPTH_ABOVE;
-  item->visible = true;
   item->sprite->flip = false;
 
   item->sprite->angle = 0;
@@ -245,6 +243,10 @@ void Player::positionItem() {
     item->sprite->angle = 90;
     item->sprite->y += 1;
     item->sprite->x = sprite->x + 1;
+  }
+
+  if (!item->shouldRotate()) {
+    item->sprite->angle = 0;
   }
 }
 

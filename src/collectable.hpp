@@ -18,14 +18,12 @@ struct Collectable : Entity {
 
   Type type;
 
-  Collectable(int x, int y, Type t);
-
-  void start();
-
   static std::string key(Type t);
 
-  bool visible = true;
-  bool shouldPromptEquip = true;
+  Collectable(int x, int y, Type t);
+  void start();
+  bool shouldRotate();
 
+  bool shouldPromptEquip = true;
   Spritesheet* sprite;
 };

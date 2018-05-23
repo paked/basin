@@ -18,6 +18,10 @@ void Collectable::start() {
   reg(sprite);
 }
 
+bool Collectable::shouldRotate() {
+  return type == JUMPERS || type == TORCH;
+}
+
 std::string Collectable::key(Type t) {
   if (t == CHAINSAW) {
     return "chainsaw";
