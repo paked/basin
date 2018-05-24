@@ -258,7 +258,7 @@ void Computer::eval(std::string in) {
       send(in, "The trapdoor has already being opened. I'm not sure what opening it again would look like.");
 
       return;
-    } else if ((opts == "goggles" || opts == "weird looking goggles")) {
+    } else if ((opts == "goggles" || opts == "weird looking goggles") && hasOpenedTrapdoor) {
       send(in, "You grab the suprisingly pristine goggles out of the dusty compartment, and place them over your face. Lights start flashing and fans start whirring, you get the feeling the world might look a bit different now.");
 
       wearingGoggles = true;

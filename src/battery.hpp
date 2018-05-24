@@ -8,7 +8,7 @@
 #include <e/component.hpp>
 
 struct Battery : Component {
-  Battery(float x = 0, float y = 0);
+  Battery();
 
   void start();
 

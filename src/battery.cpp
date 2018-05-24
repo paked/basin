@@ -5,7 +5,7 @@
 #include <e/core.hpp>
 #include <e/resources.hpp>
 
-Battery::Battery(float x, float y) {
+Battery::Battery() {
   sprite = new Spritesheet("battery.png", 18, 22);
 
   attachments = new Spritesheet("battery_attachments.png", 18, 22);
@@ -22,8 +22,8 @@ Battery::Battery(float x, float y) {
 }
 
 void Battery::start() {
-  sprite->x = entity->scene->camera->getWidth() - (width + 4);
-  sprite->y = entity->scene->camera->getHeight() - (height + 4);
+  sprite->x = entity->scene->camera->getWidth() - (width + 1);
+  sprite->y = entity->scene->camera->getHeight() - (height + 1);
 }
 
 void Battery::attach(Collectable::Type type) {
