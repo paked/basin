@@ -7,76 +7,44 @@ include_directories(src)
 file(GLOB SOURCES
     src/main.cpp
 
-    src/computer_room_wall.hpp
+    # Gameplay things
     src/computer_room_wall.cpp
-    src/computer.hpp
     src/computer.cpp
-    src/floorboard.hpp
     src/floorboard.cpp
-    src/battery.hpp
     src/battery.cpp
-    src/boulder.hpp
     src/boulder.cpp
-    src/blockade.hpp
     src/blockade.cpp
-    src/game.hpp
     src/game.cpp
-    src/config.hpp
-    src/info.hpp
     src/info.cpp
-    src/player.hpp
     src/player.cpp
-    src/enemy.hpp
     src/enemy.cpp
-    src/collectable.hpp
     src/collectable.cpp
-    src/sliding_door.hpp
     src/sliding_door.cpp
-    src/switchboard.hpp
     src/switchboard.cpp
-    src/jumper.hpp
     src/jumper.cpp
-    src/torch.hpp
     src/torch.cpp
 
-    src/e/math_util.hpp
-    src/e/math_util.cpp
-    src/e/entity.hpp
+    # Entity system things
     src/e/entity.cpp
-    src/e/group.hpp
     src/e/group.cpp
-    src/e/renderer.hpp
-    src/e/renderer.cpp
-    src/e/scene.hpp
     src/e/scene.cpp
-    src/e/component.hpp
     src/e/component.cpp
 
-    src/e/camera.hpp
+    # Engine utils
+    src/e/math_util.cpp
+    src/e/renderer.cpp
     src/e/camera.cpp
-    src/e/core.hpp
     src/e/core.cpp
-    src/e/resources.hpp
     src/e/resources.cpp
-    src/e/sprite.hpp
     src/e/sprite.cpp
-    src/e/spritesheet.hpp
     src/e/spritesheet.cpp
-    src/e/point.hpp
     src/e/point.cpp
-    src/e/csv.hpp
     src/e/csv.cpp
-    src/e/input.hpp
     src/e/input.cpp
-    src/e/tilemap.hpp
     src/e/tilemap.cpp
-    src/e/tilelayer.hpp
     src/e/tilelayer.cpp
-    src/e/collision.hpp
     src/e/collision.cpp
-    src/e/rect.hpp
     src/e/rect.cpp
-    src/e/text.hpp
     src/e/text.cpp)
 
 add_executable(game ${SOURCES})

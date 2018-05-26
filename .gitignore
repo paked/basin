@@ -3,3 +3,5 @@ build-native
 build-web
 
 *.png~
+*.kra~
+*autosave.kra
