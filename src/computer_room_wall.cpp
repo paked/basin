@@ -24,7 +24,7 @@ float bounceEaseOut(float p)
 ComputerRoomWall::ComputerRoomWall(float x, float y) {
   startX = x - distX;
 
-  sprite = new Sprite("computer_room_wall.png", startX, y);
+  sprite = new Sprite("computer_room_wall_left.png", startX, y);
   sprite->solid = false;
 
   trigger = Rect{

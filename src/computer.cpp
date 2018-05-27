@@ -165,12 +165,12 @@ void Computer::eval(std::string in) {
   }
 
   if (cmd == "help") {
-    send(in, "This is a help screen. Congratulations, you can type. These are other things you can type: \n\n- \"help\" to see this menu\n- \"look <something>\" to at something (eg. \"look cockroach\", \"look trapdoor\", \"look computer\"). You can also look around the room with just \"look\"\n- \"grab\" to pick up or pull on an item (eg \"grab trapdoor\", \"grab cockroach\")");
+    send(in, "This is a help screen. Congratulations, you can type. These are other things you can type: \n\n- \"help\" to see this menu\n- \"look <something>\" to at something (eg. \"look cockroach\", \"look trapdoor\", \"look computer\"). You can also look around the room with just \"look\"\n- \"grab <something>\" to pick up or pull on an item (eg \"grab trapdoor\", \"grab cockroach\")\n- \"push <something>\" to push on a something (eg. \"push wall\")\n- \"exit\" go back to the real world.");
 
     return;
   }
 
-  if (cmd == "look" && !wearingGoggles) {
+  if (cmd == "look" && !isWearingGoggles) {
     if (opts.empty()) {
       send(in, "You look around and see a trapdoor, a computer, and a pretty damn big cockroach.");
 
@@ -205,17 +205,17 @@ void Computer::eval(std::string in) {
     return;
   }
 
-  if (cmd == "look" && wearingGoggles) {
+  if (cmd == "look" && isWearingGoggles) {
     if (opts.empty()) {
-      send(in, "You look around the world and see, well, a lot of things. These might just be x-ray goggles! You can see the trapdoor you just opened, the circuits of the computer, the innards of the cockroach (and the weird cylindrical things which is inside it's body? maybe that's why it's not moving...) and the outlines of the walls to the room. You can see the hidden passage which you entered through, the meters of stone separating you from sunlight and... another hidden passage? it looks like there might be a fake panel!");
+      send(in, "You look around the world and see, well, a lot of things. These might just be x-ray goggles! You can see the trapdoor you just opened, the circuits of the computer, the innards of the cockroach (and the weird block inside it. Maybe that's why it's not moving...) and the outlines of the walls to the room. You can see the hidden passage which you entered through, the meters of stone separating you from sunlight and... another hidden passage? it looks like there might be a fake panel!");
 
       return; 
     } else if (opts == "panel" || opts =="wall" || opts == "walls") {
-      send(in, "It's kind of scary seeing how much rock separates you from the sunlight of the outside world. However, on closer inspection at the second false panel you see that there's a small credit card sized slot. Do you have anything that would fit in there?");
+      send(in, "A closer inspection of the fake panel reveals an infrared sensor (how did you even recognise that!) which, you assume, is used for opening it up.");
 
       return;
     } else if (opts == "cockroach") {
-      send(in, "The cockroach is still pretty damn big, and no less horrifying. It looks like it might have a key-card inside it.");
+      send(in, "The cockroach is still pretty damn big, and no less horrifying. That block thing inside it can't be comfortable.");
 
       return;
     } else if (opts == "trapdoor") {
@@ -240,12 +240,14 @@ void Computer::eval(std::string in) {
       send(in, "You can't " + cmd + " nothing, silly. To find something to try " + cmd + " type \"look\"");
 
       return;
-    } else if (opts == "cockroach" && !wearingGoggles) {
+    } else if (opts == "cockroach" && !isWearingGoggles) {
       send(in, "You may be a masochistic adventurer, but there's no way you're going to go anywhere near that cockroach without a good reason to. Things the damn biggest you've ever seen.");
 
       return;
-    } else if (opts == "cockroach" && wearingGoggles) {
-      send(in, "You pick up the cockroach, sigh, then squash it in your fist (mmm, so manly). Picking through it's guts you grab the key-card which was somehow stuck inside it and place it in your pocket.");
+    } else if (opts == "cockroach" && isWearingGoggles) {
+      send(in, "You pick up the cockroach, sigh, then squash it in your fist (mmm, so manly). Picking through it's guts you grab the block which was lodged inside it. It's not a block, it's a remote of some sort! It only has one button on it, a green button with the label \"open\". You should try pushing it. Seriously.");
+
+      hasRemote = true;
 
       return;
     } else if (opts == "trapdoor" && !hasOpenedTrapdoor) {
@@ -261,7 +263,7 @@ void Computer::eval(std::string in) {
     } else if ((opts == "goggles" || opts == "weird looking goggles") && hasOpenedTrapdoor) {
       send(in, "You grab the suprisingly pristine goggles out of the dusty compartment, and place them over your face. Lights start flashing and fans start whirring, you get the feeling the world might look a bit different now.");
 
-      wearingGoggles = true;
+      isWearingGoggles = true;
 
       return;
     } else if (opts == "computer") {
@@ -271,6 +273,24 @@ void Computer::eval(std::string in) {
     }
 
     send(in, "That things doesn't seem to exist, to find things which do exist type \"look\"");
+
+    return;
+  }
+
+  if (cmd == "push") {
+    if (opts.empty()) {
+      send(in, "You can't push nothing, silly. To find something you can try push type \"look\"");
+
+      return;
+    } else if ((opts == "green button" || opts == "button") && hasRemote) {
+      send(in, "You press the button on the remote and the cave around you starts to rumble. It's a good thing you're a masochistic adventurerer right now, otherwise you would have shat your pants. The fake panel has opened up to reveal another room! And, as suddenly as that you forget you even existed.\n The end.");
+
+      gameOver = true;
+
+      return;
+    }
+
+    send("You can't push that unfortunately. To find something you might be able to push type \"look\"");
 
     return;
   }

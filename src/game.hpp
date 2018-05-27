@@ -27,6 +27,7 @@
 #include <floorboard.hpp>
 #include <computer.hpp>
 #include <computer_room_wall.hpp>
+#include <fake_panel.hpp>
 
 struct Game {
   bool load();
@@ -60,8 +61,14 @@ private:
   Group<Floorboard> floorboards;
   ComputerRoomWall* computerWall;
   Computer *computer;
+  FakePanel *fakePanel;
 
   int darknessLayer;
+  int hiddenLayer;
+
+  bool hiddenLayerFadingIn = false;
+  int hiddenLayerFadeStartTime = 0;
+  int hiddenLayerFadeDuration = 1000;
 
   SDL_Texture* darkBuffer;
   SDL_Rect darkBufferRect;

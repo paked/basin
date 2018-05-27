@@ -10,6 +10,7 @@ struct ComputerRoomWall : Entity {
   void start();
   void tick(float dt);
   void enter();
+
   Rect trigger;
 
   float startX;

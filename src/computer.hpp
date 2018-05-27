@@ -46,5 +46,7 @@ struct Computer : Entity {
 
   // Gameplay
   bool hasOpenedTrapdoor = false;
-  bool wearingGoggles = false;
+  bool isWearingGoggles = false;
+  bool hasRemote = false;
+  bool gameOver = false;
 };

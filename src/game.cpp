@@ -36,7 +36,8 @@ bool Game::load() {
   ok |= Resources::load("floorboard.png");
   ok |= Resources::load("light_small.png");
   ok |= Resources::load("safari_guy.png");
-  ok |= Resources::load("computer_room_wall.png");
+  ok |= Resources::load("computer_room_wall_left.png");
+  ok |= Resources::load("computer_room_wall_right.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
   ok |= Resources::loadFont("Cave-Story.ttf", 25);
 
@@ -65,6 +66,7 @@ void Game::start() {
   map->loadLayer("map_background.csv", DEPTH_BG*2);
   map->loadLayer("map_foreground.csv", DEPTH_FG);
   darknessLayer = map->loadLayer("map_darkness.csv", DEPTH_FG + DEPTH_ABOVE);
+  hiddenLayer = map->loadLayer("map_hidden.csv", DEPTH_FG + DEPTH_ABOVE);
   map->loadCollisionLayer("map_collision.csv");
   map->addToGroup(&entities);
 
@@ -125,6 +127,10 @@ void Game::start() {
   computer = new Computer();
   computer->deactivate();
   entities.add(computer);
+
+  // Fake panel
+  fakePanel = new FakePanel(14 * ts->frameWidth, 43 * ts->frameWidth);
+  entities.add(fakePanel);
 
   // load collectables
   entities.add(&collectables);
@@ -192,6 +198,7 @@ void Game::tick(float dt) {
   Collision::collide(player->sprite, blockade->sprite);
   Collision::collide(player->sprite, slidingDoor->sprite);
   Collision::collide(player->sprite, computerWall->sprite);
+  Collision::collide(player->sprite, fakePanel->sprite);
 
   if (!Collision::isOverlapping(player->sprite, map, darknessLayer)) {
     map->layers[darknessLayer]->active = true;
@@ -307,16 +314,42 @@ void Game::tick(float dt) {
   }
 
   if (computer->active) {
+    if (computer->gameOver) {
+      fakePanel->sprite->solid = false;
+
+      fakePanel->active = false;
+
+      hiddenLayerFadingIn = true;
+      hiddenLayerFadeStartTime = SDL_GetTicks();
+
+      computer->deactivate();
+    }
+
     if (cancel.justDown()) {
       computer->deactivate();
     }
+  }
+
+  if (hiddenLayerFadingIn) {
+    int now = SDL_GetTicks();
+    int endTime = hiddenLayerFadeStartTime + hiddenLayerFadeDuration;
+    auto& layer = map->layers[hiddenLayer];
+
+    if (now > endTime) {
+      hiddenLayerFadingIn = false;
+
+      layer->active = false;
+    }
+
+    layer->alpha = ((float) (endTime - now)) / hiddenLayerFadeDuration;
+    layer->alpha *= layer->alpha; // make fade in non-linear
   }
 
   camera.tick(dt);
   entities.tick(dt);
 
   // TODO fix this
-  // switchboardTerminal->job(scene);
+  switchboardTerminal->job(scene);
 
   entities.postTick();
 }
