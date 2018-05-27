@@ -11,5 +11,7 @@ struct Tilelayer : Entity {
   Spritesheet* tileset;
   Data data;
 
+  float alpha = 1.0;
+
   void tick(float dt);
 };

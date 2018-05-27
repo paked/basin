@@ -13,3 +13,13 @@ float MathUtil::rand01() {
 float MathUtil::randN1P1() {
   return rand01() * 2 - 1;
 }
+
+int MathUtil::clamp(int x, int lower, int upper) {
+  if (x > upper) {
+    return upper;
+  } else if (x < lower) {
+    return lower;
+  }
+
+  return x;
+}

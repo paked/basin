@@ -27,7 +27,6 @@ file(GLOB SOURCES
     # Entity system things
     src/e/entity.cpp
     src/e/group.cpp
-    src/e/scene.cpp
     src/e/component.cpp
 
     # Engine utils
