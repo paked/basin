@@ -60,7 +60,7 @@ add_custom_command(TARGET game PRE_BUILD
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
 
 # Runs if building for a native platform (currently only Linux)
-if (UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
+if ((WIN32 OR (UNIX AND NOT APPLE)) AND NOT EMSCRIPTEN)
 	set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 	find_package(SDL2 REQUIRED)
@@ -74,11 +74,9 @@ if (UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
 	target_link_libraries(game ${SDL2_LIBRARY}
 						 ${SDL2_IMAGE_LIBRARIES}
 						 ${SDL2_TTF_LIBRARIES})
-endif()
-
-# Runs if building for Emscripten (web)
-# Modified excerpt from https://discourse.libsdl.org/t/sdl2-desktop-bridge-emscripten-questions/22632/2
-if(EMSCRIPTEN)
+elseif(EMSCRIPTEN)
+    # Runs if building for Emscripten (web)
+    # Modified excerpt from https://discourse.libsdl.org/t/sdl2-desktop-bridge-emscripten-questions/22632/2
     # Make emscripten output a html page instead of just the javascript (for easier testing).
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
 
@@ -100,4 +98,6 @@ if(EMSCRIPTEN)
 
     # Might need to play around with this if emscripten gives errors saying your program is too big.
     #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s TOTAL_MEMORY=67108864")
+else()
+    message(FATAL_ERROR "Platform not supported")
 endif()
