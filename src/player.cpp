@@ -150,10 +150,10 @@ void Player::tick(float dt) {
     SDL_Rect rect = promptText->rect;
 
     SDL_Rect dst = {
-      .x = promptPosition.x - rect.w,
-      .y = promptPosition.y - rect.h,
-      .w = rect.w*2,
-      .h = rect.h*2
+      promptPosition.x - rect.w,
+      promptPosition.y - rect.h,
+      rect.w*2,
+      rect.h*2
     };
 
     RenderJob j;

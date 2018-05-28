@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <e/spritesheet.hpp>
 #include <e/point.hpp>

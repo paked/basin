@@ -60,10 +60,10 @@ Point Camera::point() {
 
 Rect Camera::viewport(float buffer) {
   return Rect{
-    .x = x - buffer,
-    .y = y - buffer,
-    .w = logicalWidth + buffer*2,
-    .h = logicalHeight + buffer*2
+    x - buffer,
+    y - buffer,
+    logicalWidth + buffer*2,
+    logicalHeight + buffer*2
   };
 }
 

@@ -1,6 +1,6 @@
 #include <e/resources.hpp>
 
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 #include <e/core.hpp>
 

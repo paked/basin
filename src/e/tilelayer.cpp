@@ -39,10 +39,10 @@ void Tilelayer::tick(float dt) {
       }
 
       Rect dst = {
-        .x = (float) x * tileSize,
-        .y = (float) y * tileSize,
-        .w = (float) tileSize,
-        .h = (float) tileSize
+        (float) x * tileSize,
+        (float) y * tileSize,
+        (float) tileSize,
+        (float) tileSize
       };
 
       /*

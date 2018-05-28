@@ -16,10 +16,10 @@ Jumper::Jumper(bool positive, Point socket) : socket(socket) {
 
 Rect Jumper::rect() {
   return Rect {
-    .x = sprite->x + 2,
-    .y = sprite->y,
-    .w = 4,
-    .h = sprite->height,
+    sprite->x + 2,
+    sprite->y,
+    4,
+    sprite->height,
   };
 }
 
@@ -27,35 +27,35 @@ void Jumper::generateColliders() {
   Rect bananaRect = rect(); 
 
   Rect socketRect = {
-    .x = socket.x - bananaRect.w/2,
-    .y = socket.y - bananaRect.h/2,
-    .w = bananaRect.w,
-    .h = bananaRect.h/2
+    socket.x - bananaRect.w/2,
+    socket.y - bananaRect.h/2,
+    bananaRect.w,
+    bananaRect.h/2
   };
 
   socketLeftPad = {
-    .x = socketRect.x,
-    .y = socketRect.y,
-    .w = socketRect.w/2,
-    .h = sprite->height/2
+    socketRect.x,
+    socketRect.y,
+    socketRect.w/2,
+    sprite->height/2
   };
 
   socketLeftPad.x -= (socketLeftPad.w + socketPadding);
 
   socketRightPad = {
-    .x = socketRect.x,
-    .y = socketRect.y,
-    .w = socketRect.w/2,
-    .h = sprite->height/2
+    socketRect.x,
+    socketRect.y,
+    socketRect.w/2,
+    sprite->height/2
   };
 
   socketRightPad.x += (socketRightPad.w*2 + socketPadding);
 
   socketTopPad = {
-    .x = socketRect.x,
-    .y = socketRect.y,
-    .w = socketRect.w,
-    .h = socketRect.h/4
+    socketRect.x,
+    socketRect.y,
+    socketRect.w,
+    socketRect.h/4
   };
 
   socketTopPad.y -= (socketTopPad.h + socketPadding);

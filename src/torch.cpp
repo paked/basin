@@ -43,7 +43,7 @@ void Torch::beamIn(Direction d) {
   angle -= 180;
 
   // whatever
-  SDL_Point center = { .x = (int) (beam->width*2), .y = 16 };
+  SDL_Point center = { (int) (beam->width*2), 16 };
 
   SDL_RenderCopyEx(
       Core::renderer,

@@ -11,7 +11,7 @@
 #include <e/collision.hpp>
 
 bool Game::load() {
-  Core::clear = SDL_Color{.r = 10, .g = 10, .b = 13, .a = 255};
+  Core::clear = SDL_Color{ 10, 10, 13, 255};
 
   bool ok = Resources::load("player.png");
   ok |= Resources::load("computer_gui.png");
@@ -50,8 +50,8 @@ bool Game::load() {
 
 void Game::start() {
   scene = new Scene {
-    .renderer = new Renderer(),
-    .camera = &camera
+    new Renderer(),
+    &camera
   };
 
   entities.scene = scene;
@@ -138,10 +138,10 @@ void Game::start() {
 
   // Dark buffer
   darkBufferRect = {
-    .x = 0,
-    .y = 0,
-    .w = SCREEN_WIDTH,
-    .h = SCREEN_HEIGHT
+    0,
+    0,
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT
   };
 
   darkBuffer = SDL_CreateTexture(Core::renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, darkBufferRect.w, darkBufferRect.h);
@@ -288,10 +288,10 @@ void Game::tick(float dt) {
 
   if (blockade->up) {
     Rect triggerBoulder = {
-      .x = 11 * 16,
-      .y = 25 * 16,
-      .w = 16 * 2,
-      .h = 16
+      11 * 16,
+      25 * 16,
+      16 * 2,
+      16
     };
 
     if (Collision::isOverlapping(player->sprite, triggerBoulder)) {

@@ -53,10 +53,10 @@ void Battery::tick(float dt) {
   float y = sprite->y;
 
   Rect dst1 = {
-    .x = x,
-    .y = y,
-    .w = width,
-    .h = height
+    x,
+    y,
+    width,
+    height
   };
 
   SDL_Rect dst = scene->camera->toView(dst1, true);
@@ -84,10 +84,10 @@ void Battery::tick(float dt) {
   src.h = battSize;
 
   dst1 = {
-    .x = x,
-    .y = y + offset,
-    .w = width,
-    .h = (float) battSize
+    x,
+    y + offset,
+    width,
+    (float) battSize
   };
 
   dst = scene->camera->toView(dst1, true);

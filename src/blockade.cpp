@@ -34,13 +34,13 @@ void Blockade::start() {
     float ddy = 1 + rand01();
 
     particles.push_back({
-        .x = px,
-        .y = py,
-        .dx = dx,
-        .dy = dy,
-        .ddx = ddx,
-        .ddy = ddy,
-        .f = rand() % 5}
+        px,
+        py,
+        dx,
+        dy,
+        ddx,
+        ddy,
+        rand() % 5}
         );
   }
 

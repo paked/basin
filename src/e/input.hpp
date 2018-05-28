@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 struct Input {
   static std::vector<Input*> inputs;

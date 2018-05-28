@@ -7,7 +7,7 @@
 #include <e/sprite.hpp>
 #include <e/input.hpp>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 struct Computer : Entity {
   void start();

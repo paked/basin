@@ -28,10 +28,10 @@ ComputerRoomWall::ComputerRoomWall(float x, float y) {
   sprite->solid = false;
 
   trigger = Rect{
-    .x = x + sprite->width*2,
-    .y = y,
-    .w = sprite->width,
-    .h = sprite->height
+    x + sprite->width*2,
+    y,
+    sprite->width,
+    sprite->height
   };
 }
 

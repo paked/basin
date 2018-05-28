@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <e/sprite.hpp>
 #include <e/camera.hpp>

@@ -12,19 +12,19 @@ Sprite::Sprite(std::string texName, float x, float y) : x(x), y(y) {
 
 SDL_Rect Sprite::getSRC() {
   return SDL_Rect {
-    .x = 0,
-    .y = 0,
-    .w = textureWidth,
-    .h = textureHeight
+    0,
+    0,
+    textureWidth,
+    textureHeight
   };
 }
 
 Rect Sprite::rect() {
   return Rect{
-      .x = x,
-      .y = y,
-      .w = width,
-      .h = height
+      x,
+      y,
+      width,
+      height
   };
 }
 

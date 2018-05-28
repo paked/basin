@@ -60,10 +60,10 @@ void Collision::collide(Sprite *sprite, Tilemap *map) {
       }
       
       Rect rect = {
-        .x = (float) x * tileSize,
-        .y = (float) y * tileSize,
-        .w = (float) tileSize,
-        .h = (float) tileSize
+        (float) x * tileSize,
+        (float) y * tileSize,
+        (float) tileSize,
+        (float) tileSize
       };
 
       Collision::collide(sprite, rect);

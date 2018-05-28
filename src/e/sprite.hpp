@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <e/point.hpp>
 #include <e/rect.hpp>
@@ -40,8 +40,8 @@ struct Sprite : Component {
 
   Point velocity;
   Point acceleration;
-  Point drag = Point { 0.99, 0.99 };
-  Point maxVelocity = Point { 1000, 1000 };
+  Point drag = Point { 0.99f, 0.99f };
+  Point maxVelocity = Point { 1000.0f, 1000.0f };
   Point nextPositionDelta;
 
   int textureWidth;

@@ -15,7 +15,7 @@ const float frameTimeMs = 1000.0/60.0;
 
 void hook();
 
-int main() {
+int main(int argc, char *argv[]) {
   printf("Initialising SDL...");
   Core::init();
   printf(" Done.\n");

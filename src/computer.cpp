@@ -69,10 +69,10 @@ void Computer::tick(float dt) {
     }
 
     SDL_Rect pos = {
-      .x = 18 + screenRect.x,
-      .y = 25 + screenRect.y,
-      .w = bufferViewport.w,
-      .h = bufferViewport.h 
+      18 + screenRect.x,
+      25 + screenRect.y,
+      bufferViewport.w,
+      bufferViewport.h 
     };
 
     RenderJob j;
@@ -87,10 +87,10 @@ void Computer::tick(float dt) {
   // Send input line
   {
     SDL_Rect pos = {
-      .x = (int) (20 + screenRect.x),
-      .y = (int) (124 * scene->camera->zoom + screenRect.y),
-      .w = inputRect.w,
-      .h = inputRect.h
+      (int) (20 + screenRect.x),
+      (int) (124 * scene->camera->zoom + screenRect.y),
+      inputRect.w,
+      inputRect.h
     };
 
     RenderJob j;

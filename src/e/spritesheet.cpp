@@ -67,10 +67,10 @@ SDL_Rect Spritesheet::getSRC() {
   int xIndex = frame % rowSize;
 
   return SDL_Rect {
-    .x = xIndex * frameWidth,
-    .y = yIndex * frameHeight,
-    .w = frameWidth,
-    .h = frameHeight
+    xIndex * frameWidth,
+    yIndex * frameHeight,
+    frameWidth,
+    frameHeight
   };
 }
 

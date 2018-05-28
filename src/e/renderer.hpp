@@ -2,7 +2,7 @@
 
 #include <queue>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 struct RenderJob {
   SDL_Texture* tex;

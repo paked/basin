@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 struct Text {
   Text(std::string text);
