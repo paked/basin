@@ -51,6 +51,7 @@ void ComputerRoomWall::tick(float dt) {
   int now = SDL_GetTicks();
 
   if (now > bounceEndTime) {
+    sprite->alpha = 255;
     sprite->x = startX + distX;
     sprite->solid = true;
 
@@ -66,6 +67,7 @@ void ComputerRoomWall::tick(float dt) {
     scene->camera->shake(1 * 100, 0.25);
   }
 
+  sprite->alpha = 255 * bouncedP;
   sprite->x = startX + distX * bouncedP;
 }
 

@@ -16,7 +16,7 @@ struct ComputerRoomWall : Entity {
   float startX;
   float distX = 3 * 16;
 
-  int enterDuration = 500;
+  int enterDuration = 750;
   int bounceStartTime = 0;
 
   bool bouncing = false;
