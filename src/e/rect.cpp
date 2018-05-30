@@ -8,3 +8,4 @@ SDL_Rect Rect::toSDL(Rect r) {
     (int) r.h
   };
 }
+

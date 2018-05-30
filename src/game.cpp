@@ -11,7 +11,7 @@
 #include <e/collision.hpp>
 
 bool Game::load() {
-  Core::clear = SDL_Color{ 10, 10, 13, 255};
+  Core::clear = SDL_Color{ 10, 10, 13, 255 };
 
   bool ok = Resources::load("player.png");
   ok |= Resources::load("computer_gui.png");
@@ -38,8 +38,10 @@ bool Game::load() {
   ok |= Resources::load("safari_guy.png");
   ok |= Resources::load("computer_room_wall_left.png");
   ok |= Resources::load("computer_room_wall_right.png");
+  ok |= Resources::load("mountain.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
   ok |= Resources::loadFont("Cave-Story.ttf", 25);
+  ok |= Resources::loadFont("FifteenNarrow.ttf", 60);
 
   if (!ok) {
     printf("Could not load assets\n");
@@ -54,8 +56,17 @@ void Game::start() {
     &camera
   };
 
-  entities.scene = scene;
+  global.scene = scene;
 
+  // Menu
+  menu = new Menu();
+  global.add(menu);
+
+  // Menu will always be above entities;
+  entities.localDepth = -DEPTH_UI;
+  entities.active = false;
+  global.add(&entities);
+  
   // Player
   player = new Player();
   entities.add(player);
@@ -184,6 +195,14 @@ void Game::tick(float dt) {
 
         break;
     }
+  }
+
+  if (go.justDown() && menu->active) {
+    menu->exit();
+  }
+
+  if (menu->done && !menu->active) {
+    entities.active = true;
   }
 
   if (godMode.justDown()) {
@@ -346,10 +365,10 @@ void Game::tick(float dt) {
   }
 
   camera.tick(dt);
-  entities.tick(dt);
+  global.tick(dt);
 
   // TODO fix this
-  switchboardTerminal->job(scene);
+  // switchboardTerminal->job(scene);
 
   entities.postTick();
 }

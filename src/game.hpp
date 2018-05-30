@@ -26,6 +26,7 @@
 #include <blockade.hpp>
 #include <floorboard.hpp>
 #include <computer.hpp>
+#include <menu.hpp>
 #include <computer_room_wall.hpp>
 #include <fake_panel.hpp>
 
@@ -41,13 +42,16 @@ struct Game {
 
 private:
   Scene* scene;
+  Group<Entity> global;
   Group<Entity> entities;
   Camera camera;
 
+  Input go = Input(SDL_SCANCODE_RETURN);
   Input cancel = Input(SDL_SCANCODE_ESCAPE, true);
   Input godMode = Input(SDL_SCANCODE_LSHIFT);
 
   // Transient entities
+  Menu *menu;
   Player* player;
   Tilemap *map;
   Group<Collectable> collectables;

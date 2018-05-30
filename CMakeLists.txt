@@ -8,6 +8,7 @@ file(GLOB SOURCES
     src/main.cpp
 
     # Gameplay things
+    src/menu.cpp
     src/fake_panel.cpp
     src/computer_room_wall.cpp
     src/computer.cpp
