@@ -7,6 +7,11 @@
 #include <e/component.hpp>
 
 struct Text : Component {
+  enum AlignmentMode {
+    LEFT,
+    CENTER
+  };
+
   // TODO: currently fonts are literally just tied to a size. This should not be the case, it's dumb.
   Text(std::string text, int font = 30, float x = 0, float y = 0);
   ~Text();
@@ -20,6 +25,8 @@ struct Text : Component {
   float x;
   float y;
   bool hud;
+
+  AlignmentMode alignment = LEFT;
 
   SDL_Rect rect;
 

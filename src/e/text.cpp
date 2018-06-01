@@ -27,18 +27,38 @@ void Text::tick(float dt) {
 
   float zoom = entity->scene->camera->zoom;
 
-  SDL_Rect dst = {
-    (int) x * zoom,
-    (int) y * zoom,
+  float alignedX = x;
+  float alignedY = y;
+
+  switch (alignment) {
+    case LEFT:
+      alignedX = y;
+      alignedY = y;
+
+      break;
+    case CENTER:
+      alignedX = x - rect.w/2;
+      alignedY = y - rect.h/2;
+
+      break;
+    default:
+      printf("Could not render text, invalid alignment!");
+
+      return;
+  }
+
+  Rect dst = {
+    alignedX,
+    alignedY,
     rect.w,
     rect.h
   };
 
   RenderJob j;
-  j.depth = entity->getDepth();
+  j.depth = entity->getDepth() + DEPTH_UI *100;
   j.tex = texture;
   j.src = rect;
-  j.dst = dst;
+  j.dst = entity->scene->camera->toView(dst);
 
   entity->scene->renderer->queue.push(j);
 }

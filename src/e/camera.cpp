@@ -3,17 +3,15 @@
 #include <e/sprite.hpp>
 #include <e/collision.hpp>
 #include <e/math_util.hpp>
-#include <e/point.hpp>
+
+float lerp(float t, float a, float b){
+  return (1-t)*a + t*b;
+}
 
 void Camera::tick(float dt) {
-  if (follow) {
-    Rect r = follow->rect();
-    realX = r.x - (getWidth() - r.w)/2;
-    realY = r.y - (getHeight() - r.h)/2;
-  }
-
-  x = realX;
-  y = realY;
+  Point p = getTarget();
+  realX = lerp(0.1, realX, p.x);
+  realY = lerp(0.1, realY, p.y);
 
   float shake = shakeTrauma*shakeTrauma;
 
@@ -25,8 +23,8 @@ void Camera::tick(float dt) {
     }
   }
 
-  x += shakeMax * shake * MathUtil::randN1P1();
-  y += shakeMax * shake * MathUtil::randN1P1();
+  x = realX + shakeMax * shake * MathUtil::randN1P1();
+  y = realY + shakeMax * shake * MathUtil::randN1P1();
 }
 
 void Camera::shake(int duration, float st) {
@@ -34,16 +32,19 @@ void Camera::shake(int duration, float st) {
   shakeStopTime = SDL_GetTicks() + duration;
 }
 
-SDL_Rect Camera::toView(Rect rect, bool global) {
+SDL_Rect Camera::toView(Rect rect, bool global, bool scale) {
   if (!global) {
     rect.x -= x;
     rect.y -= y;
   }
 
+  if (scale) {
+    rect.w *= zoom;
+    rect.h *= zoom;
+  }
+
   rect.x *= zoom;
   rect.y *= zoom;
-  rect.w *= zoom;
-  rect.h *= zoom;
 
   return Rect::toSDL(rect);
 }
@@ -73,4 +74,20 @@ float Camera::getWidth() {
 
 float Camera::getHeight() {
   return logicalHeight / zoom;
+}
+
+Point Camera::getTarget() {
+  Point p = target;
+
+  if (follow != nullptr) {
+    Point c = follow->getCenter();
+
+    p.x = c.x;
+    p.y = c.y;
+  }
+
+  p.x -= getWidth()/2;
+  p.y -= getHeight()/2;
+
+  return p;
 }

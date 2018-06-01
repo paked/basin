@@ -39,9 +39,10 @@ bool Game::load() {
   ok |= Resources::load("computer_room_wall_left.png");
   ok |= Resources::load("computer_room_wall_right.png");
   ok |= Resources::load("mountain.png");
+  ok |= Resources::load("black.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
   ok |= Resources::loadFont("Cave-Story.ttf", 25);
-  ok |= Resources::loadFont("FifteenNarrow.ttf", 60);
+  ok |= Resources::loadFont("FifteenNarrow.ttf", 15);
 
   if (!ok) {
     printf("Could not load assets\n");
@@ -58,18 +59,22 @@ void Game::start() {
 
   global.scene = scene;
 
-  // Menu
-  menu = new Menu();
-  global.add(menu);
-
   // Menu will always be above entities;
-  entities.localDepth = -DEPTH_UI;
+  entities.localDepth = DEPTH_BELOW * DEPTH_UI;
   entities.active = false;
+
   global.add(&entities);
   
   // Player
   player = new Player();
   entities.add(player);
+
+  // Menu
+  Point c = player->sprite->getCenter();
+  c.y -= 300;
+
+  menu = new Menu(c.x, c.y);
+  global.add(menu);
 
   // Map
   Spritesheet* ts = new Spritesheet("tileset.png", 16, 16);
@@ -159,7 +164,9 @@ void Game::start() {
   SDL_SetTextureBlendMode(darkBuffer, SDL_BLENDMODE_MOD);
   
   // Setup camera
-  camera.follow = player->sprite;
+  camera.follow = menu->mountain;
+  camera.realX = menu->mountain->x;
+  camera.realY = menu->mountain->y;
 }
 
 void Game::tick(float dt) {
@@ -197,11 +204,9 @@ void Game::tick(float dt) {
     }
   }
 
-  if (go.justDown() && menu->active) {
-    menu->exit();
-  }
+  if (go.justDown()) {
+    scene->camera->follow = player->sprite;
 
-  if (menu->done && !menu->active) {
     entities.active = true;
   }
 

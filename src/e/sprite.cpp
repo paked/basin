@@ -28,6 +28,10 @@ Rect Sprite::rect() {
   };
 }
 
+Point Sprite::getCenter() {
+  return { x + width/2, y + height/2 };
+}
+
 void Sprite::tick(float dt) {
   if (entity == nullptr) {
     printf("WARNING: calling tick on an entityless component!\n");

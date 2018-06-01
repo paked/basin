@@ -11,11 +11,14 @@ Torch::Torch() {
 void Torch::beamIn(Direction d) {
   SDL_Rect src = Rect::toSDL(beam->rect());
 
-  Rect pos = beam->rect();
-  pos.x = entity->scene->camera->getWidth()/2 - src.w/2;
-  pos.y = entity->scene->camera->getHeight()/2 - src.h/8*1;
+  Camera* camera = entity->scene->camera;
 
-  SDL_Rect dst = entity->scene->camera->toView(pos, true);
+  Rect pos = beam->rect();
+  Point t = camera->getTarget();
+  pos.x = t.x + camera->getWidth()/2 - src.w/2;
+  pos.y = t.y + camera->getHeight()/2 - src.h/8*1;
+
+  SDL_Rect dst = entity->scene->camera->toView(pos, false);
 
   double angle = 0;
 
