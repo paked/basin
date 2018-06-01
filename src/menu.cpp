@@ -13,7 +13,19 @@ Menu::Menu(float x, float y) {
   title->alignment = Text::CENTER;
 }
 
+void Menu::tick(float dt) {
+  Entity::tick(dt);
+
+  if (exitTimer.done()) {
+    active = false;
+  }
+}
+
 void Menu::start() {
   reg(mountain);
   reg(title);
+}
+
+void Menu::exit() {
+  exitTimer.go(1.0 * SECONDS);
 }

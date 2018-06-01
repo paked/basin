@@ -205,6 +205,8 @@ void Game::tick(float dt) {
   }
 
   if (go.justDown()) {
+    menu->exit();
+
     scene->camera->follow = player->sprite;
 
     entities.active = true;
