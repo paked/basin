@@ -10,8 +10,8 @@ float lerp(float t, float a, float b){
 
 void Camera::tick(float dt) {
   Point p = getTarget();
-  realX = lerp(0.1, realX, p.x);
-  realY = lerp(0.1, realY, p.y);
+  realX = lerp(0.05, realX, p.x);
+  realY = lerp(0.05, realY, p.y);
 
   float shake = shakeTrauma*shakeTrauma;
 

@@ -164,6 +164,13 @@ void Computer::eval(std::string in) {
     cmd += c;
   }
 
+  // Did someone ask for a 90s-esque cheat code?
+  if (cmd == "321a") {
+    gameOver = true;
+
+    return;
+  }
+
   if (cmd == "help") {
     send(in, "This is a help screen. Congratulations, you can type. These are other things you can type: \n\n- \"help\" to see this menu\n- \"look <something>\" to at something (eg. \"look cockroach\", \"look trapdoor\", \"look computer\"). You can also look around the room with just \"look\"\n- \"grab <something>\" to pick up or pull on an item (eg \"grab trapdoor\", \"grab cockroach\")\n- \"push <something>\" to push on a something (eg. \"push wall\")\n- \"exit\" go back to the real world.");
 

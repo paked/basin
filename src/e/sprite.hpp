@@ -19,8 +19,10 @@ struct Sprite : Component {
   void job(Scene* scene, float depth=0);
   void render(SDL_Renderer* renderer, Camera* camera);
 
-  Point getCenter();
   Rect rect();
+
+  Point getCenter();
+  void center();
 
   virtual SDL_Rect getSRC();
 

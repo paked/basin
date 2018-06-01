@@ -3,8 +3,8 @@
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="128">
   <image source="gfx/tileset.png" width="256" height="128"/>
  </tileset>
- <tileset firstgid="129" name="collectables" tilewidth="8" tileheight="8" tilecount="5">
-  <image source="gfx/collectables.png" width="40" height="8"/>
+ <tileset firstgid="129" name="collectables" tilewidth="8" tileheight="8" tilecount="6">
+  <image source="gfx/collectables.png" width="48" height="8"/>
  </tileset>
  <layer name="background" width="25" height="55">
   <data encoding="csv">
@@ -283,7 +283,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,134,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

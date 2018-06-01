@@ -41,82 +41,77 @@ void Player::start() {
 void Player::tick(float dt) {
   Entity::tick(dt);
 
-  if (moveLeft.justDown()) {
-    currentMovement = MOVE_LEFT;
-    eyeLine = Torch::LEFT;
-
-    sprite->flip = true;
-    sprite->playAnimation("walk_hori");
-  }
-
-  if (moveRight.justDown()) {
-    currentMovement = MOVE_RIGHT;
-    eyeLine = Torch::RIGHT;
-
-    sprite->flip = false;
-    sprite->playAnimation("walk_hori");
-  }
-
-  if (moveUp.justDown()) {
-    currentMovement = MOVE_UP;
-    eyeLine = Torch::UP;
-
-    sprite->playAnimation("walk_up");
-  }
-
-  if (moveDown.justDown()) {
-    currentMovement = MOVE_DOWN;
-    eyeLine = Torch::DOWN;
-
-    sprite->playAnimation("walk_down");
-  }
-
-  if (moveLeft.justUp() && currentMovement == MOVE_LEFT) {
-    currentMovement = IDLE;
-
-    sprite->playAnimation("idle_hori");
-  }
-
-  if (moveRight.justUp() && currentMovement == MOVE_RIGHT) {
-    currentMovement = IDLE;
-
-    sprite->playAnimation("idle_hori");
-  }
-
-  if (moveUp.justUp() && currentMovement == MOVE_UP) {
-    currentMovement = IDLE;
-
-    sprite->playAnimation("idle_up");
-  }
-
-  if (moveDown.justUp() && currentMovement == MOVE_DOWN) {
-    currentMovement = IDLE;
-
-    sprite->playAnimation("idle_down");
-  }
-
   sprite->acceleration.x = 0;
   sprite->acceleration.y = 0;
 
+  if (!hasItem || (hasItem && !item->immovable)) {
+    if (moveLeft.justDown()) {
+      currentMovement = MOVE_LEFT;
+      eyeLine = Torch::LEFT;
+
+      sprite->flip = true;
+      sprite->playAnimation("walk_hori");
+    }
+
+    if (moveRight.justDown()) {
+      currentMovement = MOVE_RIGHT;
+      eyeLine = Torch::RIGHT;
+
+      sprite->flip = false;
+      sprite->playAnimation("walk_hori");
+    }
+
+    if (moveUp.justDown()) {
+      currentMovement = MOVE_UP;
+      eyeLine = Torch::UP;
+
+      sprite->playAnimation("walk_up");
+    }
+
+    if (moveDown.justDown()) {
+      currentMovement = MOVE_DOWN;
+      eyeLine = Torch::DOWN;
+
+      sprite->playAnimation("walk_down");
+    }
+
+    if (moveLeft.justUp() && currentMovement == MOVE_LEFT) {
+      currentMovement = IDLE;
+
+      sprite->playAnimation("idle_hori");
+    }
+
+    if (moveRight.justUp() && currentMovement == MOVE_RIGHT) {
+      currentMovement = IDLE;
+
+      sprite->playAnimation("idle_hori");
+    }
+
+    if (moveUp.justUp() && currentMovement == MOVE_UP) {
+      currentMovement = IDLE;
+
+      sprite->playAnimation("idle_up");
+    }
+
+    if (moveDown.justUp() && currentMovement == MOVE_DOWN) {
+      currentMovement = IDLE;
+
+      sprite->playAnimation("idle_down");
+    }
+
+    if (currentMovement == MOVE_LEFT) {
+      sprite->acceleration.x = -acceleration;
+    } else if (currentMovement == MOVE_RIGHT) {
+      sprite->acceleration.x = acceleration;
+    } else if (currentMovement == MOVE_UP) {
+      sprite->acceleration.y = -acceleration;
+    } else if (currentMovement == MOVE_DOWN) {
+      sprite->acceleration.y = acceleration;
+    }
+  }
+
   lastDroppedItem = nullptr;
   justDroppedItem = false;
-
-  /*
-  if (busy) {
-    // Stop player from moving, picking things up, etc. while interacting with a panel or whatever.
-    // Not entirely sure what the ramifications of this will be...
-    return;
-  }*/
-
-  if (currentMovement == MOVE_LEFT) {
-    sprite->acceleration.x = -acceleration;
-  } else if (currentMovement == MOVE_RIGHT) {
-    sprite->acceleration.x = acceleration;
-  } else if (currentMovement == MOVE_UP) {
-    sprite->acceleration.y = -acceleration;
-  } else if (currentMovement == MOVE_DOWN) {
-    sprite->acceleration.y = acceleration;
-  }
 
   if (hasItem && equip.justDown() && !justGotItem) {
     hasItem = false;
@@ -221,6 +216,10 @@ bool Player::equipMeMaybe(Collectable* c) {
 
 // make the item look like it is being carried around by the player
 void Player::positionItem() {
+  if (item->immovable) {
+    return;
+  }
+
   item->sprite->y = sprite->y + 8;
   item->localDepth = DEPTH_ABOVE;
   item->sprite->flip = false;

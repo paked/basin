@@ -13,7 +13,8 @@ struct Collectable : Entity {
     KEY,
     JUMPERS,
     TORCH,
-    SCREEN
+    SCREEN,
+    PORT
   };
 
   Type type;
@@ -24,6 +25,8 @@ struct Collectable : Entity {
   void start();
   bool shouldRotate();
 
-  bool shouldPromptEquip = true;
   Spritesheet* sprite;
+
+  bool shouldPromptEquip = true;
+  bool immovable = false;
 };

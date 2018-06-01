@@ -39,7 +39,7 @@ bool Game::load() {
   ok |= Resources::load("computer_room_wall_left.png");
   ok |= Resources::load("computer_room_wall_right.png");
   ok |= Resources::load("mountain.png");
-  ok |= Resources::load("black.png");
+  ok |= Resources::load("face.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
   ok |= Resources::loadFont("Cave-Story.ttf", 25);
   ok |= Resources::loadFont("FifteenNarrow.ttf", 15);
@@ -147,6 +147,10 @@ void Game::start() {
   // Fake panel
   fakePanel = new FakePanel(14 * ts->frameWidth, 43 * ts->frameWidth);
   entities.add(fakePanel);
+
+  // Boss
+  boss = new Boss(17 * ts->frameWidth, 36 * ts->frameWidth);
+  entities.add(boss);
 
   // load collectables
   entities.add(&collectables);
@@ -273,6 +277,20 @@ void Game::tick(float dt) {
 
         if (player->use.justDown()) {
           computer->activate();
+        }
+
+        break;
+      case Collectable::PORT:
+        if (!isHeld) {
+          break;
+        }
+
+        if (!boss->awake) {
+          player->proposePrompt(player->textPower);
+        }
+
+        if (player->use.justDown()) {
+          boss->wakeUp();
         }
 
         break;
@@ -436,6 +454,8 @@ void Game::loadCollectables(std::string fname) {
         type = Collectable::Type::TORCH;
       } else if (num == 4) {
         type = Collectable::Type::SCREEN;
+      } else if (num == 5) {
+        type = Collectable::Type::PORT;
       } else {
         printf("Error loading collectables CSV: invalid collectable type\n");
 

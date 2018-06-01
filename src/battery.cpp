@@ -15,7 +15,8 @@ Battery::Battery() {
   attachments->addAnimation("chainsaw", { 2 });
   attachments->addAnimation("jumpers", { 4 });
   attachments->addAnimation("torch", { 6 });
-  attachments->addAnimation("screen", { 6 });
+  attachments->addAnimation("screen", { 8 });
+  attachments->addAnimation("port", { 10 });
 
   width = sprite->width;
   height = sprite->height;

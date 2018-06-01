@@ -2,6 +2,8 @@
 
 Collectable::Collectable(int x, int y, Type t) : type(t) {
   sprite = new Spritesheet("collectables.png", 8, 8, x, y);
+
+  immovable = type == PORT;
 }
 
 void Collectable::start() {
@@ -10,6 +12,7 @@ void Collectable::start() {
   sprite->addAnimation("jumpers", { 2 });
   sprite->addAnimation("torch", { 3 });
   sprite->addAnimation("screen", { 4 });
+  sprite->addAnimation("port", { 5 });
 
   sprite->playAnimation(key(type));
 
@@ -33,6 +36,8 @@ std::string Collectable::key(Type t) {
     return "torch";
   } else if (t == SCREEN) {
     return "screen";
+  } else if (t == PORT) {
+    return "port";
   }
 
   return "";

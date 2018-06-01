@@ -25,6 +25,7 @@ file(GLOB SOURCES
     src/switchboard.cpp
     src/jumper.cpp
     src/torch.cpp
+    src/boss.cpp
 
     # Entity system things
     src/e/entity.cpp

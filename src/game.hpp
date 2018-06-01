@@ -29,6 +29,7 @@
 #include <menu.hpp>
 #include <computer_room_wall.hpp>
 #include <fake_panel.hpp>
+#include <boss.hpp>
 
 struct Game {
   bool load();
@@ -66,6 +67,7 @@ private:
   ComputerRoomWall* computerWall;
   Computer *computer;
   FakePanel *fakePanel;
+  Boss *boss;
 
   int darknessLayer;
   int hiddenLayer;
