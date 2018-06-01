@@ -33,6 +33,7 @@ file(GLOB SOURCES
 
     # Engine utils
     src/e/math_util.cpp
+    src/e/timer.cpp
     src/e/renderer.cpp
     src/e/camera.cpp
     src/e/core.cpp
