@@ -29,6 +29,9 @@ struct Boss : Entity {
 
   bool awake = false;
 
+  Timer speakDelay = Timer();
+  Timer letterTimer = Timer(25);
+  int letterIndex = 0;
   std::string speech = "Hello mortal. I am Xenu, ruler of the cosmos. Descendent of Zeus, slayer of Titans. You have come to feed me, correct?";
 
   Timer enterTimer = Timer(300);

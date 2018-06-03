@@ -21,23 +21,42 @@ void Boss::start() {
   textboxX = scene->camera->getWidth()/2 - textboxWidth*16/2;
   textboxY = scene->camera->getHeight() - textboxHeight*16 + 4;
 
-  textboxText = new Text(speech, 30, textboxX + textboxTextOffsetX, textboxY + textboxTextOffsetY, (textboxWidth - 2)*16);
+  textboxText = new Text("", 30, textboxX + textboxTextOffsetX, textboxY + textboxTextOffsetY, (textboxWidth - 2)*16);
   textboxText->hud = true;
   textboxText->localDepth = DEPTH_UI + DEPTH_ABOVE;
   textboxText->active = false;
 
   reg(sprite);
   reg(textboxText);
+
 }
 
 void Boss::tick(float dt) {
   Entity::tick(dt);
 
+  if (speakDelay.done()) {
+    letterTimer.go();
+  }
+
+  if (letterTimer.done() && letterIndex < speech.size()) {
+    letterIndex += 1;
+
+    textboxText->text = speech.substr(0, letterIndex);
+
+    if (speech[letterIndex] == ' ') {
+      speakDelay.go(75);
+    } else {
+      letterTimer.go();
+    }
+  }
+
   if (!sprite->playing && sprite->currentAnimationName == "boot") {
     sprite->playAnimation("talking", true);
 
     textboxText->active = true;
+
     enterTimer.go();
+    speakDelay.go(enterTimer.duration);
   }
 
   if (!textboxText->active) {
