@@ -6,6 +6,10 @@ void Entity::start() {}
 
 void Entity::tick(float dt) {
   for (auto& comp : components) {
+    if (!comp->active) {
+      continue;
+    }
+
     comp->tick(dt);
   }
 }

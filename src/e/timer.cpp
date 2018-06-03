@@ -39,3 +39,7 @@ bool Timer::done() {
 int Timer::now() {
   return SDL_GetTicks();
 }
+
+float Timer::pc() {
+  return 1.0 - ((float) ((start + duration) - now())) / duration;
+}

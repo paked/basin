@@ -40,9 +40,10 @@ bool Game::load() {
   ok |= Resources::load("computer_room_wall_right.png");
   ok |= Resources::load("mountain.png");
   ok |= Resources::load("face.png");
+  ok |= Resources::load("textbox.png");
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
   ok |= Resources::loadFont("Cave-Story.ttf", 25);
-  ok |= Resources::loadFont("FifteenNarrow.ttf", 15);
+  ok |= Resources::loadFont("FifteenNarrow.ttf", 60);
 
   if (!ok) {
     printf("Could not load assets\n");

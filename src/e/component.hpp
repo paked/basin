@@ -7,4 +7,5 @@ struct Component {
   virtual void tick(float dt);
 
   Entity *entity = nullptr;
+  bool active = true;
 };

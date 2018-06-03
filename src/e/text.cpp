@@ -5,16 +5,16 @@
 #include <e/resources.hpp>
 #include <e/core.hpp>
 
-Text::Text(std::string text, int font, float x, float y) : text(text), x(x), y(y) {
-  TTF_Font* f = Resources::get(font);
-  SDL_Surface* surface = TTF_RenderText_Solid(f, text.c_str(), White);
+Text::Text(std::string text, int font, float x, float y) : text(text), font(font), x(x), y(y) {
+  gen();
+}
 
-  texture = SDL_CreateTextureFromSurface(Core::renderer, surface);
+Text::Text(std::string text, int font, float x, float y, int width) : text(text), font(font), x(x), y(y), width(width) {
+  wrap = true;
+}
 
-  rect.x = rect.y = 0;
-  TTF_SizeText(f, text.c_str(), &rect.w, &rect.h);
-
-  SDL_FreeSurface(surface);
+void Text::start() {
+  gen();
 }
 
 void Text::center() {
@@ -25,6 +25,11 @@ void Text::center() {
 void Text::tick(float dt) {
   Component::tick(dt);
 
+  // Regen the text if there has been a change to it
+  if (textureText != text) {
+    gen();
+  }
+
   float zoom = entity->scene->camera->zoom;
 
   float alignedX = x;
@@ -32,13 +37,15 @@ void Text::tick(float dt) {
 
   switch (alignment) {
     case LEFT:
-      alignedX = y;
+      alignedX = x;
       alignedY = y;
 
       break;
     case CENTER:
-      alignedX = x - rect.w/2;
-      alignedY = y - rect.h/2;
+      // We don't scale text with screen size in order to preserve it's aesthetic. We compensate for that here
+      // TODO: we really need to create a divison between local and world in this text class. Maybe something like srcRect and rect. The latter being the rect in world space.
+      alignedX = x - (rect.w/zoom)/2;
+      alignedY = y - (rect.h/zoom)/2;
 
       break;
     default:
@@ -55,16 +62,38 @@ void Text::tick(float dt) {
   };
 
   RenderJob j;
-  j.depth = entity->getDepth() + DEPTH_UI *100;
+  j.depth = entity->getDepth() + localDepth;
   j.tex = texture;
   j.src = rect;
-  j.dst = entity->scene->camera->toView(dst);
+  j.dst = entity->scene->camera->toView(dst, hud, false);
 
   entity->scene->renderer->queue.push(j);
+}
+
+void Text::gen() {
+  textureText = text;
+
+  TTF_Font* f = Resources::get(font);
+
+  const char* t = text.c_str();
+
+  SDL_Surface* surface = nullptr;
+  if (wrap) {
+    surface = TTF_RenderText_Blended_Wrapped(f, t, color, width * entity->scene->camera->zoom);
+  } else {
+    surface = TTF_RenderText_Solid(f, t, color);
+  }
+
+  texture = SDL_CreateTextureFromSurface(Core::renderer, surface);
+
+  rect.x = rect.y = 0;
+  SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+
+  SDL_FreeSurface(surface);
 }
 
 Text::~Text() {
   SDL_DestroyTexture(texture);
 }
 
-SDL_Color Text::White = {255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+SDL_Color Text::White = {255, 255, 255};

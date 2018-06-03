@@ -11,6 +11,9 @@ struct Timer {
   bool done();
   int now();
 
+  // Time left scaled 0-1.
+  float pc();
+
   int defaultDuration;
 
   bool running = false;
