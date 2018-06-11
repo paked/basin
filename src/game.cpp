@@ -41,6 +41,8 @@ bool Game::load() {
   ok |= Resources::load("mountain.png");
   ok |= Resources::load("face.png");
   ok |= Resources::load("textbox.png");
+  ok |= Resources::load("switchboard_indicator.png");
+
   ok |= Resources::loadFont("Cave-Story.ttf", 30);
   ok |= Resources::loadFont("Cave-Story.ttf", 25);
   ok |= Resources::loadFont("FifteenNarrow.ttf", 60);

@@ -75,4 +75,5 @@ void ComputerRoomWall::enter() {
   bouncing = true;
 
   bounceStartTime = SDL_GetTicks();
+  sprite->alpha = 0;
 }

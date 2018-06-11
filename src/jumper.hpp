@@ -10,6 +10,8 @@ struct Jumper {
   Jumper(bool positive, Point socket);
   void render(SDL_Renderer* renderer, Camera* cam);
 
+  void tick(float dt);
+
   void generateColliders();
 
   bool dirty();
@@ -26,4 +28,5 @@ struct Jumper {
   Point socket;
 
   Spritesheet* sprite;
+  Spritesheet* indicator;
 };

@@ -35,10 +35,16 @@ void Switchboard::start() {
   outNegative->sprite->y = 30;
 
   reg(backboard);
+
   reg(inPositive->sprite);
   reg(inNegative->sprite);
   reg(outPositive->sprite);
   reg(outNegative->sprite);
+
+  reg(inPositive->indicator);
+  reg(inNegative->indicator);
+  reg(outPositive->indicator);
+  reg(outNegative->indicator);
 }
 
 void Switchboard::tick(float dt) {
@@ -47,6 +53,10 @@ void Switchboard::tick(float dt) {
   Point point = { Input::mouseX/scene->camera->zoom, Input::mouseY/scene->camera->zoom };
 
   std::vector<Jumper*> grabbables = { inPositive, inNegative, outPositive, outNegative };
+  for (auto j : grabbables) {
+    j->tick(dt);
+  }
+
   for (auto grabbable : grabbables) {
     Rect rect = grabbable->sprite->rect();
 

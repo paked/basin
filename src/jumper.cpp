@@ -11,6 +11,13 @@ Jumper::Jumper(bool positive, Point socket) : socket(socket) {
 
   sprite->playAnimation((positive ? "positive" : "negative"));
 
+  indicator = new Spritesheet("switchboard_indicator.png", 2, 2, socket.x - 1, socket.y - 16);
+  indicator->hud = true;
+  indicator->addAnimation("off", { 0 });
+  indicator->addAnimation("on", { 1 });
+
+  indicator->playAnimation("off");
+
   generateColliders();
 }
 
@@ -89,15 +96,10 @@ void Jumper::render(SDL_Renderer* renderer, Camera* camera) {
   } else {
     SDL_SetRenderDrawColor(renderer, 0, 50, 10, 255);
   }
-/*
-  SDL_Rect okLight = {
-    .x = socket.x - 4,
-    .y = socket.y - 64,
-    .w = 8,
-    .h = 8
-  };
+}
 
-  SDL_RenderFillRect(renderer, &okLight);*/
+void Jumper::tick(float dt) {
+  indicator->playAnimation(in() ? "on" : "off");
 }
 
 bool Jumper::dirty() {
@@ -108,6 +110,8 @@ bool Jumper::dirty() {
     Collision::isOverlapping(r, socketTopPad);
 }
 
+// FIXME: This function modifies state (calls indicator->playAnimation), when it really doesn't need to.
+// Should refactor this struct into a Component and do this shit in the `tick` function.
 bool Jumper::in() {
   return Collision::isOverlapping(sprite->rect(), socketInPad) && !dirty();
 }
