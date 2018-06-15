@@ -15,6 +15,8 @@ struct Menu : Entity {
 
   Sprite* mountain;
   Text* title;
+  Text* pressEnter;
 
   Timer exitTimer;
+  Timer enterTimer = Timer(400);
 };

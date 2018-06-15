@@ -41,7 +41,6 @@ struct Game {
 
   bool quit = false;
 
-private:
   Scene* scene;
   Group<Entity> global;
   Group<Entity> entities;
@@ -50,6 +49,12 @@ private:
   Input go = Input(SDL_SCANCODE_RETURN);
   Input cancel = Input(SDL_SCANCODE_ESCAPE, true);
   Input godMode = Input(SDL_SCANCODE_LSHIFT);
+
+  Timer doneTimer = Timer(3000);
+  bool done = false;
+
+  Entity *gameOver;
+  Text* gameOverText;
 
   // Transient entities
   Menu *menu;

@@ -66,6 +66,7 @@ void Text::tick(float dt) {
   j.tex = texture;
   j.src = rect;
   j.dst = entity->scene->camera->toView(dst, hud, false);
+  j.alpha = (unsigned char) (alpha * 255);
 
   entity->scene->renderer->queue.push(j);
 }
@@ -97,3 +98,4 @@ Text::~Text() {
 }
 
 SDL_Color Text::White = {255, 255, 255};
+SDL_Color Text::Black = {0, 0, 0};

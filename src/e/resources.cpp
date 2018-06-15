@@ -14,7 +14,7 @@ bool Resources::load(std::string name) {
   if (textures.find(name) != textures.end()) {
     printf("Texture has already been loaded: %s\n", name.c_str());
 
-    return false;
+    return true;
   }
 
   std::string fname = getPath(name);

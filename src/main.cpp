@@ -14,34 +14,30 @@ Game *game;
 const float frameTimeMs = 1000.0/60.0;
 
 void hook();
+int startGame();
 
 int main(int argc, char *argv[]) {
   printf("Initialising SDL...");
   Core::init();
   printf(" Done.\n");
 
-  printf("Initialising game...");
-  game = new Game();
-  printf(" Done\n");
+  if (startGame() < 0) {
+    printf("Can't start game.\n");
 
-  printf("Loading game resources...");
-  if (game->load()) {
-    printf(" Done.\n");
-  } else {
-    printf(" Failed.\n");
-
-    return -1;
+    return 0;
   }
-
-  printf("Starting game...");
-  game->start();
-  printf(" Done.\n");
 
 #ifdef __EMSCRIPTEN__
   emscripten_set_main_loop(hook, 60, 1);
 #else
   while (!game->quit) {
     int frameStart = SDL_GetTicks();
+
+    if (game->done) {
+      delete game;
+
+      startGame();
+    }
 
     hook();
 
@@ -84,4 +80,25 @@ void hook() {
   if (frameDuration > 16) {
     printf("WARNING: frame took too long to complete (%d vs %d) (t: %d, r: %d).\n", frameDuration, 16, tickDuration, renderDuration);
   }
+}
+
+int startGame() {
+  printf("Initialising game...");
+  game = new Game();
+  printf(" Done\n");
+
+  printf("Loading game resources...");
+  if (game->load()) {
+    printf(" Done.\n");
+  } else {
+    printf(" Failed.\n");
+
+    return -1;
+  }
+
+  printf("Starting game...");
+  game->start();
+  printf(" Done.\n");
+
+  return 0;
 }

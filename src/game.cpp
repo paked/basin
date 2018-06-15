@@ -79,6 +79,19 @@ void Game::start() {
   menu = new Menu(c.x, c.y);
   global.add(menu);
 
+  // Game over text
+  gameOver = new Entity();
+  gameOver->localDepth = DEPTH_UI;
+  global.add(gameOver);
+
+  gameOverText = new Text("Game Over...", 60, camera.getWidth()/2, camera.getHeight()/2);
+  gameOverText->color = { 242, 65, 65 };
+  gameOverText->alignment = Text::CENTER;
+  gameOverText->hud = true;
+
+  gameOver->reg(gameOverText);
+  gameOver->active = false;
+
   // Map
   Spritesheet* ts = new Spritesheet("tileset.png", 16, 16);
   map = new Tilemap(ts);
@@ -121,11 +134,11 @@ void Game::start() {
     const int colSize = 5;
 
     bool fake[colSize][rowSize] = {
-      { false, true, false },
-      { true, true, false },
-      { true, false, false },
-      { true, true, true },
+      { true, false, true },
       { false, false, true },
+      { false, true, true },
+      { false, false, false },
+      { true, true, false },
     };
 
     for (int y = 0; y < colSize; y++) {
@@ -209,6 +222,26 @@ void Game::tick(float dt) {
 
         break;
     }
+  }
+
+  if (player->dead && !doneTimer.running) {
+    doneTimer.go();
+
+    gameOver->active = true;
+  }
+
+  if (doneTimer.done()) {
+    done = true;
+  }
+
+  if (!doneTimer.done() && doneTimer.running) {
+    float pc = doneTimer.pc() * 2;
+
+    gameOverText->alpha = pc*pc;
+  }
+
+  if (doneTimer.pc() > 0.5) {
+    gameOverText->alpha = 1;
   }
 
   if (go.justDown()) {
@@ -304,7 +337,11 @@ void Game::tick(float dt) {
   torchHitbox.x += scene->camera->x;
   torchHitbox.y += scene->camera->y;
   for (auto& f : floorboards.members) {
-    if (!f->fake) {
+    if (f->fake) {
+      if (Collision::isOverlapping(player->sprite, f->sprite->rect())) {
+        player->dead = true;
+      }
+
       continue;
     }
 
@@ -327,9 +364,11 @@ void Game::tick(float dt) {
       switchboard->active = false;
     }
 
-    if (switchboard->continuous()) {
+    if (switchboard->continuous() && player->battery->hasCapacity(0.2)) {
       slidingDoor->open();
       switchboard->active = false;
+
+      player->battery->capacity -= 0.2;
     }
   }
 
@@ -361,6 +400,8 @@ void Game::tick(float dt) {
   }
 
   if (computer->active) {
+    player->battery->capacity -= 0.0001;
+
     if (computer->gameOver) {
       fakePanel->sprite->solid = false;
 

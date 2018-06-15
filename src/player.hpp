@@ -68,4 +68,6 @@ struct Player : Entity {
 
   Battery* battery;
   Torch* torch;
+
+  bool dead = false;
 };

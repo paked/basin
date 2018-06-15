@@ -23,7 +23,7 @@ struct Battery : Component {
   float width;
   float height;
 
-  float capacity = 0.3f;
+  float capacity = 0.8f;
 
   bool hasCapacity(float c);
 

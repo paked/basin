@@ -127,7 +127,15 @@ void Player::tick(float dt) {
     torch->on = !torch->on;
   }
 
+  if (torch->on) {
+    battery->capacity -= 0.0001;
+  }
+
   if (hasItem && item->type == Collectable::TORCH && battery->capacity < 0) {
+    torch->on = false;
+  }
+
+  if (!hasItem || item->type != Collectable::TORCH) {
     torch->on = false;
   }
 
@@ -136,6 +144,10 @@ void Player::tick(float dt) {
   }
 
   justGotItem = false;
+
+  if (battery->capacity < 0) {
+    dead = true;
+  }
 
   // send render commands
 

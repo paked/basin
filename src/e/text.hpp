@@ -31,6 +31,8 @@ struct Text : Component {
   bool hud = false;
   int font;
 
+  float alpha = 1.0f;
+
   AlignmentMode alignment = LEFT;
 
   bool wrap = false;
@@ -41,4 +43,5 @@ struct Text : Component {
   SDL_Rect rect;
 
   static SDL_Color White;
+  static SDL_Color Black;
 };

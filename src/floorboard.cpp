@@ -41,7 +41,7 @@ void Floorboard::trigger() {
 }
 
 void Floorboard::glow() {
-  if (!fake || !glowing) {
+  if (!glowing) {
     return;
   }
 

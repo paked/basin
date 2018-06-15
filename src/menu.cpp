@@ -13,6 +13,18 @@ Menu::Menu(float x, float y) {
 
   title = new Text("Echo Mountain", 60, x, y - 60);
   title->alignment = Text::CENTER;
+
+  pressEnter = new Text("Press enter", 30, x, y + 60);
+  pressEnter->alignment = Text::CENTER;
+  pressEnter->color = Text::Black;
+}
+
+void Menu::start() {
+  reg(mountain);
+  reg(title);
+  reg(pressEnter);
+
+  enterTimer.go();
 }
 
 void Menu::tick(float dt) {
@@ -21,11 +33,12 @@ void Menu::tick(float dt) {
   if (exitTimer.done()) {
     active = false;
   }
-}
 
-void Menu::start() {
-  reg(mountain);
-  reg(title);
+  if (enterTimer.done()) {
+    pressEnter->active = !pressEnter->active;
+
+    enterTimer.go();
+  }
 }
 
 void Menu::exit() {
