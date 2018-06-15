@@ -44,7 +44,7 @@ void Player::tick(float dt) {
   sprite->acceleration.x = 0;
   sprite->acceleration.y = 0;
 
-  if (!hasItem || (hasItem && !item->immovable)) {
+  if ((!hasItem || (hasItem && !item->immovable)) && !dead) {
     if (moveLeft.justDown()) {
       currentMovement = MOVE_LEFT;
       eyeLine = Torch::LEFT;

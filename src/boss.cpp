@@ -1,5 +1,7 @@
 #include <boss.hpp>
 
+#include <ctype.h>
+
 Boss::Boss(float x, float y) {
   sprite = new Spritesheet("face.png", 24, 32, x, y);
 }
@@ -45,9 +47,18 @@ void Boss::tick(float dt) {
 
     if (speech[letterIndex] == ' ') {
       speakDelay.go(75);
+    } else if (isupper(speech[letterIndex])) {
+      scene->camera->shake(20, 0.2);
+
+      letterTimer.go();
     } else {
       letterTimer.go();
     }
+  }
+
+  if (letterIndex >= speech.size()) {
+    sprite->playAnimation("idle");
+    done = true;
   }
 
   if (!sprite->playing && sprite->currentAnimationName == "boot") {

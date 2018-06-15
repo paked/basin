@@ -32,7 +32,9 @@ struct Boss : Entity {
   Timer speakDelay = Timer();
   Timer letterTimer = Timer(25);
   int letterIndex = 0;
-  std::string speech = "Hello mortal. I am Xenu, ruler of the cosmos. Descendent of Zeus, slayer of Titans. You have come to feed me, correct?\n This is the end of the game. You may leave.";
+  std::string speech = "Hello mortal. I am Xenu, ruler of the cosmos. Descendent of Zeus, slayer of Titans. You have come to feed me, correct?\nThis is the end of the game. You may leave. I DON'T WANT YOUR ELECTRICITY! I WANT YOUR SOUL! MWAHAHAHAHAHHAHAHAHAHHAAH. MWAHAHAHAHAH. MWAHAHAHAAHAHAHAHAHAHA.";
 
   Timer enterTimer = Timer(300);
+
+  bool done = false;
 };

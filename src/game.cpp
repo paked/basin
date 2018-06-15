@@ -389,6 +389,10 @@ void Game::tick(float dt) {
       blockade->explode();
       camera.shake(1 * 100, 1);
     }
+
+    if (Collision::isOverlapping(boulder->sprite, player->sprite->rect())) {
+      player->dead = true;
+    }
   }
 
   if (!computerWall->active) {
@@ -431,6 +435,10 @@ void Game::tick(float dt) {
 
     layer->alpha = ((float) (endTime - now)) / hiddenLayerFadeDuration;
     layer->alpha *= layer->alpha; // make fade in non-linear
+  }
+
+  if (boss->done) {
+    player->dead = true;
   }
 
   camera.tick(dt);
