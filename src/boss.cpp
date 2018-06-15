@@ -116,10 +116,10 @@ void Boss::tick(float dt) {
       SDL_Rect src = textboxSprite->getSRC();
 
       Rect dst = {
-        tbx + x * textboxSprite->frameWidth,
-        tby + y * textboxSprite->frameWidth,
-        textboxSprite->frameWidth,
-        textboxSprite->frameWidth,
+        (float) (tbx + x * textboxSprite->frameWidth),
+        (float) (tby + y * textboxSprite->frameWidth),
+        (float) textboxSprite->frameWidth,
+        (float) textboxSprite->frameWidth,
       };
 
       RenderJob j;

@@ -57,8 +57,8 @@ void Text::tick(float dt) {
   Rect dst = {
     alignedX,
     alignedY,
-    rect.w,
-    rect.h
+    (float) rect.w,
+    (float) rect.h
   };
 
   RenderJob j;
